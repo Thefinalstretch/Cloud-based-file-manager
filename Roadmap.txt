@@ -1,0 +1,54 @@
+vecka 1:
+ Mål för vecka 1:
+ * Initialize the repo with electron-vite (highly recommended boilerplate). //klart
+ * koppla SupaBase Auth (inloggning)
+ * Skriv ett script som kan hitta en specifik mapp ( typ en "testGame" mapp, till en början),
+   som också ska kunna zippa innehållet i mappen (viktiga libraries kan vara antingen adm-zip eller archiver)
+   (genom att zippa filerna sparar man på bandbredden och man håller filstrukturen intakt)
+ * Vi vill manuellt kunna lägga till spel, vi ska ha en knapp man kan trycka på, så att man själv kan välja
+   ett directory till ett spel(vi kan använda electrons "dialog.showOpenDialog" för detta)
+ * Vi vill kunna lagra detta directory i en lokal config-fil(exempelvis store.json, vi kan använda electron-store) 
+
+vecka 2:
+ Mål för vecka 2: 
+ * Vi vill kunna ladda upp zip-filerna till Supabase och kunna ladda ner dom igen
+ * Vi ska lägga in ett table i Supabase som heter game_saves, som ska innehålla följande:
+   id, user_id, game_name, updated_at, download_url, file_hash
+ * Uppladdningslogiken ska fungera så här när användaren vill synca:
+   Zippa mappen  -> generera en hash av zippen för att se om den faktiskt ändrades
+   -> ladda upp till Supabase Storage buckets -> uppdatera game_saves table
+ * nedladdningslogiken ska va motsatsen av ^, ladda ner zip-fil -> unzippa -> overwritea lokala filer
+ * under vecka 2 ska vi bara fråga användaren någonting i stilen av "cloudsave är nyare, vill du overwritea lokala filer?"
+   OBS! Vi vill inte mergea filer automatiskt 
+
+vecka 3:
+ Mål för vecka 3: 
+ * Målet är att appen ska kunna hitta Steam/Minecraft automatiskt och synca i bakgrunden
+ * för steam kan vi använda biblioteket "steam-locate" eller kolla default paths (C:\Program Files (x86)\Steam\userdata)
+ * För Minecraft kan vi kolla "%appdata%/.minecraft/saves"
+ * Målet: gör en "skanna för spel" knapp som kollar efter dessa default-paths
+ * Använd biblioteket "chokidar" i huvudprocessen för att hålla koll på save-mapparna
+ * När en fil ändras i mappen -> vänta 30 sekunder -> starta uppladdning
+   (den ska vänta eftersom spel ofta skriver in i save-filer flera gånger när man sparar, vi vill inte
+   ladda upp 10 gånger under spannet av 2 sekunder)
+
+vecka 4:
+ Mål för vecka 4:
+ * Målet är att ha en .exe fil som funkar
+ * Hantera konflikter, exempelvis "vad händer när jag spelar på min Laptop, och sedan startar min desktop utan att ladda ner den nya sparfilen?"
+ * Lösning: På startup, kola Supabase. Om cloud_timestamp > local_timestamp, visa en "sync konflikt" varning.
+ * Vi ska använda electron-builder för att packetera appen till en installer
+ * Vi kommer behöva hantera Code signing om vi vill att windows inte ska ge "Unknown Publisher" varningar
+
+
+Generella utmaningar
+ * Steam har Steam Cloud, vilket redan är en slags cloud sync. Om bade vår app och steam försöker synca samma filer, kan det resultera i en konflikt
+ * Lösning: vår app är användbar för spel som inte har Steam Cloud, som typ Minecraft och äldre titlar. För Steamspel
+   kan vi säga till användare att avaktivera Steam Cloud för det specifika spel dom vill ha vår app för
+ * Cross-platform: Windows använder "\" och "Appdata" till skillnad från Linux och Mac(ifall vi vill att appen ska kunna användas på Linux och Mac 
+   Måste vi använda Nodes "path.join()" och "os.homedir()")
+ * Fillåsning: visa spel låser sina savefiles medan spelet körs
+ * Lösning: vår uppladdningslogik måste använda ett "try/catch"-block. Exempelvis "om filen är last, försök igen efter 5 minuter" 
+
+
+https://docs.google.com/document/d/18Z4_Aku3UlAvbO_uJIHhS3Gs4gel9X8tyxvnDrPnwTg/edit?usp=sharing
