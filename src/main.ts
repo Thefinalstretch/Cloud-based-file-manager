@@ -1,6 +1,7 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
+import { uploadGameSave } from "./lib/save-handler";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
@@ -74,3 +75,20 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+ipcMain.handle("upload-save", async (event, filePath, userId, gameId) => {
+  console.log("Main process recieved upload request for: ", filePath);
+
+  //kallar på funktionen i save-handler.ts
+  return await uploadGameSave(filePath, userId, gameId);
+});
+
+ipcMain.handle("dialog:openDirectory", async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    properties: ["openDirectory"],
+  }); //
+  if (canceled) {
+    return null;
+  } else {
+    return filePaths[0];
+  }
+});

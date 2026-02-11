@@ -1,27 +1,35 @@
 import { supabase } from "./supabase-vite";
 
 export const Googlesigninbutton = () => {
-  const SignInwithGoogle = async () => {
+  const SignInwithGoogle = async (e: React.MouseEvent) => {
+    e.preventDefault();
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          skipBrowserRedirect: true,
-          redirectTo: "http://localhost:5173/auth/callback",
+          redirectTo: "http://localhost:5173",
+          queryParams: {
+            access_type: "offline",
+            prompt: "select_account",
+          },
         },
       });
       if (error) throw error;
 
+      console.log(data);
       if (data?.url) {
-        console.log("Redirecting to:", data.url);
-        window.open(data.url, "_self");
+        window.location.href = data.url;
       }
     } catch (error) {
       console.log("Inloggningsfel:", error);
     }
   };
 
-  return <button onClick={SignInwithGoogle}>Logga in med Google</button>;
+  return (
+    <button type="button" onClick={SignInwithGoogle}>
+      Logga in med Google
+    </button>
+  );
 };
 
 export const Signoutbutton = () => {

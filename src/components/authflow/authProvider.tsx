@@ -8,6 +8,7 @@ console.log(import.meta.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY);
 console.log("Vite miljö-check:", import.meta.env);
 
 export default function AuthProvider({ children }: PropsWithChildren) {
+  console.log("Aktuell URL hash:", window.location.hash);
   const [session, setSession] = useState<Session | undefined | null>();
   const [profile, setProfile] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -42,15 +43,20 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     const fetchProfile = async () => {
       setIsLoading(true);
       if (session) {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("profiles")
           .select("*")
           .eq("id", session.user.id)
           .single();
-        setProfile(data);
-      } else {
-        setProfile(null);
+
+        if (error) {
+          console.warn("Error fetching profile:", error);
+          setProfile(null);
+        } else {
+          setProfile(data);
+        }
       }
+
       setIsLoading(false);
     };
     fetchProfile();
@@ -67,3 +73,5 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     </AuthContext.Provider>
   );
 }
+
+//kod fungerar men måste optimeras
