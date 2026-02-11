@@ -1,8 +1,9 @@
-export default function App() {
+import Login_screen from "./authflow/login-screen";
+
+export const App = () => {
   return (
-    <div>
-      <h1>🚀 React + Electron fungerar!</h1>
-      <p>Nu är det dags att börja med Supabase-inloggningen.</p>
-    </div>
+    <>
+      <Login_screen />
+    </>
   );
-}
+};
