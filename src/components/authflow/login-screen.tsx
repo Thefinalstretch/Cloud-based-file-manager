@@ -1,4 +1,5 @@
 import { useAuthContext } from "../../hooks/useAuth";
+import { Profile_icon } from "../Profile_icon";
 import { Googlesigninbutton, Signoutbutton } from "./buttons";
 import { Extract_button } from "./file_management/buttons";
 
@@ -16,10 +17,11 @@ export default function Login_screen() {
         <div>
           <p>Inloggad som: {session.user.email}</p>
           <Signoutbutton />
+          <Extract_button />
+          <Profile_icon />
         </div>
       : <div>
           <Googlesigninbutton />
-          <Extract_button />
         </div>
       }
     </>

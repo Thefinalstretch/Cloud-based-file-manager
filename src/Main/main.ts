@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
-import { uploadGameSave } from "./lib/save-handler";
+import { uploadGameSave } from "./save-handler";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
@@ -14,8 +14,8 @@ if (started) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1500,
+    height: 1000,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
@@ -27,8 +27,8 @@ const createWindow = () => {
       return {
         action: "allow", // Tillåt det nya fönstret
         overrideBrowserWindowOptions: {
-          width: 600,
-          height: 800,
+          width: 1500,
+          height: 1000,
           autoHideMenuBar: true,
           // Detta lurar Google att inte blockera Electron
           userAgent: "Chrome/120.0.0.0 Safari/537.36",

@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import Profile from "./components/Profile";
+
 import AuthProvider from "./components/authflow/authProvider";
 import { App } from "./components/App";
 

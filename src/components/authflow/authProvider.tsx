@@ -3,12 +3,7 @@ import { supabase } from "./supabase-vite";
 import type { Session } from "@supabase/supabase-js";
 import { PropsWithChildren, useEffect, useState } from "react";
 
-console.log(import.meta.env.VITE_SUPABASE_URL);
-console.log(import.meta.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY);
-console.log("Vite miljö-check:", import.meta.env);
-
 export default function AuthProvider({ children }: PropsWithChildren) {
-  console.log("Aktuell URL hash:", window.location.hash);
   const [session, setSession] = useState<Session | undefined | null>();
   const [profile, setProfile] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
