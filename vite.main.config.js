@@ -11,5 +11,3 @@ export default defineConfig({
     ),
   },
 });
-
-import dotenv from "dotenv";

@@ -1,29 +1,24 @@
+import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuth";
 import { Profile_icon } from "../Profile_icon";
 import { Googlesigninbutton, Signoutbutton } from "./buttons";
 import { Extract_button } from "./file_management/buttons";
+import { useEffect } from "react";
 
 export default function Login_screen() {
   const { isLoggedIn, session } = useAuthContext();
-  console.log(isLoggedIn);
-  console.log(session);
-  return (
-    <>
-      <header className="flex 1 justify-center items-center">
-        Welcome to Cloud extract
-      </header>
+  const router = useNavigate();
 
-      {isLoggedIn && session ?
-        <div>
-          <p>Inloggad som: {session.user.email}</p>
-          <Signoutbutton />
-          <Extract_button />
-          <Profile_icon />
-        </div>
-      : <div>
-          <Googlesigninbutton />
-        </div>
-      }
-    </>
+  useEffect(() => {
+    if (isLoggedIn) {
+      router("/home");
+    } else {
+      router("/");
+    }
+  }, [isLoggedIn, session]);
+
+  return (
+    //styling
+    <Googlesigninbutton />
   );
 }

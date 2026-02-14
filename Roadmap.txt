@@ -52,3 +52,9 @@ Generella utmaningar
 
 
 https://docs.google.com/document/d/18Z4_Aku3UlAvbO_uJIHhS3Gs4gel9X8tyxvnDrPnwTg/edit?usp=sharing
+
+
+eventuella utökningar, för onlinespel kanske man kan ta configs, settings osv.
+Om den lokala filen är nyare än den i databasen, gör att knappen för att synka byter färg för att fånga användarens uppmärksamhet.
+Vi vill också ha att spelsymbolen ska visas bredvid spelen i supported games i spellistan.
+vi vill kunna lägga till en inställningsmeny där man kan ändra grundläggande saker, såsom vilken upplösning man vill att appen startar i, och liknande småsaker
