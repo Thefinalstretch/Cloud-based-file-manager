@@ -7,6 +7,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | undefined | null>();
   const [profile, setProfile] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   // Fetch the session once, and subscribe to auth state changes
   useEffect(() => {
     const fetchSession = async () => {
@@ -63,6 +64,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         isLoading,
         profile,
         isLoggedIn: session != undefined && session != null,
+        user: session?.user ?? null,
       }}>
       {children}
     </AuthContext.Provider>

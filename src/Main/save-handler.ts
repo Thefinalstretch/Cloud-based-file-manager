@@ -3,6 +3,8 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import archiver from "archiver";
+import { use } from "react";
+
 // sätt in dessa i .env senare om det behövs
 
 // samma url och key som frontend, men annan Client
@@ -68,15 +70,32 @@ export async function uploadGameSave(
         duplex: "half",
       });
 
+    const filesize = fs.statSync(tempZipPath).size;
+    const Size_MB = (filesize / (1024 * 1024)).toFixed(4);
+
     //cleanup, raderar tempfilen
     fs.unlinkSync(tempZipPath);
 
     if (error) throw error;
 
+    // om uppladdningen lyckades, kan vi spara metadata i databasen, t.ex. en referens till filen i storage och vilken användare det tillhör
+    console.log("Updating database record");
+    const { error: dbError } = await supabase.from("game_saves").insert([
+      {
+        user_id: userId,
+        game_name: gameId,
+        storage_path: cloudPath,
+        file_size_mb: Size_MB,
+      },
+    ]);
+
+    if (dbError) throw dbError;
+
     console.log("uppladdningen slutförd", data);
     return { success: true, data };
   } catch (err) {
     console.log("uppladdningen misslyckades", err);
+
     return { success: false, error: err };
   }
 }

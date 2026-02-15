@@ -1,0 +1,70 @@
+Date : 2026-02-15 22:26:39
+Directory : c:\Dev\VScode\PKD_project
+Total : 29 files,  12862 codes, 73 comments, 110 blanks, all 13045 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          2 |     12,251 |          0 |          2 |     12,253 |
+| TypeScript JSX     |         10 |        300 |         22 |         45 |        367 |
+| TypeScript         |          9 |        231 |         49 |         51 |        331 |
+| JSON with Comments |          2 |         38 |          0 |          2 |         40 |
+| JavaScript         |          3 |         20 |          2 |          7 |         29 |
+| pyscript           |          1 |         11 |          0 |          2 |         13 |
+| PostCSS            |          1 |          8 |          0 |          1 |          9 |
+| Markdown           |          1 |          3 |          0 |          0 |          3 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                          | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                             |         29 |     12,862 |         73 |        110 |     13,045 |
+| . (Files)                                                                     |         11 |     12,375 |          8 |         17 |     12,400 |
+| src                                                                           |         18 |        487 |         65 |         93 |        645 |
+| src (Files)                                                                   |          4 |         42 |          7 |         10 |         59 |
+| src\Main                                                                      |          3 |        131 |         41 |         36 |        208 |
+| src\components                                                                |         10 |        297 |         17 |         43 |        357 |
+| src\components (Files)                                                        |          5 |        126 |         12 |         18 |        156 |
+| src\components\authflow                                                       |          5 |        171 |          5 |         25 |        201 |
+| src\components\authflow (Files)                                               |          4 |        137 |          5 |         18 |        160 |
+| src\components\authflow\file_management                                       |          1 |         34 |          0 |          7 |         41 |
+| src\hooks                                                                     |          1 |         17 |          0 |          4 |         21 |
++-------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                      | language           | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| c:\Dev\VScode\PKD_project\.eslintrc.json                                      | JSON with Comments |         16 |          0 |          1 |         17 |
+| c:\Dev\VScode\PKD_project\README.md                                           | Markdown           |          3 |          0 |          0 |          3 |
+| c:\Dev\VScode\PKD_project\forge.config.ts                                     | TypeScript         |         52 |          5 |          3 |         60 |
+| c:\Dev\VScode\PKD_project\forge.env.d.ts                                      | TypeScript         |          0 |          1 |          1 |          2 |
+| c:\Dev\VScode\PKD_project\index.html                                          | pyscript           |         11 |          0 |          2 |         13 |
+| c:\Dev\VScode\PKD_project\package-lock.json                                   | JSON               |     12,198 |          0 |          1 |     12,199 |
+| c:\Dev\VScode\PKD_project\package.json                                        | JSON               |         53 |          0 |          1 |         54 |
+| c:\Dev\VScode\PKD_project\src\Main\main.ts                                    | TypeScript         |         65 |         17 |         13 |         95 |
+| c:\Dev\VScode\PKD_project\src\Main\save-handler.ts                            | TypeScript         |         66 |         17 |         19 |        102 |
+| c:\Dev\VScode\PKD_project\src\Main\supabase-admin.ts                          | TypeScript         |          0 |          7 |          4 |         11 |
+| c:\Dev\VScode\PKD_project\src\components\App.tsx                              | TypeScript JSX     |         29 |          1 |          2 |         32 |
+| c:\Dev\VScode\PKD_project\src\components\DownloadGameSave.tsx                 | TypeScript JSX     |         10 |          1 |          3 |         14 |
+| c:\Dev\VScode\PKD_project\src\components\Homescreen.tsx                       | TypeScript JSX     |         33 |          8 |          6 |         47 |
+| c:\Dev\VScode\PKD_project\src\components\Profile_icon.tsx                     | TypeScript JSX     |         35 |          1 |          4 |         40 |
+| c:\Dev\VScode\PKD_project\src\components\UploadGameSave.tsx                   | TypeScript JSX     |         19 |          1 |          3 |         23 |
+| c:\Dev\VScode\PKD_project\src\components\authflow\authProvider.tsx            | TypeScript JSX     |         65 |          4 |          6 |         75 |
+| c:\Dev\VScode\PKD_project\src\components\authflow\buttons.tsx                 | TypeScript JSX     |         41 |          0 |          5 |         46 |
+| c:\Dev\VScode\PKD_project\src\components\authflow\file_management\buttons.tsx | TypeScript JSX     |         34 |          0 |          7 |         41 |
+| c:\Dev\VScode\PKD_project\src\components\authflow\login-screen.tsx            | TypeScript JSX     |         20 |          1 |          4 |         25 |
+| c:\Dev\VScode\PKD_project\src\components\authflow\supabase-vite.ts            | TypeScript         |         11 |          0 |          3 |         14 |
+| c:\Dev\VScode\PKD_project\src\hooks\useAuth.ts                                | TypeScript         |         17 |          0 |          4 |         21 |
+| c:\Dev\VScode\PKD_project\src\index.css                                       | PostCSS            |          8 |          0 |          1 |          9 |
+| c:\Dev\VScode\PKD_project\src\preload.ts                                      | TypeScript         |          6 |          2 |          3 |         11 |
+| c:\Dev\VScode\PKD_project\src\renderer.tsx                                    | TypeScript JSX     |         14 |          5 |          5 |         24 |
+| c:\Dev\VScode\PKD_project\src\types.d.ts                                      | TypeScript         |         14 |          0 |          1 |         15 |
+| c:\Dev\VScode\PKD_project\tsconfig.json                                       | JSON with Comments |         22 |          0 |          1 |         23 |
+| c:\Dev\VScode\PKD_project\vite.main.config.js                                 | JavaScript         |         11 |          1 |          2 |         14 |
+| c:\Dev\VScode\PKD_project\vite.preload.config.js                              | JavaScript         |          2 |          1 |          2 |          5 |
+| c:\Dev\VScode\PKD_project\vite.renderer.config.mjs                            | JavaScript         |          7 |          0 |          3 |         10 |
+| Total                                                                         |                    |     12,862 |         73 |        110 |     13,045 |
++-------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

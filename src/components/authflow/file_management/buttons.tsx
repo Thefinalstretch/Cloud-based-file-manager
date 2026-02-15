@@ -15,6 +15,8 @@ export const Extract_button = () => {
 
       setSelectedPath(path);
 
+      alert(`Are you sure you want to upload ${path}?`);
+
       await window.electron.uploadSave(path, user?.id as string, "Minecraft");
     }
   };

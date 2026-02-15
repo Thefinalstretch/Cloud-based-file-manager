@@ -1,0 +1,31 @@
+"filename", "language", "JavaScript", "JSON with Comments", "JSON", "pyscript", "Markdown", "TypeScript", "TypeScript JSX", "PostCSS", "comment", "blank", "total"
+"c:\Dev\VScode\PKD_project\.eslintrc.json", "JSON with Comments", 0, 16, 0, 0, 0, 0, 0, 0, 0, 1, 17
+"c:\Dev\VScode\PKD_project\README.md", "Markdown", 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3
+"c:\Dev\VScode\PKD_project\forge.config.ts", "TypeScript", 0, 0, 0, 0, 0, 52, 0, 0, 5, 3, 60
+"c:\Dev\VScode\PKD_project\forge.env.d.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2
+"c:\Dev\VScode\PKD_project\index.html", "pyscript", 0, 0, 0, 11, 0, 0, 0, 0, 0, 2, 13
+"c:\Dev\VScode\PKD_project\package-lock.json", "JSON", 0, 0, 12198, 0, 0, 0, 0, 0, 0, 1, 12199
+"c:\Dev\VScode\PKD_project\package.json", "JSON", 0, 0, 53, 0, 0, 0, 0, 0, 0, 1, 54
+"c:\Dev\VScode\PKD_project\src\Main\main.ts", "TypeScript", 0, 0, 0, 0, 0, 65, 0, 0, 17, 13, 95
+"c:\Dev\VScode\PKD_project\src\Main\save-handler.ts", "TypeScript", 0, 0, 0, 0, 0, 66, 0, 0, 17, 19, 102
+"c:\Dev\VScode\PKD_project\src\Main\supabase-admin.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 7, 4, 11
+"c:\Dev\VScode\PKD_project\src\components\App.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 29, 0, 1, 2, 32
+"c:\Dev\VScode\PKD_project\src\components\DownloadGameSave.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 10, 0, 1, 3, 14
+"c:\Dev\VScode\PKD_project\src\components\Homescreen.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 33, 0, 8, 6, 47
+"c:\Dev\VScode\PKD_project\src\components\Profile_icon.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 35, 0, 1, 4, 40
+"c:\Dev\VScode\PKD_project\src\components\UploadGameSave.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 19, 0, 1, 3, 23
+"c:\Dev\VScode\PKD_project\src\components\authflow\authProvider.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 65, 0, 4, 6, 75
+"c:\Dev\VScode\PKD_project\src\components\authflow\buttons.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 41, 0, 0, 5, 46
+"c:\Dev\VScode\PKD_project\src\components\authflow\file_management\buttons.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 34, 0, 0, 7, 41
+"c:\Dev\VScode\PKD_project\src\components\authflow\login-screen.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 20, 0, 1, 4, 25
+"c:\Dev\VScode\PKD_project\src\components\authflow\supabase-vite.ts", "TypeScript", 0, 0, 0, 0, 0, 11, 0, 0, 0, 3, 14
+"c:\Dev\VScode\PKD_project\src\hooks\useAuth.ts", "TypeScript", 0, 0, 0, 0, 0, 17, 0, 0, 0, 4, 21
+"c:\Dev\VScode\PKD_project\src\index.css", "PostCSS", 0, 0, 0, 0, 0, 0, 0, 8, 0, 1, 9
+"c:\Dev\VScode\PKD_project\src\preload.ts", "TypeScript", 0, 0, 0, 0, 0, 6, 0, 0, 2, 3, 11
+"c:\Dev\VScode\PKD_project\src\renderer.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 14, 0, 5, 5, 24
+"c:\Dev\VScode\PKD_project\src\types.d.ts", "TypeScript", 0, 0, 0, 0, 0, 14, 0, 0, 0, 1, 15
+"c:\Dev\VScode\PKD_project\tsconfig.json", "JSON with Comments", 0, 22, 0, 0, 0, 0, 0, 0, 0, 1, 23
+"c:\Dev\VScode\PKD_project\vite.main.config.js", "JavaScript", 11, 0, 0, 0, 0, 0, 0, 0, 1, 2, 14
+"c:\Dev\VScode\PKD_project\vite.preload.config.js", "JavaScript", 2, 0, 0, 0, 0, 0, 0, 0, 1, 2, 5
+"c:\Dev\VScode\PKD_project\vite.renderer.config.mjs", "JavaScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 3, 10
+"Total", "-", 20, 38, 12251, 11, 3, 231, 300, 8, 73, 110, 13045

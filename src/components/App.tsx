@@ -20,6 +20,7 @@ export const App = () => {
       <HashRouter>
         <Routes>
           <Route path="/" element={<Login_screen />} />
+          {/*Här ska man kanske sätta in någon form av guard???  */}
           <Route path="/home" element={<Homescreen />} />
           <Route path="/UploadGameSave" element={<UploadSave />} />
           <Route path="/DownloadGameSave" element={<DownloadSave />} />
