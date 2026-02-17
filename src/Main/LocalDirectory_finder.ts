@@ -77,10 +77,49 @@ export function find_all_steam_games() {
 
   const steampath = find_steampath();
   if (steampath) {
-    const gamespath = path.join(steampath, "steamapps");
+    const gamespath = path.join(steampath, "steamapps", "libraryfolders.vdf");
     if (fs.existsSync(gamespath)) {
-      //tittar om denn gamepath faktiskt finns på appen
-    }
-    return null;
+      //Behöver titta i min libraryfolders.vdf fil för att hitta alla steam librarys, eftersom användare kan ha flera librarys på olika diskar, och sedan titta i varje librarys steamapps/appmanifest.acf mapp för att hitta spelmapparna
+      const libraryFolders = fs.readFileSync(gamespath, "utf-8");
+      const libraryPaths: string[] = [];
+      const libraryRegex = /"path"\s+"([^"]+)"/g
+      const appManifestIDRegex = /\s+"apps"\s+\{([\s\S]*?)\}/g
+      let match: RegExpExecArray | null;
+
+      while (match = libraryRegex.exec(libraryFolders)) {
+        libraryPaths.push(match[1]);
+      }
+
+
+// // 1. Hitta varje bibliotek (0, 1, 2...)
+// while ((folderMatch = libraryBlockRegex.exec(vdfContent)) !== null) {
+//     // blockText är nu ALLT innehåll för ETT bibliotek (t.ex. bibliotek "0")
+//     const blockText = folderMatch[1];
+
+//     // 2. Hitta SÖKVÄGEN i just detta block
+//     const pathMatch = /"path"\s+"([^"]+)"/.exec(blockText);
+//     const currentPath = pathMatch ? pathMatch[1] : "Okänd sökväg";
+
+//     console.log(`--- Skannar bibliotek: ${currentPath} ---`);
+
+//     // 3. Hitta APPS-BLOCKET i just detta block
+//     const appsBlockMatch = /"apps"\s*\{([\s\S]*?)\}/.exec(blockText);
+    
+//     if (appsBlockMatch) {
+//         const appsInThisFolder = appsBlockMatch[1];
+        
+//         // 4. Hitta alla ID:n i just detta biblioteks apps-lista
+//         const idRegex = /"(\d+)"\s+"\d+"/g;
+//         let idMatch;
+        
+//         while ((idMatch = idRegex.exec(appsInThisFolder)) !== null) {
+//             const appId = idMatch[1];
+//             console.log(`Spelet ${appId} ligger på ${currentPath}`);
+//             // Här kan du nu spara: { path: currentPath, appId: appId }
+//         }
+//     }
+// }
+
+    return libraryPaths;
   }
 }
