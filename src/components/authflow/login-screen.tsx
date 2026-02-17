@@ -19,6 +19,9 @@ export default function Login_screen() {
 
   return (
     //styling
-    <Googlesigninbutton />
+    <div>
+      <p>NomadSync</p>
+      <Googlesigninbutton />
+    </div>
   );
 }

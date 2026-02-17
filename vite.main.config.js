@@ -10,4 +10,9 @@ export default defineConfig({
       process.env.VITE_SUPABASE_SERVICE_ROLE_KEY,
     ),
   },
+  build: {
+    rollupOptions: {
+      external: ["registry-js"],
+    },
+  },
 });

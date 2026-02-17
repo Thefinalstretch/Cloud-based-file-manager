@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
 import { uploadGameSave } from "./save-handler";
+import { find_all_worlds } from "./LocalDirectory_finder";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
@@ -91,4 +92,20 @@ ipcMain.handle("dialog:openDirectory", async () => {
   } else {
     return filePaths[0];
   }
+});
+
+//Variant som väljer flera directories
+ipcMain.handle("dialog:multiDirectory", async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    properties: ["openDirectory", "multiSelections"],
+  }); //
+  if (canceled) {
+    return null;
+  } else {
+    return filePaths;
+  }
+});
+
+ipcMain.handle("get-minecraft-worlds", () => {
+  return find_all_worlds();
 });

@@ -7,4 +7,5 @@ contextBridge.exposeInMainWorld("electron", {
   selectFolder: () => ipcRenderer.invoke("dialog:openDirectory"),
   uploadSave: (path: string, userId: string, gameId: string) =>
     ipcRenderer.invoke("upload-save", path, userId, gameId),
+  getMinecraftWorlds: () => ipcRenderer.invoke("get-minecraft-worlds"),
 });

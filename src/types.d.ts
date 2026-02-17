@@ -5,6 +5,7 @@ export interface IElectronAPI {
     userId: string,
     gameId: string,
   ) => Promise<any>;
+  getMinecraftWorlds: () => Promise<any>;
   onLog: (callback: (message: string) => void) => void;
 }
 declare global {

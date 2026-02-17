@@ -13,6 +13,7 @@ import DownloadSave from "./DownloadGameSave";
 import UploadSave from "./UploadGameSave";
 import { AuthContext } from "src/hooks/useAuth";
 import AuthProvider from "./authflow/authProvider";
+import Gamefinder from "./Gamefinder";
 
 export const App = () => {
   return (
