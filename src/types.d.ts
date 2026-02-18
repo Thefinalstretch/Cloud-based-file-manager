@@ -7,6 +7,7 @@ export interface IElectronAPI {
   ) => Promise<any>;
   getMinecraftWorlds: () => Promise<any>;
   onLog: (callback: (message: string) => void) => void;
+  find_steampath: () => Promise<any>
 }
 declare global {
   interface Window {

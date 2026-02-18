@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
 import { uploadGameSave } from "./save-handler";
-import { find_all_worlds } from "./LocalDirectory_finder";
+import { find_all_worlds, find_steampath } from "./LocalDirectory_finder";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
@@ -109,3 +109,7 @@ ipcMain.handle("dialog:multiDirectory", async () => {
 ipcMain.handle("get-minecraft-worlds", () => {
   return find_all_worlds();
 });
+
+ipcMain.handle("find-steam-path", () => {
+  return find_steampath();
+})

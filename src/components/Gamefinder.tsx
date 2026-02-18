@@ -30,30 +30,30 @@ export default function Gamefinder() {
     }
     setIsScanning(false);
   };
-  handleAutoFind();
-  //   const handleUpload = async (worldPath: string, worldName: string) => {
-  //     if (!user) {
-  //       alert("You need to be logged in!");
-  //       return;
-  //     }
-  //     setStatus(`Uploading `);
 
-  //     try {
-  //       const result = await window.electron.uploadSave(
-  //         worldPath,
-  //         user.id,
-  //         worldName,
-  //       );
+    // const handleUpload = async (worldPath: string, worldName: string) => {
+    //   if (!user) {
+    //     alert("You need to be logged in!");
+    //     return;
+    //   }
+    //   setStatus(`Uploading `);
 
-  //       if (result.success) {
-  //         setStatus(`${worldName} Uploaded successfully`);
-  //       } else {
-  //         setStatus(` Failed to upload ${worldName} :(`);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       setStatus("Error during upload: " + error);
-  //     }
-  //   };
-  return <button onClick={Gamefinder}>Find Minecraft Worlds</button>;
+    //   try {
+    //     const result = await window.electron.uploadSave(
+    //       worldPath,
+    //       user.id,
+    //       worldName,
+    //     );
+
+    //     if (result.success) {
+    //       setStatus(`${worldName} Uploaded successfully`);
+    //     } else {
+    //       setStatus(` Failed to upload ${worldName} :(`);
+    //     }
+    //   } catch (error) {
+    //     console.error(error);
+    //     setStatus("Error during upload: " + error);
+    //   }
+    // };
+  return <button onClick={handleAutoFind}>Find Minecraft Worlds</button>;
 }

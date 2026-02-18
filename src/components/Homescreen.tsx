@@ -10,6 +10,7 @@ import DownloadSave from "./DownloadGameSave";
 import UploadSave from "./UploadGameSave";
 import { Signoutbutton } from "./authflow/buttons";
 import { useAuthContext } from "../hooks/useAuth";
+import { find_steampath } from "src/Main/LocalDirectory_finder";
 // kanske måste lägga till lite grejer innan return statementet
 export const Homescreen = () => {
   const { isLoggedIn, isLoading } = useAuthContext();
@@ -38,6 +39,13 @@ export const Homescreen = () => {
 
       <button onClick={() => router("/DownloadGameSave")}>
         Download Game Save
+      </button>
+
+      <button onClick={async () => {
+        const steamPath = await window.electron.find_steampath();
+        console.log("Steam Path:", steamPath);
+      }} >
+      find steam path
       </button>
 
       <Signoutbutton />
