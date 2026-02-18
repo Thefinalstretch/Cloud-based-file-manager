@@ -1,7 +1,6 @@
 //importera modul som identifierar operativsystemet
 import { dialog, BaseWindow } from "electron";
 import * as os from "os";
-import { HKEY, enumerateValues } from "registry-js";
 import path from "path";
 import fs from "fs";
 
@@ -57,30 +56,30 @@ export function find_all_worlds() {
   }
 }
 
-export function find_all_steam_games() {
-  function find_steampath() {
-    try {
-      const hive = HKEY.HKEY_CURRENT_USER;
-      const SteamRegistryKey = "Software\\Valve\\Steam";
-      const steamroot = enumerateValues(hive, SteamRegistryKey).find(
-        (value) => value.name === "SteamPath",
-      );
+// export function find_all_steam_games() {
+//   function find_steampath() {
+//     try {
+//       const hive = HKEY.HKEY_CURRENT_USER;
+//       const SteamRegistryKey = "Software\\Valve\\Steam";
+//       const steamroot = enumerateValues(hive, SteamRegistryKey).find(
+//         (value) => value.name === "SteamPath",
+//       );
 
-      if (steamroot && typeof steamroot.data === "string") {
-        return path.normalize(steamroot.data); //path.normalize hanterar städar upp filvägen så att den är korrekt formaterad för operativsystemet ex. inte innehåller "\\"
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    return null;
-  }
+//       if (steamroot && typeof steamroot.data === "string") {
+//         return path.normalize(steamroot.data); //path.normalize hanterar städar upp filvägen så att den är korrekt formaterad för operativsystemet ex. inte innehåller "\\"
+//       }
+//     } catch (error) {
+//       console.error(error);
+//     }
+//     return null;
+//   }
 
-  const steampath = find_steampath();
-  if (steampath) {
-    const gamespath = path.join(steampath, "steamapps");
-    if (fs.existsSync(gamespath)) {
-      //tittar om denn gamepath faktiskt finns på appen
-    }
-    return null;
-  }
-}
+//   const steampath = find_steampath();
+//   if (steampath) {
+//     const gamespath = path.join(steampath, "steamapps");
+//     if (fs.existsSync(gamespath)) {
+//       //tittar om denn gamepath faktiskt finns på appen
+//     }
+//     return null;
+  // }
+// }
