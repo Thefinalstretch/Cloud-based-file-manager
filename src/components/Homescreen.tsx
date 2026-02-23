@@ -41,11 +41,12 @@ export const Homescreen = () => {
         Download Game Save
       </button>
 
-      <button onClick={async () => {
-        const steamPath = await window.electron.find_steampath();
-        console.log("Steam Path:", steamPath);
-      }} >
-      find steam path
+      <button
+        onClick={async () => {
+          const steamPath = await window.electron.find_steampath();
+          console.log("Steam Path:", steamPath);
+        }}>
+        find steam path
       </button>
 
       <Signoutbutton />
