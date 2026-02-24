@@ -8,5 +8,7 @@ contextBridge.exposeInMainWorld("electron", {
   uploadSave: (path: string, userId: string, gameId: string) =>
     ipcRenderer.invoke("upload-save", path, userId, gameId),
   getMinecraftWorlds: () => ipcRenderer.invoke("get-minecraft-worlds"),
-  find_steampath: () => ipcRenderer.invoke("find-steam-path")
+  find_steampath: () => ipcRenderer.invoke("find-steam-path"),
+  getXboxGames: () => ipcRenderer.invoke("get-xbox-games"),
+  getallgames: () => ipcRenderer.invoke("get-complete-game-save-data"),
 });

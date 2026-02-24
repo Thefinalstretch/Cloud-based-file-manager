@@ -11,6 +11,7 @@ import UploadSave from "./UploadGameSave";
 import { Signoutbutton } from "./authflow/buttons";
 import { useAuthContext } from "../hooks/useAuth";
 import { find_steampath } from "src/Main/LocalDirectory_finder";
+import HexGameCard from "./HexGameCard";
 // kanske måste lägga till lite grejer innan return statementet
 export const Homescreen = () => {
   const { isLoggedIn, isLoading } = useAuthContext();
@@ -50,6 +51,7 @@ export const Homescreen = () => {
       </button>
 
       <Signoutbutton />
+      <HexGameCard gameId="730" gameName="Counter-Strike 2" />
     </div>
   );
 };

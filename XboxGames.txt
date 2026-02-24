@@ -1,0 +1,24 @@
+Man kan inte använda fs commands för xbox spel, spelen är skyddade med hög säkerhet
+Dom använder installerar spel som UWP( Universal Windows Platform) eller MSIXVC packages
+därför kommer fs commands ge "access denied"
+Eftersom filsystemet är låst, är det säkraste sättet att få installationsvägarna genom Powershell
+* Get-AppxPackage kan användas för att lista installerade xbox spel
+kommandot returnerar en lista av allting som är installerat via microsoft store/ xbox appen, inklusive PackageFamilyName och den exakta installationsvägen
+Vi kommer behöva använda child_process.exec (som i steam registry) för att köra ett powershell script i bakgrunden och parsea texten som kommandot returnerar
+
+Microsoft ändrade nyligen hur xbox spel installeras,
+de gamla systemet installerade spel i C:\Program files\WindowsApps, som är en restrikterad mapp. Man kan inte
+använda node.js för att titta i denna mapp, utan att tvinga användaren att ändra "Windows ownership permissions" (det vill vi inte göra)
+Annars installeras spel nuförtiden i C:\XboxGames, som är läsbar. Därför kan det vara bra att leta i användarens dator för
+den mappen och läsa den, och på ngt sätt hantera tillgång-errors om koden råkar röra en låst mapp
+
+Windows Gaming Storage (WGS) är den svåraste delen
+Xbox spel sparar nästan alltid i C:\Users\<Name>\AppData\Local\Packages\<PackageFamilyName>\SystemAppData\wgs,
+men problemet är att sparfilerna inte har "normala" namn (en normal sparfil heter kanske "save1.dat till exempel),
+istället sparas dom som långa strängar med slumpmässiga siffror och bokstäver (som kallas GUIDs), och det finns en index fil som mappar dom siffrorna och bokstäverna till
+faktisk spardata. Kan vara bra att ta reda på hur man parsear Xbox WGS sparfiler, jag måste ta reda på hur man zippar hela wgs-mappen för ett specifikt spel
+
+alternativt till powershell scriptet kan man använda registry, då ska man leta i HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore
+eller GamingServices registry keys
+
+$gamesWithSaves = Get-ChildItem "$env:LOCALAPPDATA\Packages" -Directory | Where-Object { Test-Path "$($_.FullName)\SystemAppData\wgs" }; Get-AppxPackage | Where-Object { $gamesWithSaves.Name -contains $_.PackageFamilyName } | Select-Object Name, PackageFamilyName, InstallLocation

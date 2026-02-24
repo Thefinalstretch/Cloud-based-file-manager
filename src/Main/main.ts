@@ -2,7 +2,12 @@ import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
 import { uploadGameSave } from "./save-handler";
-import { find_all_worlds, find_steampath } from "./LocalDirectory_finder";
+import {
+  find_all_worlds,
+  find_steampath,
+  getCompleteGameSaveData,
+} from "./LocalDirectory_finder";
+import { find_xbox_games } from "./XBOXGameFinder";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
@@ -112,4 +117,11 @@ ipcMain.handle("get-minecraft-worlds", () => {
 
 ipcMain.handle("find-steam-path", () => {
   return find_steampath();
-})
+});
+ipcMain.handle("get-xbox-games", async () => {
+  return await find_xbox_games();
+});
+
+ipcMain.handle("get-complete-game-save-data", async () => {
+  return await getCompleteGameSaveData();
+});
