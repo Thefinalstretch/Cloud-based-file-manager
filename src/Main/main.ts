@@ -20,8 +20,8 @@ if (started) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1500,
-    height: 1000,
+    width: 1148,
+    height: 780,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
@@ -33,8 +33,8 @@ const createWindow = () => {
       return {
         action: "allow", // Tillåt det nya fönstret
         overrideBrowserWindowOptions: {
-          width: 1500,
-          height: 1000,
+          width: 1148,
+          height: 780,
           autoHideMenuBar: true,
           // Detta lurar Google att inte blockera Electron
           userAgent: "Chrome/120.0.0.0 Safari/537.36",

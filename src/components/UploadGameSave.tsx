@@ -11,7 +11,7 @@ export default function UploadSave() {
   const { user } = useAuthContext();
 
   return (
-    <div>
+    <div className=" py-10">
       <h1>Upload Game Save</h1>
       <p>Logged in as:{user?.email}</p>
       {/* Här kan du lägga till UI-komponenter för att välja en spel och en knapp för att starta uppladdningen */}

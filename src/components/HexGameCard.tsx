@@ -18,12 +18,8 @@ export default function HexGameCard({
         className="absolute inset-0 z-0 w-full h-full object-cover"
       />
 
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-5 text-center transition-all duration-300 bg-black/30 backdrop-blur-sm group-hover:bg-black/20 group-hover:backdrop-blur-none">
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-5 text-center transition-all duration-300">
         <h3 className="mb-4 text-lg text-white drop-shadow-md">{gameName}</h3>
-
-        <button className="px-5 py-2 text-sm text-white transition-colors border rounded-full bg-white/20 border-white/50 backdrop-blur-sm hover:bg-white/40">
-          Upload
-        </button>
       </div>
     </div>
   );

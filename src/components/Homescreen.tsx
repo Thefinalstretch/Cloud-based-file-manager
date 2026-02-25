@@ -42,6 +42,8 @@ export const Homescreen = () => {
         Download Game Save
       </button>
 
+      <button onClick={() => router("/UploadGameData")}>Upload GameData</button>
+
       <button
         onClick={async () => {
           const steamPath = await window.electron.find_steampath();

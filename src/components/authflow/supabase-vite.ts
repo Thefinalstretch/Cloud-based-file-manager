@@ -7,7 +7,7 @@ export const SupabaseKey = import.meta.env
 export const supabase = createClient(SupabaseURL, SupabaseKey, {
   auth: {
     autoRefreshToken: true, // Sparar sessionen i Electron
-    persistSession: false, // Uppdaterar tokens automatiskt
+    persistSession: true, // Uppdaterar tokens automatiskt
     detectSessionInUrl: true, // VIKTIGT: Electron sköter inte URL-auth som webben
   },
 });

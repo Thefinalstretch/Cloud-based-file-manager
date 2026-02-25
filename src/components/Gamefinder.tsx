@@ -93,22 +93,25 @@ export default function Gamefinder() {
           className="px-6 py-2 text-white transition-colors bg-blue-600 rounded-full hover:bg-blue-500 disabled:opacity-50">
           {isScanning ? "Scanning for Xbox games" : "Scan Xbox games"}
         </button>
+
+        <div className="flex flex-wrap gap-4 mt-8">
+          {xboxGames.map((game, index) => (
+            <HexGameCard
+              key={`xbox-${index}`}
+              gameId={game.PackageFamilyName}
+              gameName={game.Name}
+              onUpload={(id, name) => {
+                console.log(
+                  "Preparing to upload save for:",
+                  name,
+                  "at ID:",
+                  id,
+                );
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
-
-// {/* The Grid for the Hexagon Cards */}
-//       <div className="flex flex-wrap gap-4 mt-8">
-
-//         {/* Render Xbox Games */}
-//         {xboxGames.map((game, index) => (
-//           <HexGameCard
-//             key={`xbox-${index}`}
-//             gameId={game.PackageFamilyName}
-//             gameName={game.Name}
-//             onUpload={(id, name) => {
-//               console.log("Preparing to upload save for:", name, "at ID:", id);
-//             }}
-//           />
-//         ))}

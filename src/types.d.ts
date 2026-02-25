@@ -48,6 +48,7 @@ export interface GameData {
   versionID: string;
   Saves: Foundfile[];
   AppID: string;
+  isDummy?: boolean;
 }
 
 interface HexGameCardProps {
