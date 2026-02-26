@@ -53,7 +53,6 @@ export const Homescreen = () => {
       </button>
 
       <Signoutbutton />
-      <HexGameCard gameId="730" gameName="Counter-Strike 2" />
     </div>
   );
 };

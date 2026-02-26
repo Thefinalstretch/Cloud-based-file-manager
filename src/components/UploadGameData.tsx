@@ -27,6 +27,20 @@ export default function UploadGameData() {
   if (loading) {
     return <div>Loading games...</div>;
   }
+  const SIMULATION_COUNT = 40; // Totalt antal spel att simulera (inklusive riktiga spel)
+  const simulatedGames: GameData[] = [...games];
+  for (let i = games.length; i < SIMULATION_COUNT; i++) {
+    simulatedGames.push({
+      AppID: `sim-${i}`,
+      Gamename: `Test Game ${i}`,
+      SizeOnDisk: "10 GB",
+      lastplayed: "2024-01-01",
+      versionID: "1.0",
+      Saves: [],
+      // Vi sätter INTE isDummy: true här, för vi vill att HexGameCard ska renderas
+    } as GameData);
+  }
+
   function createHoneycombRows(games: GameData[]) {
     const rows = [];
     let currentIndex = 0;
@@ -53,37 +67,41 @@ export default function UploadGameData() {
     return rows;
   }
 
-  const honeycombRows = createHoneycombRows(games);
+  const honeycombRows = createHoneycombRows(simulatedGames);
 
   return (
-    <div className="bg-[#192B87]  bg-gradient-to-bl from-red-600/20 via-slate-500/20 to-red-800/20">
-      <h1 className="mb-10 text-3xl font-bold text-white">
-        Select a Game to Upload
-      </h1>
-      <div className="flex flex-col items-center">
-        {honeycombRows.map((row, rowIndex) => (
-          <div
-            key={`row-${rowIndex}`}
-            className={`flex justify-center gap-4 ${rowIndex > 0 ? "-mt-[60px]" : ""}`}>
-            {row.map((game: GameData) => {
-              if (game.isDummy) {
-                return <div key={game.AppID} className="w-[250px]"></div>;
-              }
+    <div>
+      <div className="">
+        <h1 className="mb-10 text-3xl font-bold text-white">
+          Select a Game to Upload
+        </h1>
+        <div className="h-[600px] w-full overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,blue_25%,blue_75%,transparent)]">
+          <div className="flex flex-col items-center pt-20">
+            {honeycombRows.map((row, rowIndex) => (
+              <div
+                key={`row-${rowIndex}`}
+                className={`flex justify-center gap-4 ${rowIndex > 0 ? "-mt-[25px]" : ""}`}>
+                {row.map((game: GameData) => {
+                  if (game.isDummy) {
+                    return <div key={game.AppID} className="w-[125px]"></div>;
+                  }
 
-              return (
-                <HexGameCard
-                  key={game.AppID}
-                  gameId={game.AppID}
-                  gameName={game.Gamename}
-                />
-              );
-            })}
+                  return (
+                    <HexGameCard
+                      key={game.AppID}
+                      gameId={game.AppID}
+                      gameName={game.Gamename}
+                    />
+                  );
+                })}
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+        <button className="bg-gray-800" onClick={() => back(-1)}>
+          Back
+        </button>
       </div>
-      <button className="bg-gray-800" onClick={() => back(-1)}>
-        Back
-      </button>
     </div>
   );
 }

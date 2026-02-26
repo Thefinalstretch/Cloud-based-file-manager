@@ -11,7 +11,7 @@ export default function HexGameCard({
   return (
     /* Hexagon containern */
     /* 'group' låter child elementet veta när användaren hovverar över parent elementet */
-    <div className="group relative w-[250px] h-[280px] cursor-pointer transition-transform duration-300 hover:scale-105 transform-gpu antialiased [clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]">
+    <div className="bg-black group relative w-[125px] h-[140px] cursor-pointer transition-transform duration-300 hover:scale-90 hover:-translate-y-1 transform-gpu antialiased [clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)] ">
       <img
         src={steamImageUrl}
         alt={gameName}

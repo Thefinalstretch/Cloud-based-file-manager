@@ -1,3 +1,87 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Kodchasan-SemiBold";
+  src: url("/Fonts/Kodchasan-SemiBold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Kodchasan-Medium";
+  src: url("/Fonts/Kodchasan-Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inter-Semibold";
+  src: url("/Fonts/inter_24pt-SemiBold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  background-image: url("/Sanddune.png");
+  background-image: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: #c27705;
+}
+
+:root {
+  --tint-color: 255, 255, 255;
+  --tint-opacity: 0.06;
+  --shadow-blur: 20px;
+  --shadow-spread: -5px;
+  --shadow-color: rgba(255, 255, 255, 0.45);
+  --outer-shadow-blur: 24px;
+  --glass-radius: 40px; /* Du kan minska denna om 60px är för runt */
+}
+
+/* Denna klass gör grovjobbet åt dig */
+.liquid-glass-card {
+  position: relative;
+  width: 437px;
+  height: 75px;
+  border-radius: var(--glass-radius);
+  box-shadow: 0px 4px var(--outer-shadow-blur) rgba(0, 0, 0, 0.18);
+  isolation: isolate;
+}
+
+/* Det "inre" glaset och färgen */
+.liquid-glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow: inset 0 0 var(--shadow-blur) var(--shadow-spread)
+    var(--shadow-color);
+  background-color: rgba(var(--tint-color), var(--tint-opacity));
+  pointer-events: none;
+}
+
+/* Själva filter-effekten */
+.liquid-glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  backdrop-filter: url(#liquid-glass-filter) blur(20px);
+  -webkit-backdrop-filter: url(#liquid-glass-filter) blur(20px);
+}
+
+/* Dölj skrollisten för Chrome, Safari och din Electron-app */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* För Firefox och IE/Edge */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

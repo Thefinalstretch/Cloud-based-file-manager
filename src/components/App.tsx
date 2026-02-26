@@ -16,11 +16,13 @@ import AuthProvider from "./authflow/authProvider";
 import Gamefinder from "./Gamefinder";
 import UploadGameData from "./UploadGameData";
 import { LiquidGlassProvider } from "@gracefullight/liquid-glass";
+import TopBar from "./TopBar";
 
 export const App = () => {
   return (
-    <AuthProvider>
-      <LiquidGlassProvider>
+    <div>
+      <TopBar />
+      <AuthProvider>
         <HashRouter>
           <Routes>
             <Route path="/" element={<Login_screen />} />
@@ -31,7 +33,16 @@ export const App = () => {
             <Route path="/UploadGameData" element={<UploadGameData />} />
           </Routes>
         </HashRouter>
-      </LiquidGlassProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </div>
   );
 };
+
+{
+  /* <div className="min-h-screen text-white bg-center bg-no-repeat bg-cover bg-fixed">
+      <div
+        className="w-full h-8"
+        style={{ WebkitAppRegion: "drag" } as React.CSSProperties}>
+        Nomadsync
+      </div> */
+}

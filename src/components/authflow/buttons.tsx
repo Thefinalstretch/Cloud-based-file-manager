@@ -7,7 +7,8 @@ export const Googlesigninbutton = () => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: "http://localhost:5173",
+          skipBrowserRedirect: true,
+
           queryParams: {
             access_type: "offline",
             prompt: "select_account",
@@ -26,8 +27,15 @@ export const Googlesigninbutton = () => {
   };
 
   return (
-    <button type="button" onClick={SignInwithGoogle}>
-      Logga in med Google
+    <button onClick={SignInwithGoogle}>
+      <div className="flex w-[437px] h-[75px]  relative overflow-hidden  hover:scale-105 transition-transform duration-200 cursor-pointer liquid-glass-card transform-gpu will">
+        <div className="flex-1 flex items-center pl-[15px] relative z-10">
+          <img src="/devicon_google.svg" className="w-12 h-12" />
+        </div>
+        <span className="font-InterSemi text-[#EEDFD1] text-4xl items-center flex pr-[20px] relative z-10">
+          Sign in using Google
+        </span>
+      </div>
     </button>
   );
 };
