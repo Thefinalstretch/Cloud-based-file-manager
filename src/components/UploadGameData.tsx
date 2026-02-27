@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { LiquidGlassFilters } from "@gracefullight/liquid-glass";
 import { useEffect, useState } from "react";
@@ -86,12 +87,14 @@ export default function UploadGameData() {
                     return <div key={game.AppID} className="w-[125px]"></div>;
                   }
 
-                  return (
+                  return (<button onClick={() => back("/GameSaveSelect", 
+                    {state: { game: game },})} >
                     <HexGameCard
                       key={game.AppID}
                       gameId={game.AppID}
                       gameName={game.Gamename}
                     />
+                  </button>
                   );
                 })}
               </div>

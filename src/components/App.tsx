@@ -17,6 +17,8 @@ import Gamefinder from "./Gamefinder";
 import UploadGameData from "./UploadGameData";
 import { LiquidGlassProvider } from "@gracefullight/liquid-glass";
 import TopBar from "./TopBar";
+import EpicSave from "./EpicGameSave";
+import Selector from "./GameSaveSelect";
 
 export const App = () => {
   return (
@@ -31,6 +33,7 @@ export const App = () => {
             <Route path="/UploadGameSave" element={<UploadSave />} />
             <Route path="/DownloadGameSave" element={<DownloadSave />} />
             <Route path="/UploadGameData" element={<UploadGameData />} />
+            <Route path="/GameSaveSelect" element={<Selector />} />
           </Routes>
         </HashRouter>
       </AuthProvider>
