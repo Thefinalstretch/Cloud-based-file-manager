@@ -21,15 +21,21 @@ const supabase = createClient(
 );
 //helper, denna funktion skapar en zipfil av vald mapp
 
-function zipDirectory(sourceDir: string, outPath: string): Promise<void> {
+function zipSource(sourceDir: string, outPath: string): Promise<void> {
   const archive = archiver("zip", { zlib: { level: 6 } });
   const stream = fs.createWriteStream(outPath);
 
   return new Promise((resolve, reject) => {
     archive
-      .directory(sourceDir, false)
       .on("error", (err) => reject(err))
       .pipe(stream);
+
+      const stats = fs.statSync(sourceDir);
+      if (stats.isDirectory()) {
+        archive.directory(sourceDir, false);
+      } else {
+        archive.file(sourceDir, { name: path.basename(sourceDir) });
+      }
 
     stream.on("close", () => resolve());
     archive.finalize();
@@ -37,7 +43,7 @@ function zipDirectory(sourceDir: string, outPath: string): Promise<void> {
 }
 //denna funktion laddar upp en zipfil till supabase
 
-export async function uploadGameSave(
+export async function uploadGameSave_separate(
   folderPath: string,
   userId: string,
   gameId: string,
@@ -51,7 +57,7 @@ export async function uploadGameSave(
 
     //zippar valda mappen
     console.log(`Zippar till ${tempZipPath}`);
-    await zipDirectory(folderPath, tempZipPath);
+    await zipSource(folderPath, tempZipPath);
 
     // Läser zipfilen, mappen har blivit en fil, så streams funkar nu!!!
     const fileStream = fs.createReadStream(tempZipPath);
@@ -59,7 +65,7 @@ export async function uploadGameSave(
     //ladda upp steget
 
     console.log(gameId, userId);
-    const cloudPath = `${userId}/${gameId}/saveC.zip`;
+    const cloudPath = `${userId}/${gameId}/saveF.zip`;
     console.log(`laddar upp till  ${cloudPath}`);
 
     const { data, error } = await supabase.storage

@@ -1,0 +1,2 @@
+FIXA file uppladdning så den inte skriver över sig själv, upsert:false
+fixa fil nedladdning

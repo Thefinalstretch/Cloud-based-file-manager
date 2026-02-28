@@ -88,7 +88,7 @@ export default function UploadGameData() {
                   }
 
                   return (<button onClick={() => back("/GameSaveSelect", 
-                    {state: { game: game },})} >
+                    {state: { selectedgame: game },})} >
                     <HexGameCard
                       key={game.AppID}
                       gameId={game.AppID}

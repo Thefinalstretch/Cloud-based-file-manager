@@ -326,11 +326,12 @@ export async function getGameSavePath(
       try {
         const stats = await fs.promises.stat(fullpathnormalized);
         const filesize = stats.size;
+        const megabytes = (filesize / (1024 * 1024)).toFixed(3);
 
         foundfiles.push({
           filePath: fullpathnormalized,
           filename: path.basename(relativepath),
-          filesize: filesize.toString(),
+          filesize: megabytes.toString(),
         });
       } catch (error) {
         console.warn(

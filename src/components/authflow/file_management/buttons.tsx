@@ -38,3 +38,42 @@ export const Extract_button = () => {
     </div>
   );
 };
+
+
+export const Extract_button_file = () => {
+  const [selectedPath, setSelectedPath] = useState<string>("");
+  const handleAddGame = async () => {
+    const path = await window.electron.selectFile();
+
+    if (path) {
+      console.log("selected: ", path);
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      console.log(user);
+
+      setSelectedPath(path);
+
+      alert(`Are you sure you want to upload ${path}?`);
+
+      await window.electron.uploadsave_separate(path, user?.id as string, "Warhammer");
+    }
+  };
+  return (
+    <div
+      style={{
+        marginTop: "50px",
+        borderTop: "2px dashed red",
+        padding: "20px",
+      }}>
+      <h3> Developer Test Zone </h3>
+      <p>Selected File: {selectedPath || "None"}</p>
+
+      <button
+        onClick={handleAddGame}
+        style={{ padding: "10px", fontSize: "16px" }}>
+        Test File Picker
+      </button>
+    </div>
+  );
+};

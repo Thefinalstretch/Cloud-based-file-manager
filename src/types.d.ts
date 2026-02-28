@@ -1,5 +1,6 @@
 export interface IElectronAPI {
   selectFolder: () => Promise<string | null>;
+  selectFile: () => Promise<string | null>;
   uploadSave: (
     filePath: string,
     userId: string,
@@ -10,6 +11,11 @@ export interface IElectronAPI {
   find_steampath: () => Promise<any>;
   getXboxGames: () => Promise<any[]>;
   getallgames: () => Promise<GameData[]>;
+  uploadsave_separate: (
+    filePath: string,
+    userId: string,
+    gameId: string,
+  ) => Promise<any>;
 }
 declare global {
   interface Window {

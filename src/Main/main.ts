@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
 import { uploadGameSave } from "./save-handler";
+import { uploadGameSave_separate } from "./save-handler-separate-files";
 import {
   find_all_worlds,
   find_steampath,
@@ -109,6 +110,17 @@ ipcMain.handle("dialog:openDirectory", async () => {
   }
 });
 
+ipcMain.handle("dialog:openFile", async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    properties: ["openFile"],
+  }); //
+  if (canceled) {
+    return null;
+  } else {
+    return filePaths[0];
+  }
+});
+
 //Variant som väljer flera directories
 ipcMain.handle("dialog:multiDirectory", async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog({
@@ -134,4 +146,8 @@ ipcMain.handle("get-xbox-games", async () => {
 
 ipcMain.handle("get-complete-game-save-data", async () => {
   return await getCompleteGameSaveData();
+});
+
+ipcMain.handle("uploadsave-separate", async (event, filePath, userId, gameId) => {
+  return await uploadGameSave_separate(filePath, userId, gameId);
 });
