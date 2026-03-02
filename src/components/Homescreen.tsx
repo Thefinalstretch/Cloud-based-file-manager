@@ -34,17 +34,35 @@ export const Homescreen = () => {
     <div>
       <h1>Welcome to the Home Screen!</h1>
 
-      <button onClick={() => router("/UploadGameSave")}>
+      <button 
+        className="pr-5"
+        onClick={() => router("/UploadGameSave")}>
+
         Upload Game Save
       </button>
 
-      <button onClick={() => router("/DownloadGameSave")}>
+      <button 
+        className="pr-5"
+        onClick={() => router("/DownloadGameSave")}>
         Download Game Save
       </button>
 
-      <button onClick={() => router("/UploadGameData")}>Upload GameData</button>
+      <button 
+        className="pr-5"
+        onClick={() => router("/CloudSelectPage")}>
+
+        Download Game Data
+      </button>
+
+      <button 
+        className="pr-5"
+        onClick={() => router("/GameSelectPage")}>
+
+        Upload Game Data
+      </button>
 
       <button
+        className="pr-5"
         onClick={async () => {
           const steamPath = await window.electron.find_steampath();
           console.log("Steam Path:", steamPath);

@@ -31,11 +31,11 @@ export default function Selector() {
     try {
     for (const save of selectedGame) {
       const path = save.filePath;
-      await window.electron.uploadsave_separate(save.filePath, user?.id as string, game.Gamename);
+      await window.electron.uploadsave_separate(save.filePath, user?.id as string, game.AppID, game.Gamename.replace(/[^a-zA-Z0-9 ]/g, ""), save.filename);
       
     }
     } catch (error) {
-      console.error("Error uploading saves: ", error);
+      console.error("Error uploading saves: ", error);0
     }
     }
   
@@ -68,6 +68,7 @@ export default function Selector() {
               key={game.AppID}
               gameId={game.AppID}
               gameName={game.Gamename}
+              gameSavesLength={game.Saves.length}
             />
           </header>
           <p>{game.SizeOnDisk} GB</p>
@@ -106,11 +107,14 @@ export default function Selector() {
           </div>
         </div>
 
-        <p className="text-black z-10 pl-[10px] text-xl py-5 px-20 mt-5 bg-[#ffff]" onClick={() => UploadSelected()}>
-            Waaaaa
-        </p>
+        <button 
+            className="text-black z-10 text-xl py-5 px-20 mt-5 bg-[#fffbaa] text-center flex justify-center rounded-[20px]" 
+            onClick={() => UploadSelected()}>
+
+            Upload
+        </button>
       </div>
-      <button className="bg-gray-800" onClick={() => back(-1)}>
+      <button className="bg-white" onClick={() => back(-1)}>
         Back
       </button>
 

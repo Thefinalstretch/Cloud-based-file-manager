@@ -56,7 +56,7 @@ export const Extract_button_file = () => {
 
       alert(`Are you sure you want to upload ${path}?`);
 
-      await window.electron.uploadsave_separate(path, user?.id as string, "Warhammer");
+      await window.electron.uploadsave_separate(path, user?.id as string);
     }
   };
   return (

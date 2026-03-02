@@ -4,6 +4,7 @@ import path from "path";
 import os from "os";
 import archiver from "archiver";
 import { use } from "react";
+import extract from 'extract-zip';
 
 // sätt in dessa i .env senare om det behövs
 

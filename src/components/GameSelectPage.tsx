@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { GameData } from "src/types";
 import HexGameCard from "./HexGameCard";
 
-export default function UploadGameData() {
+export default function GameList() {
   const back = useNavigate();
   const [games, setGames] = useState<GameData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -93,6 +93,7 @@ export default function UploadGameData() {
                       key={game.AppID}
                       gameId={game.AppID}
                       gameName={game.Gamename}
+                      gameSavesLength={game.Saves.length}
                     />
                   </button>
                   );

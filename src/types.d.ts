@@ -15,7 +15,13 @@ export interface IElectronAPI {
     filePath: string,
     userId: string,
     gameId: string,
+    fileId: string,
+    fileName: string,
   ) => Promise<any>;
+  fetchCloudSaves: (
+    userID: string,
+  ) => Promise<{ success: boolean; saves: Cloudsave[] }>;
+  downloadSave: (signedUrl: string, targetFolder: string) => Promise<{ success: boolean }>;
 }
 declare global {
   interface Window {
@@ -57,13 +63,24 @@ export interface GameData {
   isDummy?: boolean;
 }
 
-interface HexGameCardProps {
+export interface HexGameCardProps {
   gameId: string;
   gameName: string;
+  gameSavesLength: number;
   // onUpload: (id: string, name: string) => void;
 }
 export interface XboxGame {
   Name: string;
   PackageFamilyName: string;
   InstallLocation: string;
+}
+
+export interface Cloudsave {
+  gameName: string,
+  appID: string,
+  fileName: string, 
+  last_updated: string,
+  file_size: string,
+  storage_path: string, 
+  isDummy?: boolean,
 }

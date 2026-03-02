@@ -4,6 +4,7 @@ import type { HexGameCardProps } from "src/types";
 export default function HexGameCard({
   gameId,
   gameName,
+  gameSavesLength
   // onUpload,
 }: HexGameCardProps) {
   const steamImageUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${gameId}/header.jpg`;
@@ -19,7 +20,14 @@ export default function HexGameCard({
       />
 
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-5 text-center transition-all duration-300">
-        <h3 className="mb-4 text-lg text-white drop-shadow-md">{gameName}</h3>
+        <h3 className="mb-4 text-lg text-white drop-shadow-md">
+          {gameName}
+          <div className="mt-2 px-2 py-0.5 bg-[#000000]/20 border border-[#ffffff]/30 rounded-full">
+                  <span className="text-white text-[8px] font-bold">
+                    {gameSavesLength} DATA BLOCKS
+                  </span>
+          </div>
+        </h3>
       </div>
     </div>
   );
