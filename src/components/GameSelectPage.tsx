@@ -8,7 +8,7 @@ import HexGameCard from "./HexGameCard";
 export default function GameList() {
   const back = useNavigate();
   const [games, setGames] = useState<GameData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchGames = async () => {

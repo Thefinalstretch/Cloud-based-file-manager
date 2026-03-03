@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import HexGameCard from "./HexGameCard";
 import { Cloudsave } from "src/types";
 
+
 export default function Selectors() {
   const back = useNavigate();
   const { user } = useAuthContext();
@@ -19,6 +20,8 @@ export default function Selectors() {
   const game = location.state?.selectedgame as Cloudsave;
   const [availableSaves, setAvailableSaves] = useState<Cloudsave[]>([]);
   const [selectedGame, setSelectedGame] = useState<Cloudsave[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [games, setGames] = useState<GameData[]>([]);
 
   useEffect(() => {
     const fetchSaves = async () => {
@@ -40,6 +43,20 @@ export default function Selectors() {
 
   }, [])
 
+  function removeEnd(directory: string): string {
+  // Förväntare fullynormalized directories
+  const sliced = directory.split("\\");
+  console.log("before pop",sliced);
+  sliced.pop();
+  console.log("we are doing sth with slice gangalicious", sliced);
+  const remadePath = sliced.join("\\")
+  console.log(`Remade path for matching: ${remadePath}`);
+  
+  return remadePath;
+  }
+ 
+
+
 
   const DownloadSelected = async () => {
     const headfolder = game.gameName;
@@ -51,27 +68,40 @@ export default function Selectors() {
     try {
       for (const save of selectedGame) {
         
-        const filePath = `${user.id}/${game.gameName}/${save.fileName}`;
-        console.log("Attempting to download file from path: ", filePath);
+        const cloudFilePath = `${user.id}/${game.gameName}/${save.fileName}`;
+        console.log("Attempting to download file from path: ", cloudFilePath);
         const { data, error } = await supabase
           .storage
           .from("Game-save")
-          .createSignedUrl(filePath, 60);
+          .createSignedUrl(cloudFilePath, 60);
 
         if (error || !data) {
           console.error("Error downloading file: ", error);
           continue; // Skip this file and move to the next one
         }
         try {
-          await window.electron.downloadSave(data.signedUrl,"C:\\Users\\jonat\\Programmering\\code\\testDirectory")
-          console.log(`File ${save.fileName} downloaded and extracted successfully.`);
-        } catch (error) {
+        const localfilePath = await window.electron.cloudMatcher(save.appID, save.rootID, save.relativePath);
+        console.log("Local file path determined: ", localfilePath);
+        
+        if(await window.electron.checkIfFileExists(localfilePath)) {
+          const overrideselect = window.confirm(`${save.fileName} already exists at ${localfilePath}. Do you want to overwrite it?`)
+          if(!overrideselect) { 
+            console.log(`Skipping download of ${save.fileName} as it already exists and user chose not to overwrite.`);
+          }
+          else{
+            await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath));
+            console.log(`File ${save.fileName} downloaded and extracted successfully.`);
+          } 
+      } else {
+           await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath));
+           console.log(`File ${save.fileName} downloaded and extracted successfully.`);
+        } 
+
+
+
+      } catch (error) {
           console.error(`Error downloading or extracting file ${save.fileName}: `, error);
-        }
-
-
-
-      }
+        }}
     } catch (error) {
       console.error("Error fetching saves: ", error);
     }

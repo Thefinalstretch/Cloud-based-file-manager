@@ -17,11 +17,15 @@ export interface IElectronAPI {
     gameId: string,
     fileId: string,
     fileName: string,
+    relativePath: string,
+    rootID: string,
   ) => Promise<any>;
   fetchCloudSaves: (
     userID: string,
   ) => Promise<{ success: boolean; saves: Cloudsave[] }>;
   downloadSave: (signedUrl: string, targetFolder: string) => Promise<{ success: boolean }>;
+  cloudMatcher: (appID: string, rootID: string, relativePath: string) => Promise<string>;
+  checkIfFileExists: (localDirectory: string) => Promise<boolean>;
 }
 declare global {
   interface Window {
@@ -51,6 +55,8 @@ export interface Foundfile {
   filePath: string;
   filename: string;
   filesize?: string;
+  relativePath: string;
+  rootID: string;
 }
 
 export interface GameData {
@@ -78,9 +84,11 @@ export interface XboxGame {
 export interface Cloudsave {
   gameName: string,
   appID: string,
-  fileName: string, 
+  fileName: string,
+  relativePath: string,
   last_updated: string,
   file_size: string,
-  storage_path: string, 
+  storage_path: string,
   isDummy?: boolean,
+  rootID: string,
 }

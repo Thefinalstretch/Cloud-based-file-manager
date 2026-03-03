@@ -6,6 +6,7 @@ import type { Cloudsave, GameData } from "src/types";
 import HexGameCard from "./HexGameCard";
 import { supabase } from "./authflow/supabase-vite";
 import { useAuthContext } from "../hooks/useAuth";
+import { randomInt } from "node:crypto";
 
 
 export default function CloudFileList() {
@@ -92,6 +93,8 @@ export default function CloudFileList() {
           storage_path: "",
           fileName:"",
           isDummy: true,
+          rootID: "",
+          relativePath: "",
         });
       }
       rows.push(chunk);
@@ -117,11 +120,13 @@ export default function CloudFileList() {
                 className={`flex justify-center gap-4 ${rowIndex > 0 ? "-mt-[25px]" : ""}`}>
                 {row.map((game: Cloudsave) => {
 
-                                    return (<button onClick={() => back("/CloudSave",
+                  return (<button 
+                           key={game.appID}
+                           onClick={() => back("/CloudSave",
                     { state: { selectedgame: game }, })} >
                     
                     <HexGameCard
-                      key={game.appID}
+                      key={game.fileName}
                       gameId={game.appID}
                       gameName={game.gameName}
                       gameSavesLength={nr_saves}

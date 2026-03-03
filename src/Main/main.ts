@@ -2,13 +2,15 @@ import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
 import { uploadGameSave } from "./save-handler";
-import { uploadGameSave_separate, fetchCloudSaves, downloadSave } from "./save-handler-separate-files";
+import { uploadGameSave_separate, fetchCloudSaves, downloadSave, checkIfFileExists } from "./save-handler-separate-files";
 import {
+  cloudMatcher,
   find_all_worlds,
   find_steampath,
   getCompleteGameSaveData,
 } from "./LocalDirectory_finder";
 import { find_xbox_games } from "./XBOXGameFinder";
+import { removeEnd } from "./LocalDirectory_finder";
 
 import DownloadSave from "src/components/DownloadGameSave";
 
@@ -150,19 +152,26 @@ ipcMain.handle("get-complete-game-save-data", async () => {
   return await getCompleteGameSaveData();
 });
 
-ipcMain.handle("uploadsave-separate", async (event, filePath, userID, appID, gameName, fileName) => {
-  return await uploadGameSave_separate(filePath, userID, appID, gameName, fileName);
+ipcMain.handle("uploadsave-separate", async (event, filePath, userID, appID, gameName, fileName, relativePath, rootID) => {
+  return await uploadGameSave_separate(filePath, userID, appID, gameName, fileName, relativePath, rootID);
 });
 
 ipcMain.handle("fetchCloudSaves", async (event, userID) => {
   return await fetchCloudSaves(userID)
-})
+});
 ipcMain.handle("downloadSave", async (_event, signedUrl: string, targetFolder: string) => {
   try {
     const result = await downloadSave(signedUrl, targetFolder);
     return result;
   } catch (error) {
-    console.error("something failed bro", error);
+    console.error("something failed gangalang", error);
     throw error;
   }
-})
+});
+ipcMain.handle("cloudMatcher", async (event, appID, rootID, relativePath) => {
+  return await cloudMatcher(appID, rootID, relativePath);
+});
+
+ipcMain.handle("checkIfFileExists", async (event, localDirectory:string) => {
+  return await checkIfFileExists(localDirectory);
+});

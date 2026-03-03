@@ -9,6 +9,7 @@ import { exec } from "child_process";
 import util from "util";
 import { error } from "console";
 import type { Foundfile, GameData, SteamGame, steamuser } from "src/types";
+import { checkIfFileExists } from "./save-handler-separate-files";
 
 export function find_all_worlds() {
   function findMinecraftDirectory(): string | null {
@@ -332,6 +333,8 @@ export async function getGameSavePath(
           filePath: fullpathnormalized,
           filename: path.basename(relativepath),
           filesize: megabytes.toString(),
+          relativePath: relativepath,
+          rootID: rootId,
         });
       } catch (error) {
         console.warn(
@@ -385,4 +388,29 @@ export async function getCompleteGameSaveData(): Promise<GameData[]> {
     }),
   );
   return gamewithsaves.filter((game) => game.Saves.length > 0);
+}
+
+export async function cloudMatcher(appID: string, rootID: string, relativePath: string): Promise<string> {
+  console.log("We are using cloudmatcher!")
+  try {
+    const steampath = await find_steampath();
+    if (!steampath) {
+      throw new Error("Steam path not found.");
+    }
+    const user = await getLatestActiveSteamUser(steampath);
+    if (!user) {
+      throw new Error("No active user found.");
+    }
+    const filedir = getBasePathFromRoot(rootID, steampath, user.AccountID, appID);
+    const fullpathnormalized = path.normalize(path.join(filedir, relativePath));
+    console.log(`Attempting to match cloud save path: ${fullpathnormalized}`);
+    
+
+    return fullpathnormalized;
+  }
+
+  catch (error) {
+    console.error("Error in cloudMatcher:", error);
+  }
+  return "";
 }

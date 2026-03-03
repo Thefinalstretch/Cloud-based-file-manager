@@ -6,6 +6,7 @@ import archiver from "archiver";
 import { use } from "react";
 import { Cloudsave } from "../types";
 import extract from "extract-zip";
+import { error } from "console";
 
 // sätt in dessa i .env senare om det behövs
 
@@ -51,6 +52,8 @@ export async function uploadGameSave_separate(
   appID: string,
   gameName: string,
   fileName: string,
+  relativePath: string,
+  rootID: string,
 
 ) {
   console.log(`startar uppladdning för: '${filePath}`);
@@ -92,7 +95,7 @@ export async function uploadGameSave_separate(
 
     // om uppladdningen lyckades, kan vi spara metadata i databasen, t.ex. en referens till filen i storage och vilken användare det tillhör
     console.log("Updating database record");
-    const { error: dbError } = await supabase.from("game_saves").insert([
+    const { error: dbError } = await supabase.from("game_saves").upsert([
       {
         user_id: userID,
         game_name: gameName,
@@ -100,8 +103,10 @@ export async function uploadGameSave_separate(
         file_name: fileName,
         file_size_mb: Size_MB,
         app_id: appID,
+        relative_path: relativePath,
+        root_id: rootID
       },
-    ]);
+    ], { onConflict: "user_id,app_id,file_name" });
 
     if (dbError) throw dbError;
 
@@ -128,7 +133,8 @@ export async function fetchCloudSaves(userID: string) {
         last_updated: object.last_updated,
         file_size: object.file_size_mb,
         storage_path: object.storage_path,
-
+        relativePath: object.relative_path,
+        rootID: object.root_id,
       }));
       return { success: true, saves: gameObjects };
     }
@@ -139,11 +145,11 @@ export async function fetchCloudSaves(userID: string) {
   }
 }
 
-export async function downloadSave(signedUrl:string, targetFolder:string){
+export async function downloadSave(signedUrl: string, targetFolder: string) {
   const TempZipPath2 = path.join(targetFolder, "temp_download_file");
   try {
     if (!fs.existsSync(targetFolder)) {
-      fs.mkdirSync(targetFolder, {recursive: true});
+      fs.mkdirSync(targetFolder, { recursive: true });
     }
     const response = await fetch(signedUrl);
     if (!response.ok) {
@@ -153,11 +159,11 @@ export async function downloadSave(signedUrl:string, targetFolder:string){
     const buffer = Buffer.from(arrayBuffer);
     fs.writeFileSync(TempZipPath2, buffer);
 
-    await extract(TempZipPath2, {dir: targetFolder});
+    await extract(TempZipPath2, { dir: targetFolder });
 
     fs.unlinkSync(TempZipPath2);
 
-    return {success: true};
+    return { success: true };
   } catch (error) {
     if (fs.existsSync(TempZipPath2)) {
       fs.unlinkSync(TempZipPath2);
@@ -166,4 +172,16 @@ export async function downloadSave(signedUrl:string, targetFolder:string){
 
     throw error;
   }
+}
+
+export async function checkIfFileExists(Localdirectory: string): Promise<boolean> {
+  try {
+    await fs.promises.access(Localdirectory);
+    return true;
+} 
+  catch (error)
+     {
+      console.log("koll av fil misslyckades (troligen finns filen inte)", error);
+      return false;
+    };
 }

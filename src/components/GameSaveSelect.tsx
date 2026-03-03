@@ -31,11 +31,17 @@ export default function Selector() {
     try {
     for (const save of selectedGame) {
       const path = save.filePath;
-      await window.electron.uploadsave_separate(save.filePath, user?.id as string, game.AppID, game.Gamename.replace(/[^a-zA-Z0-9 ]/g, ""), save.filename);
+      await window.electron.uploadsave_separate(save.filePath, 
+                                                user?.id as string, 
+                                                game.AppID, 
+                                                game.Gamename.replace(/[^a-zA-Z0-9 ]/g, ""), 
+                                                save.filename,
+                                                save.relativePath,
+                                                save.rootID);
       
     }
     } catch (error) {
-      console.error("Error uploading saves: ", error);0
+      console.error("Error uploading saves: ", error);
     }
     }
   
