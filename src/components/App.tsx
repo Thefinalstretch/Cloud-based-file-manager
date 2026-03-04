@@ -9,11 +9,11 @@ import Login_screen from "./authflow/login-screen";
 import React, { useState } from "react";
 import { Homescreen } from "./Homescreen";
 import { uploadGameSave } from "src/Main/save-handler";
-import DownloadSave from "./DownloadGameSave";
+
 import UploadSave from "./UploadGameSave";
 import { AuthContext } from "src/hooks/useAuth";
 import AuthProvider from "./authflow/authProvider";
-import Gamefinder from "./Gamefinder";
+
 import CloudFileList from "./CloudSelectPage";
 import GameList from "./GameSelectPage";
 import { LiquidGlassProvider } from "@gracefullight/liquid-glass";
@@ -32,7 +32,6 @@ export const App = () => {
             {/*Här ska man kanske sätta in någon form av guard???  */}
             <Route path="/home" element={<Homescreen />} />
             <Route path="/UploadGameSave" element={<UploadSave />} />
-            <Route path="/DownloadGameSave" element={<DownloadSave />} />
             <Route path="/CloudSelectPage" element={<CloudFileList />} />
             <Route path="/CloudSave" element={<Selectors />} />
             <Route path="/GameSelectPage" element={<GameList />} />

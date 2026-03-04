@@ -9,9 +9,7 @@ import {
   find_steampath,
   getCompleteGameSaveData,
 } from "./LocalDirectory_finder";
-import { find_xbox_games } from "./XBOXGameFinder";
 
-import DownloadSave from "src/components/DownloadGameSave";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
@@ -95,11 +93,11 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.handle("upload-save", async (event, filePath, userID, gameID) => {
+ipcMain.handle("upload-save", async (event, filePath, userId, gameId) => {
   console.log("Main process recieved upload request for: ", filePath);
 
   //kallar på funktionen i save-handler.ts
-  return await uploadGameSave(filePath, userID, gameID);
+  return await uploadGameSave(filePath, userId, gameId);
 });
 
 ipcMain.handle("dialog:openDirectory", async () => {
@@ -143,9 +141,7 @@ ipcMain.handle("get-minecraft-worlds", () => {
 ipcMain.handle("find-steam-path", () => {
   return find_steampath();
 });
-ipcMain.handle("get-xbox-games", async () => {
-  return await find_xbox_games();
-});
+
 
 ipcMain.handle("get-complete-game-save-data", async () => {
   return await getCompleteGameSaveData();
@@ -158,7 +154,7 @@ ipcMain.handle("uploadsave-separate", async (event, filePath, userID, appID, gam
 ipcMain.handle("fetchCloudSaves", async (event, userID) => {
   return await fetchCloudSaves(userID)
 });
-ipcMain.handle("downloadSave", async (event, signedUrl: string, targetFolder: string) => {
+ipcMain.handle("downloadSave", async (_event, signedUrl: string, targetFolder: string) => {
   try {
     const result = await downloadSave(signedUrl, targetFolder);
     return result;

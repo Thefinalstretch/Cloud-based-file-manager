@@ -1,9 +1,9 @@
 
 import { useNavigate } from "react-router-dom";
-import { LiquidGlassFilters } from "@gracefullight/liquid-glass";
 import { useEffect, useState } from "react";
 import type { gameData } from "src/types";
 import HexGameCard from "./HexGameCard";
+import { Generalisedbutton, GeneralisedbuttonSm } from "./authflow/buttons";
 
 export default function GameList() {
   const back = useNavigate();
@@ -72,11 +72,11 @@ export default function GameList() {
 
   return (
     <div>
-      <div className="">
-        <h1 className="mb-10 text-3xl font-bold text-white">
+      <div className="justify-center items-center flex-col flex">
+        <h1 className="mb-10 text-5xl font-bold text-[#57463D] font-[Kodchasan-Semibold] pt-16">
           Select a Game to Upload
         </h1>
-        <div className="h-[600px] w-full overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,blue_25%,blue_75%,transparent)]">
+        <div className="h-[550px] w-full overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,blue_25%,blue_75%,transparent)]">
           <div className="flex flex-col items-center pt-20">
             {honeycombRows.map((row, rowIndex) => (
               <div
@@ -84,10 +84,12 @@ export default function GameList() {
                 className={`flex justify-center gap-4 ${rowIndex > 0 ? "-mt-[25px]" : ""}`}>
                 {row.map((game: gameData) => {
                   if (game.isDummy) {
-                    return <div key={game.appID} className="w-[125px]"></div>;
+                    return <div key={game.appID} className="w-[125px] "></div>;
                   }
 
-                  return (<button onClick={() => back("/GameSaveSelect", 
+                  return (<button 
+                           key={game.appID}
+                           onClick={() => back("/GameSaveSelect", 
                     {state: { selectedgame: game },})} >
                     <HexGameCard
                       key={game.appID}
@@ -98,13 +100,19 @@ export default function GameList() {
                   </button>
                   );
                 })}
-              </div>
+              </div >
             ))}
           </div>
         </div>
-        <button className="bg-gray-800" onClick={() => back(-1)}>
-          Back
-        </button>
+        <div className="position: fixed bottom-10 left-10">
+          <GeneralisedbuttonSm buttonName="Back" onClick={() => back(-1)}/>
+        </div>
+
+        <div className="position: fixed bottom-10 right-10">
+          <GeneralisedbuttonSm buttonName="Manual Upload" onClick={() => back(-1)}/>
+        </div>
+        
+        
       </div>
     </div>
   );

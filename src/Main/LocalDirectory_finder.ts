@@ -156,12 +156,12 @@ export async function getInstalledsteamGames(
 
         //Använder regex för att plocka ut namn och appID
         const nameMatch = filecontent.match(/"name"\s+"([^"]+)"/);
-        const appIDMatch = filecontent.match(/"appID"\s+"(\d+)"/);
+        const appIDMatch = filecontent.match(/"appid"\s+"(\d+)"/);
         const installdirectorymatch = filecontent.match(
           /"installdir"\s+"([^"]+)"/,
         );
-        const lastPlayedMatch = filecontent.match(/"lastPlayed"\s+"(\d+)"/);
-        const sizeOnDisk = filecontent.match(/"sizeOnDisk"\s+"(\d+)"/);
+        const lastPlayedMatch = filecontent.match(/"LastPlayed"\s+"(\d+)"/);
+        const sizeOnDisk = filecontent.match(/"SizeOnDisk"\s+"(\d+)"/);
         const versionIDMatch = filecontent.match(/"buildid"\s+"(\d+)"/);
 
         if (nameMatch && appIDMatch) {
@@ -379,7 +379,7 @@ export async function getCompleteGameSaveData(): Promise<gameData[]> {
     installedgames.map(async (game) => {
       const saves = await getGameSavePath(user, game.appID, steampath);
       return {
-        gameName: game.gameName,
+        gameName: game.gameName.replace(/[^a-zA-Z0-9 ]/g, ""),
         sizeOnDisk: game.sizeOnDisk,
         lastPlayed: game.lastPlayed,
         versionID: game.versionID,

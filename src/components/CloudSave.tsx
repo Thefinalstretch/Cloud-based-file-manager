@@ -4,12 +4,13 @@ import { useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuth";
 import { Profile_icon } from "./Profile_icon";
 import { Extract_button } from "./authflow/file_management/buttons";
-import Gamefinder from "./Gamefinder";
+
 import { gameData, foundFile } from "src/types";
 import { useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import HexGameCard from "./HexGameCard";
 import { cloudSave } from "src/types";
+import { GeneralisedbuttonSm } from "./authflow/buttons";
 
 
 export default function Selectors() {
@@ -51,8 +52,13 @@ export default function Selectors() {
   console.log("we are doing sth with slice gangalicious", sliced);
   const remadePath = sliced.join("\\")
   console.log(`Remade path for matching: ${remadePath}`);
-  
+
   return remadePath;
+  }
+
+  function splitFileName(file: string): string  {
+    const split = file.split("elefantkraka");
+    return split[0];
   }
  
 
@@ -113,13 +119,13 @@ export default function Selectors() {
   const SelectSave = (MoveToSelect: cloudSave) => {
     //Steg A: Ta bort från tillgängliga saves
     //"Behåll alla filer vars namn vi inte klickat på"
-    setAvailableSaves((prev) => prev.filter((save) => save.fileName !== MoveToSelect.fileName));
+    setAvailableSaves((prev) => prev.filter((save) => save.relativePath !== MoveToSelect.relativePath));
     setSelectedGame((prev) => [...prev, MoveToSelect])
   }
 
 
   const DeselectSave = (MoveToAvailable: cloudSave) => {
-    setSelectedGame((prev) => prev.filter((save) => save.fileName !== MoveToAvailable.fileName));
+    setSelectedGame((prev) => prev.filter((save) => save.relativePath !== MoveToAvailable.relativePath));
     setAvailableSaves((prev) => [...prev, MoveToAvailable])
   }
 
@@ -131,13 +137,14 @@ export default function Selectors() {
 
       <div className="bg-[#ffffff]/50 h-[651px] w-[643px] rounded-[20px] flex flex-col items-center pt-[40px]">
         <div className="w-[600px] h-[150px] bg-[#D9BBA1] rounded-[20px] flex">
-          <header>{game.gameName}
-            <HexGameCard
+          <header>
+            <img src={`https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appID}/library_hero.jpg`}/>{game.gameName}
+            {/* <HexGameCard
               key={game.appID}
               gameID={game.appID}
               gameName={game.gameName}
               gameSavesLength={0}
-            />
+            /> */}
           </header>
           {/* <p>{game.fileSize} GB</p> */}
           {/* <p>{game.lastplayed}</p> */}
@@ -151,9 +158,9 @@ export default function Selectors() {
             <h1>Cloud Database</h1>
             {availableSaves.map((save) => (
               <div onClick={() => SelectSave(save)}
-                key={save.fileName}
+                key={save.relativePath}
                 className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
-                <h3 className="text-md font-bold">{save.fileName}</h3>
+                <h3 className="text-md font-bold">{splitFileName(save.fileName)}</h3>
                 <p className="text-sm">{save.fileSize} MB</p>
                 <p>{game.gameName}</p>
               </div>
@@ -165,9 +172,9 @@ export default function Selectors() {
             <h1 className="">To Be Downloaded</h1>
             {selectedGame.map((save) => (
               <div onClick={() => DeselectSave(save)}
-                key={save.fileName}
+                key={save.relativePath}
                 className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
-                <h3 className="text-md font-bold">{save.fileName}</h3>
+                <h3 className="text-md font-bold">{splitFileName(save.fileName)}</h3>
                 <p className="text-sm">{save.fileSize} MB</p>
               </div>
 
@@ -175,16 +182,13 @@ export default function Selectors() {
           </div>
         </div>
 
-        <button
-          className="text-black z-10 text-xl py-5 px-20 mt-5 bg-[#fffbaa] text-center flex justify-center rounded-[20px]"
-          onClick={() => DownloadSelected()}>
-
-          Download
-        </button>
+        <div className="pt-3 ">
+                  <GeneralisedbuttonSm buttonName="Upload" onClick={() => DownloadSelected()}/>
+                </div>
       </div>
-      <button className="bg-white" onClick={() => back(-1)}>
-        Back
-      </button>
+      <div className="position: fixed bottom-16 left-6">
+                <GeneralisedbuttonSm buttonName="Back" onClick={() => back(-1)}/>
+        </div>
 
     </div>
   );

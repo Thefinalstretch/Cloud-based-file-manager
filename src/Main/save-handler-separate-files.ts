@@ -106,7 +106,7 @@ export async function uploadGameSave_separate(
         relative_path: relativePath,
         root_id: rootID
       },
-    ], { onConflict: "user_id,app_id,file_name" });
+    ], { onConflict: "user_id,app_id,relative_path" });
 
     if (dbError) throw dbError;
 
@@ -120,12 +120,18 @@ export async function uploadGameSave_separate(
 }
 
 export async function fetchCloudSaves(userID: string) {
+
+  
+
+
   try {
     const { data, error } = await supabase
       .from("game_saves")
       .select("*")
       .eq("user_id", userID);
     if (data) {
+      
+      
       const gameObjects: cloudSave[] = data.map((object) => ({
         gameName: object.game_name,
         appID: object.app_id,

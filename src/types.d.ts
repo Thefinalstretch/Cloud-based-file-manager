@@ -10,7 +10,7 @@ export interface IElectronAPI {
   onLog: (callback: (message: string) => void) => void;
   find_steampath: () => Promise<any>;
   getXboxGames: () => Promise<any[]>;
-  getallgames: () => Promise<GameData[]>;
+  getallgames: () => Promise<gameData[]>;
   uploadsave_separate: (
     filePath: string,
     userID: string,
@@ -22,7 +22,7 @@ export interface IElectronAPI {
   ) => Promise<any>;
   fetchCloudSaves: (
     userID: string,
-  ) => Promise<{ success: boolean; saves: Cloudsave[] }>;
+  ) => Promise<{ success: boolean; saves: cloudSave[] }>;
   downloadSave: (signedUrl: string, targetFolder: string) => Promise<{ success: boolean }>;
   cloudMatcher: (appID: string, rootID: string, relativePath: string) => Promise<string>;
   checkIfFileExists: (localDirectory: string) => Promise<boolean>;
@@ -64,7 +64,7 @@ export interface gameData {
   sizeOnDisk: string;
   lastPlayed: string;
   versionID: string;
-  saves: Foundfile[];
+  saves: foundFile[];
   appID: string;
   isDummy?: boolean;
 }

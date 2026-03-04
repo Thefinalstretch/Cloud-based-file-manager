@@ -7,6 +7,7 @@ import HexGameCard from "./HexGameCard";
 import { supabase } from "./authflow/supabase-vite";
 import { useAuthContext } from "../hooks/useAuth";
 import { randomInt } from "node:crypto";
+import { GeneralisedbuttonSm } from "./authflow/buttons";
 
 
 export default function CloudFileList() {
@@ -15,8 +16,10 @@ export default function CloudFileList() {
   const { user } = useAuthContext();
 
   const [Saves, setSaves] = useState<cloudSave[]>([]);
-  const [nr_saves, setNr_saves] = useState(0);
+  const [nr_saves, setNr_saves] = useState<cloudSave[]>([]);
   const [loading, setLoading] = useState(true);
+
+  
 
 
 
@@ -29,7 +32,7 @@ export default function CloudFileList() {
         
         if (response) {
           setSaves(RemoveDuplicated(response.saves));
-          setNr_saves(response.saves.length);
+          setNr_saves(response.saves);
         }
       }
       catch (error) {
@@ -108,18 +111,18 @@ export default function CloudFileList() {
 
   return (
     <div>
-      <div className="">
-        <h1 className="mb-10 text-3xl font-bold text-white">
-          Select a Game to Upload
+      <div className="justify-center items-center flex-col flex">
+        <h1 className="mb-10 text-5xl font-bold text-[#57463D] font-[Kodchasan-Semibold] pt-16">
+          Select a Game to Download
         </h1>
-        <div className="h-[600px] w-full overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,blue_25%,blue_75%,transparent)]">
+        <div className="h-[550px] w-full overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,blue_25%,blue_75%,transparent)]">
           <div className="flex flex-col items-center pt-20">
             {honeycombRows.map((row, rowIndex) => (
               <div
                 key={`row-${rowIndex}`}
                 className={`flex justify-center gap-4 ${rowIndex > 0 ? "-mt-[25px]" : ""}`}>
                 {row.map((game: cloudSave) => {
-
+                  const filesWithSameID = nr_saves.filter(x => x.appID === game.appID);
                   return (<button 
                            key={game.appID}
                            onClick={() => back("/cloudSave",
@@ -129,7 +132,7 @@ export default function CloudFileList() {
                       key={game.fileName}
                       gameID={game.appID}
                       gameName={game.gameName}
-                      gameSavesLength={nr_saves}
+                      gameSavesLength={filesWithSameID.length}
                     />
                   </button>
                   );
@@ -138,9 +141,12 @@ export default function CloudFileList() {
             ))}
           </div>
         </div>
-        <button className="bg-gray-800" onClick={() => back(-1)}>
-          Back
-        </button>
+        <div className="position: fixed bottom-10 left-10">
+          <GeneralisedbuttonSm buttonName="Back" onClick={() => back(-1)}/>
+        </div>
+        <div className="position: fixed bottom-10 right-10">
+          <GeneralisedbuttonSm buttonName="Manual Download" onClick={() => back(-1)}/>
+        </div>
       </div>
     </div>
   );

@@ -16,18 +16,19 @@ export default function HexGameCard({
       <img
         src={steamImageUrl}
         alt={gameName}
-        className="absolute inset-0 z-0 w-full h-full object-cover"
+        className="absolute inset-0 z-0 w-full h-full opacity-50 object-cover"
       />
 
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-5 text-center transition-all duration-300">
-        <h3 className="mb-4 text-lg text-white drop-shadow-md">
+      <div className="inset-0 z-10 flex flex-col items-center justify-center pt-5 px-2 text-center transition-all duration-300">
+        <h3 className="absolute top-[30px] px-1 text-sm text-white drop-shadow-md line-clamp-2 font-[Kodchasan-Semibold]">
           {gameName}
-          <div className="mt-2 px-2 py-0.5 bg-[#000000]/20 border border-[#ffffff]/30 rounded-full">
-                  <span className="text-white text-[8px] font-bold">
-                    {gameSavesLength} DATA BLOCKS
+          
+        </h3>
+        <div className="absolute top-[80px] bg-[#000000]/20 border border-[#ffffff]/30 rounded-full justify-center items-center flex">
+                  <span className="font-[Kodchasan-Semibold] text-white text-[8px] font-bold px-2 py-2 justify-center items-center ">
+                    {gameSavesLength} Saves
                   </span>
           </div>
-        </h3>
       </div>
     </div>
   );

@@ -22,13 +22,13 @@ export const Profile_icon = () => {
         <img
           src={avatar_icon_url}
           alt="Google Icon"
-          style={{ width: "40px", height: "40px", borderRadius: "50%" }}
+          style={{ width: "80px", height: "80px", borderRadius: "50%" }}
           referrerPolicy="no-referrer"
         />
       : <div
           style={{
-            width: "40px",
-            height: "40px",
+            width: "80px",
+            height: "80px",
             borderRadius: "50%",
             background: "#8d2626",
           }}

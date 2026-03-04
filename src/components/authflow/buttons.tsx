@@ -1,5 +1,7 @@
 import { supabase } from "./supabase-vite";
 
+
+
 export const Googlesigninbutton = () => {
   const SignInwithGoogle = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -28,7 +30,8 @@ export const Googlesigninbutton = () => {
 
   return (
     <button onClick={SignInwithGoogle}>
-      <div className="flex w-[437px] h-[75px]  relative overflow-hidden  hover:scale-105 transition-transform duration-200 cursor-pointer liquid-glass-card transform-gpu will">
+      <div className="flex w-[437px] h-[75px]  relative overflow-hidden  hover:scale-105
+                      transition-transform duration-200 cursor-pointer liquid-glass-card transform-gpu will">
         <div className="flex-1 flex items-center pl-[15px] relative z-10">
           <img src="/devicon_google.svg" className="w-12 h-12" />
         </div>
@@ -40,8 +43,7 @@ export const Googlesigninbutton = () => {
   );
 };
 
-export const Signoutbutton = () => {
-  const SignOut = async () => {
+export const SignOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
@@ -49,5 +51,33 @@ export const Signoutbutton = () => {
       console.log("Signoutfel:", error);
     }
   };
+
+export const Signoutbutton = () => {
   return <button onClick={SignOut}>Logga ut</button>;
 };
+
+export const Generalisedbutton = ({buttonName, onClick}: {buttonName:string, onClick: () => void} ) => {
+  return (
+     <button onClick={onClick}>
+      <div className="flex w-[437px] h-[75px]  relative overflow-hidden  hover:scale-105 
+                      transition-transform duration-200 cursor-pointer liquid-glass-card transform-gpu will justify-center">
+        <span className="font-InterSemi text-[#EEDFD1] text-4xl items-center flex pr-[20px] relative z-10">
+          {buttonName}
+        </span>
+      </div>
+    </button>
+  ) 
+}
+
+export const GeneralisedbuttonSm = ({buttonName, onClick}: {buttonName:string, onClick: () => void} ) => {
+  return (
+     <button onClick={onClick}>
+      <div className="flex overflow-hidden hover:scale-105 pt-0
+                      transition-transform duration-200 cursor-pointer liquid-glass-card-sm transform-gpu justify-center">
+        <span className="font-InterSemi text-[#EEDFD1] text-xl items-center flex relative z-10">
+          {buttonName}
+        </span>
+      </div>
+    </button>
+  ) 
+}

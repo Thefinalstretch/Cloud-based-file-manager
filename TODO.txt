@@ -1,2 +1,13 @@
-FIXA file uppladdning så den inte skriver över sig själv, upsert:false
-fixa fil nedladdning
+FIXA Delete knapp vid nerladdnings page, alltså CoudSave.tsx
+
+Fixa headern på både nerladdning och uppladdning
+Den ska inkludera namnet, last played, och använda spelets banner grafik.
+
+Manuell uppladdningsknapp, ska använda logik som redan finns i UploadGameSave.tsx
+Manuella uppladdningar ska använda någonting som "Custom Files" för att sparas, och sparas i formen av folder.
+Användaren väljer ett folder -> foldern blir en zip fil med samma namn -> zip filen skickas upp till Custom files bucket.
+Vid nerladdning så dyker Custom Files upp I våra game select, vi kan välja den och tas till dess filer. Där kan du välja vilka filer att 
+ladda ner som om den vore ett spel.
+
+(Om vi laddar upp zip filen med dess filepath, så kan nerladdning skickas till exakt samma filepath igen vid nerladdning)
+(OM filepath också är sparad i databasen.)

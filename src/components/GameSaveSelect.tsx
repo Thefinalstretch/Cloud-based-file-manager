@@ -4,11 +4,12 @@ import { useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuth";
 import { Profile_icon } from "./Profile_icon";
 import { Extract_button } from "./authflow/file_management/buttons";
-import Gamefinder from "./Gamefinder";
+
 import { gameData, foundFile } from "src/types";
 import { useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import HexGameCard from "./HexGameCard";
+import { Generalisedbutton, GeneralisedbuttonSm } from "./authflow/buttons";
 
 export default function Selector() {
   const back = useNavigate();
@@ -26,38 +27,37 @@ export default function Selector() {
     if (selectedGame.length === 0) {
       alert("Please select at least one save to upload.");
       return;
-    }  
+    }
 
     try {
     for (const save of selectedGame) {
       const path = save.filePath;
+      //Logik för att titta om relative path finns i databasen
+      
       await window.electron.uploadsave_separate(save.filePath, 
                                                 user?.id as string, 
                                                 game.appID, 
-                                                game.gameName.replace(/[^a-zA-Z0-9 ]/g, ""), 
+                                                game.gameName, 
                                                 save.fileName,
                                                 save.relativePath,
                                                 save.rootID);
-      
+      }
     }
-    } catch (error) {
+    catch (error) {
       console.error("Error uploading saves: ", error);
     }
     }
-  
-
-
 
   const SelectSave = (MoveToSelect: foundFile) => {
     //Steg A: Ta bort från tillgängliga saves
     //"Behåll alla filer vars namn vi inte klickat på"
-    setAvailableSaves((prev) => prev.filter((save) => save.fileName !== MoveToSelect.fileName));
+    setAvailableSaves((prev) => prev.filter((save) => save.relativePath !== MoveToSelect.relativePath));
     setSelectedGame((prev) => [...prev, MoveToSelect])
   }
 
 
   const DeselectSave = (MoveToAvailable: foundFile) =>{
-    setSelectedGame((prev) => prev.filter((save) => save.fileName !== MoveToAvailable.fileName));
+    setSelectedGame((prev) => prev.filter((save) => save.relativePath !== MoveToAvailable.relativePath));
     setAvailableSaves((prev) => [...prev, MoveToAvailable])
   }
 
@@ -89,7 +89,7 @@ export default function Selector() {
             <h1>Local Saves</h1>
             {availableSaves.map((save) => (
               <div onClick={() => SelectSave(save)}
-                   key={save.fileName} 
+                   key={save.relativePath}
                    className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
                 <h3 className="text-md font-bold">{save.fileName}</h3>
                 <p className="text-sm">{save.fileSize} MB</p>
@@ -103,7 +103,7 @@ export default function Selector() {
             <h1 className="">To Be Uploaded</h1> 
             {selectedGame.map((save) => (
               <div onClick={() => DeselectSave(save)}
-                   key={save.fileName} 
+                   key={save.relativePath} 
                    className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
                 <h3 className="text-md font-bold">{save.fileName}</h3>
                 <p className="text-sm">{save.fileSize} MB</p>
@@ -112,17 +112,15 @@ export default function Selector() {
             ))}
           </div>
         </div>
-
-        <button 
-            className="text-black z-10 text-xl py-5 px-20 mt-5 bg-[#fffbaa] text-center flex justify-center rounded-[20px]" 
-            onClick={() => UploadSelected()}>
-
-            Upload
-        </button>
+        <div className="pt-3 ">
+          <GeneralisedbuttonSm buttonName="Upload" onClick={() => UploadSelected()}/>
+        </div>
+       
+        
       </div>
-      <button className="bg-white" onClick={() => back(-1)}>
-        Back
-      </button>
+      <div className="position: fixed bottom-16 left-6">
+          <GeneralisedbuttonSm buttonName="Back" onClick={() => back(-1)}/>
+        </div>
 
     </div>
   );
