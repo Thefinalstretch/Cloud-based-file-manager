@@ -3,7 +3,7 @@ import { useAuthContext } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { Profile_icon } from "./Profile_icon";
 import HexGameCard from "./HexGameCard";
-import { XboxGame } from "../types";
+import { xboxGame } from "../types";
 
 export default function Gamefinder() {
   const back = useNavigate();

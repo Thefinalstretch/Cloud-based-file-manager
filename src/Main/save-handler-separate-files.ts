@@ -4,7 +4,7 @@ import path from "path";
 import os from "os";
 import archiver from "archiver";
 import { use } from "react";
-import { Cloudsave } from "../types";
+import { cloudSave } from "../types";
 import extract from "extract-zip";
 import { error } from "console";
 
@@ -126,7 +126,7 @@ export async function fetchCloudSaves(userID: string) {
       .select("*")
       .eq("user_id", userID);
     if (data) {
-      const gameObjects: Cloudsave[] = data.map((object) => ({
+      const gameObjects: cloudSave[] = data.map((object) => ({
         gameName: object.game_name,
         appID: object.app_id,
         fileName: object.file_name,

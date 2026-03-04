@@ -91,7 +91,7 @@ export default function GameList() {
                     {state: { selectedgame: game },})} >
                     <HexGameCard
                       key={game.appID}
-                      gameId={game.appID}
+                      gameID={game.appID}
                       gameName={game.gameName}
                       gameSavesLength={game.saves.length}
                     />

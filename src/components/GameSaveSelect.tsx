@@ -72,7 +72,7 @@ export default function Selector() {
           <header>{game.gameName}
             <HexGameCard
               key={game.appID}
-              gameId={game.appID}
+              gameID={game.appID}
               gameName={game.gameName}
               gameSavesLength={game.saves.length}
             />
