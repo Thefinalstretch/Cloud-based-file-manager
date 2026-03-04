@@ -1,13 +1,13 @@
 import React from "react";
-import type { HexGameCardProps } from "src/types";
+import type { hexGameCardProps } from "src/types";
 
 export default function HexGameCard({
-  gameId,
+  gameID,
   gameName,
   gameSavesLength
   // onUpload,
-}: HexGameCardProps) {
-  const steamImageUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${gameId}/header.jpg`;
+}: hexGameCardProps) {
+  const steamImageUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${gameID}/header.jpg`;
 
   return (
     /* Hexagon containern */

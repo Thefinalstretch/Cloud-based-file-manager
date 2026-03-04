@@ -5,11 +5,11 @@ import { useAuthContext } from "../hooks/useAuth";
 import { Profile_icon } from "./Profile_icon";
 import { Extract_button } from "./authflow/file_management/buttons";
 import Gamefinder from "./Gamefinder";
-import { GameData, Foundfile } from "src/types";
+import { gameData, foundFile } from "src/types";
 import { useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import HexGameCard from "./HexGameCard";
-import { Cloudsave } from "src/types";
+import { cloudSave } from "src/types";
 
 
 export default function Selectors() {
@@ -17,11 +17,11 @@ export default function Selectors() {
   const { user } = useAuthContext();
   const location = useLocation();
 
-  const game = location.state?.selectedgame as Cloudsave;
-  const [availableSaves, setAvailableSaves] = useState<Cloudsave[]>([]);
-  const [selectedGame, setSelectedGame] = useState<Cloudsave[]>([]);
+  const game = location.state?.selectedgame as cloudSave;
+  const [availableSaves, setAvailableSaves] = useState<cloudSave[]>([]);
+  const [selectedGame, setSelectedGame] = useState<cloudSave[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [games, setGames] = useState<GameData[]>([]);
+  const [games, setGames] = useState<gameData[]>([]);
 
   useEffect(() => {
     const fetchSaves = async () => {
@@ -110,7 +110,7 @@ export default function Selectors() {
 
 
 
-  const SelectSave = (MoveToSelect: Cloudsave) => {
+  const SelectSave = (MoveToSelect: cloudSave) => {
     //Steg A: Ta bort från tillgängliga saves
     //"Behåll alla filer vars namn vi inte klickat på"
     setAvailableSaves((prev) => prev.filter((save) => save.fileName !== MoveToSelect.fileName));
@@ -118,7 +118,7 @@ export default function Selectors() {
   }
 
 
-  const DeselectSave = (MoveToAvailable: Cloudsave) => {
+  const DeselectSave = (MoveToAvailable: cloudSave) => {
     setSelectedGame((prev) => prev.filter((save) => save.fileName !== MoveToAvailable.fileName));
     setAvailableSaves((prev) => [...prev, MoveToAvailable])
   }
@@ -134,12 +134,12 @@ export default function Selectors() {
           <header>{game.gameName}
             <HexGameCard
               key={game.appID}
-              gameId={game.appID}
+              gameID={game.appID}
               gameName={game.gameName}
               gameSavesLength={0}
             />
           </header>
-          {/* <p>{game.file_size} GB</p> */}
+          {/* <p>{game.fileSize} GB</p> */}
           {/* <p>{game.lastplayed}</p> */}
 
         </div>
@@ -154,7 +154,7 @@ export default function Selectors() {
                 key={save.fileName}
                 className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
                 <h3 className="text-md font-bold">{save.fileName}</h3>
-                <p className="text-sm">{save.file_size} MB</p>
+                <p className="text-sm">{save.fileSize} MB</p>
                 <p>{game.gameName}</p>
               </div>
 
@@ -168,7 +168,7 @@ export default function Selectors() {
                 key={save.fileName}
                 className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
                 <h3 className="text-md font-bold">{save.fileName}</h3>
-                <p className="text-sm">{save.file_size} MB</p>
+                <p className="text-sm">{save.fileSize} MB</p>
               </div>
 
             ))}

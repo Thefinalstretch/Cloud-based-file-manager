@@ -2,12 +2,12 @@
 import { useNavigate } from "react-router-dom";
 import { LiquidGlassFilters } from "@gracefullight/liquid-glass";
 import { useEffect, useState } from "react";
-import type { GameData } from "src/types";
+import type { gameData } from "src/types";
 import HexGameCard from "./HexGameCard";
 
 export default function GameList() {
   const back = useNavigate();
-  const [games, setGames] = useState<GameData[]>([]);
+  const [games, setGames] = useState<gameData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -29,20 +29,20 @@ export default function GameList() {
     return <div>Loading games...</div>;
   }
   const SIMULATION_COUNT = 40; // Totalt antal spel att simulera (inklusive riktiga spel)
-  const simulatedGames: GameData[] = [...games];
+  const simulatedGames: gameData[] = [...games];
   for (let i = games.length; i < SIMULATION_COUNT; i++) {
     simulatedGames.push({
-      AppID: `sim-${i}`,
-      Gamename: `Test Game ${i}`,
-      SizeOnDisk: "10 GB",
-      lastplayed: "2024-01-01",
+      appID: `sim-${i}`,
+      gameName: `Test Game ${i}`,
+      sizeOnDisk: "10 GB",
+      lastPlayed: "2024-01-01",
       versionID: "1.0",
-      Saves: [],
+      saves: [],
       // Vi sätter INTE isDummy: true här, för vi vill att HexGameCard ska renderas
-    } as GameData);
+    } as gameData);
   }
 
-  function createHoneycombRows(games: GameData[]) {
+  function createHoneycombRows(games: gameData[]) {
     const rows = [];
     let currentIndex = 0;
     let isThreeRow = true;
@@ -53,12 +53,12 @@ export default function GameList() {
       while (chunk.length < chunkSize) {
         chunk.push({
           isDummy: true,
-          AppID: `dummy-${currentIndex}-${chunk.length}`,
-          Gamename: "empty",
-          SizeOnDisk: "",
-          lastplayed: "",
+          appID: `dummy-${currentIndex}-${chunk.length}`,
+          gameName: "empty",
+          sizeOnDisk: "",
+          lastPlayed: "",
           versionID: "",
-          Saves: [],
+          saves: [],
         });
       }
       rows.push(chunk);
@@ -82,18 +82,18 @@ export default function GameList() {
               <div
                 key={`row-${rowIndex}`}
                 className={`flex justify-center gap-4 ${rowIndex > 0 ? "-mt-[25px]" : ""}`}>
-                {row.map((game: GameData) => {
+                {row.map((game: gameData) => {
                   if (game.isDummy) {
-                    return <div key={game.AppID} className="w-[125px]"></div>;
+                    return <div key={game.appID} className="w-[125px]"></div>;
                   }
 
                   return (<button onClick={() => back("/GameSaveSelect", 
                     {state: { selectedgame: game },})} >
                     <HexGameCard
-                      key={game.AppID}
-                      gameId={game.AppID}
-                      gameName={game.Gamename}
-                      gameSavesLength={game.Saves.length}
+                      key={game.appID}
+                      gameId={game.appID}
+                      gameName={game.gameName}
+                      gameSavesLength={game.saves.length}
                     />
                   </button>
                   );

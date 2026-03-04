@@ -8,7 +8,7 @@ import { promisify } from "util";
 import { exec } from "child_process";
 import util from "util";
 import { error } from "console";
-import type { Foundfile, GameData, SteamGame, steamuser } from "src/types";
+import type { foundFile, gameData, steamGame, steamUser } from "src/types";
 import { checkIfFileExists } from "./save-handler-separate-files";
 
 export function find_all_worlds() {
@@ -16,7 +16,7 @@ export function find_all_worlds() {
     // vi kan möjligtvis också använda den här funktionen i downloadfunktionen, genom att vi laddar ner sparfilen
     // och sedan att appen läser localdirectory och unzippar filen i pathen.
     const platform = os.platform();
-    const homedirectory = os.homedir();
+    const homeDirectory = os.homedir();
 
     if (platform === "win32") {
       const appData = process.env.APPDATA;
@@ -27,7 +27,7 @@ export function find_all_worlds() {
     }
     if (platform === "darwin") {
       return path.join(
-        homedirectory,
+        homeDirectory,
         "Library",
         "Application Support",
         "minecraft",
@@ -35,7 +35,7 @@ export function find_all_worlds() {
       ); // C:\\Users\User\Library\Application Support\minecraft\saves (bara ett exempel)
     }
     if (platform === "linux") {
-      return path.join(homedirectory, ".minecraft", "saves");
+      return path.join(homeDirectory, ".minecraft", "saves");
     }
 
     return null;
@@ -89,9 +89,9 @@ regedit.setExternalVBSLocation(vbsdirectory);
 
 export async function find_steampath(): Promise<string | null> {
   try {
-    const SteamRegistryKey = "HKCU\\Software\\Valve\\Steam";
-    const result = (await listkey([SteamRegistryKey])) as any;
-    const steamPathData = result[SteamRegistryKey]?.values?.SteamPath?.value;
+    const steamRegistryKey = "HKCU\\Software\\Valve\\Steam";
+    const result = (await listkey([steamRegistryKey])) as any;
+    const steamPathData = result[steamRegistryKey]?.values?.SteamPath?.value;
     if (steamPathData) {
       return path.normalize(steamPathData);
     }
@@ -122,25 +122,25 @@ export async function getLibraryVdfPaths(
       libraryPaths.push(path.normalize(match[1]));
     }
 
-    const uniqueLibraryPaths = [...new Set(libraryPaths)];
+    const uniquelibraryPaths = [...new Set(libraryPaths)];
     console.log("Found library paths:");
-    uniqueLibraryPaths.forEach((Path) => {
+    uniquelibraryPaths.forEach((Path) => {
       console.log(Path);
     });
 
-    return uniqueLibraryPaths;
+    return uniquelibraryPaths;
   } catch (error) {
     console.error("Error accessing libraryfolders.vdf:", error);
     return null;
   }
 }
 
-export async function getInstalledSteamGames(
-  LibraryPaths: string[],
-): Promise<SteamGame[]> {
-  const installedgames: SteamGame[] = [];
+export async function getInstalledsteamGames(
+  libraryPaths: string[],
+): Promise<steamGame[]> {
+  const installedgames: steamGame[] = [];
 
-  for (const librarypath of LibraryPaths) {
+  for (const librarypath of libraryPaths) {
     const steamappsPath = path.join(librarypath, "steamapps");
     try {
       const dirfiles = await fs.promises.readdir(steamappsPath);
@@ -154,42 +154,42 @@ export async function getInstalledSteamGames(
         const full_filepath = path.join(steamappsPath, file);
         const filecontent = await fs.promises.readFile(full_filepath, "utf-8");
 
-        //Använder regex för att plocka ut namn och AppID
+        //Använder regex för att plocka ut namn och appID
         const nameMatch = filecontent.match(/"name"\s+"([^"]+)"/);
-        const appidmatch = filecontent.match(/"appid"\s+"(\d+)"/);
+        const appIDMatch = filecontent.match(/"appID"\s+"(\d+)"/);
         const installdirectorymatch = filecontent.match(
           /"installdir"\s+"([^"]+)"/,
         );
-        const lastplayedmatch = filecontent.match(/"LastPlayed"\s+"(\d+)"/);
-        const SizeOnDisk = filecontent.match(/"SizeOnDisk"\s+"(\d+)"/);
-        const versionIDmatch = filecontent.match(/"buildid"\s+"(\d+)"/);
+        const lastPlayedMatch = filecontent.match(/"lastPlayed"\s+"(\d+)"/);
+        const sizeOnDisk = filecontent.match(/"sizeOnDisk"\s+"(\d+)"/);
+        const versionIDMatch = filecontent.match(/"buildid"\s+"(\d+)"/);
 
-        if (nameMatch && appidmatch) {
+        if (nameMatch && appIDMatch) {
           //konverterar unix-tid till ett läsbart datum
-          let lastplayed = "Never Played";
-          if (lastplayedmatch && lastplayedmatch[1] !== "0") {
-            const unixtimestamp = parseInt(lastplayedmatch[1]);
-            lastplayed = new Date(unixtimestamp * 1000).toLocaleDateString(
+          let lastPlayed = "Never Played";
+          if (lastPlayedMatch && lastPlayedMatch[1] !== "0") {
+            const unixtimestamp = parseInt(lastPlayedMatch[1]);
+            lastPlayed = new Date(unixtimestamp * 1000).toLocaleDateString(
               "sv-SE",
             );
           }
 
           //konverterar storlek i byte till GB med 2 decimaler
-          let sizeondiskformatted = "0 GB/Not installed";
-          if (SizeOnDisk && SizeOnDisk[1] !== "0") {
-            const bytes = BigInt(SizeOnDisk[1]);
+          let sizeOnDiskformatted = "0 GB/Not installed";
+          if (sizeOnDisk && sizeOnDisk[1] !== "0") {
+            const bytes = BigInt(sizeOnDisk[1]);
             const gigabytes = Number(bytes) / 1024 ** 3;
-            sizeondiskformatted = gigabytes.toFixed(2);
+            sizeOnDiskformatted = gigabytes.toFixed(2);
           }
 
           installedgames.push({
-            name: nameMatch[1],
-            appid: appidmatch[1],
+            gameName: nameMatch[1],
+            appID: appIDMatch[1],
             installDir: installdirectorymatch ? installdirectorymatch[1] : "",
             libraryPath: librarypath,
-            lastplayed: lastplayed,
-            SizeOnDisk: sizeondiskformatted,
-            versionID: versionIDmatch ? versionIDmatch[1] : "",
+            lastPlayed: lastPlayed,
+            sizeOnDisk: sizeOnDiskformatted,
+            versionID: versionIDMatch ? versionIDMatch[1] : "",
           });
         }
       }
@@ -200,44 +200,45 @@ export async function getInstalledSteamGames(
   return installedgames;
 }
 
-export async function getLatestActiveSteamUser(
-  steampath: string,
-): Promise<steamuser | null> {
-  //AccountID = SteamID64 - 76561197960265728
-  const loginuserspath = path.join(steampath, "config", "loginusers.vdf");
+export async function getLatestActivesteamUser(
+  steamPath: string,
+): Promise<steamUser | null> {
+  //accountID = SteamID64 - 76561197960265728
+  const loginUsersPath = path.join(steamPath, "config", "loginusers.vdf");
 
   try {
-    const loginuserscontent = await fs.promises.readFile(
-      loginuserspath,
+    const loginUsersContent = await fs.promises.readFile(
+      loginUsersPath,
       "utf-8",
     );
 
     //Ger SteamID64 för den senaste användaren som loggat in, genom att leta efter "MostRecent" : "1" i loginusers.vdf
-    const mostrecentuserregex =
+    const mostRecentUserRegex =
       /"(765\d{14})"\s+\{([^}]*?"MostRecent"\s+"1"[^}]*?)\}/is;
 
-    const latestusermatch = loginuserscontent.match(mostrecentuserregex);
+    const latestusermatch = loginUsersContent.match(mostRecentUserRegex);
 
     if (latestusermatch) {
-      const SteamID64 = latestusermatch[1];
+      const steamID64 = latestusermatch[1];
 
-      const PersonaNameRegex = /"PersonaName"\s+"([^"]+)"/i;
-      const AccountNameRegex = /"AccountName"\s+"([^"]+)"/i;
-      const PersonaNameMatch = latestusermatch[2].match(PersonaNameRegex);
-      const AccountNameMatch = latestusermatch[2].match(AccountNameRegex);
+      const personaNameRegex = /"personaName"\s+"([^"]+)"/i;
+      const accountNameRegex = /"accountName"\s+"([^"]+)"/i;
+      const personaNameMatch = latestusermatch[2].match(personaNameRegex);
+      const accountNameMatch = latestusermatch[2].match(accountNameRegex);
 
-      const PersonaName = PersonaNameMatch ? PersonaNameMatch[1] : "Unknown";
-      const AccountName = AccountNameMatch ? AccountNameMatch[1] : "Unknown";
-      const accountid = (
-        BigInt(SteamID64) - BigInt("76561197960265728")
+      const personaName = personaNameMatch ? personaNameMatch[1] : "Unknown";
+      const accountName = accountNameMatch ? accountNameMatch[1] : "Unknown";
+      const accountID = (
+
+        BigInt(steamID64) - BigInt("76561197960265728")
       ).toString();
-      const userpathdata = path.join(steampath, "userdata", accountid);
+      const userpathdata = path.join(steamPath, "userdata", accountID);
       return {
-        SteamID64: SteamID64,
-        AccountID: accountid,
-        PersonaName: PersonaName,
-        AccountName: AccountName,
-        userpathdata: userpathdata,
+        steamID64: steamID64,
+        accountID: accountID,
+        personaName: personaName,
+        accountName: accountName,
+        userPathData: userpathdata,
       };
     }
   } catch (error) {
@@ -247,10 +248,10 @@ export async function getLatestActiveSteamUser(
 }
 
 function getBasePathFromRoot(
-  rootId: string,
+  rootID: string,
   steamPath: string,
-  accountid: string,
-  appid: string,
+  accountID: string,
+  appID: string,
 ): string {
   const userProfile = process.env.USERPROFILE || os.homedir();
   const localAppData =
@@ -258,45 +259,45 @@ function getBasePathFromRoot(
   const roamingAppData =
     process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming");
 
-  switch (rootId) {
+  switch (rootID) {
     case "0":
-      //om rootid är 0. (standard steam cloud i userdata)
-      return path.join(steamPath, "userdata", accountid, appid, "remote");
+      //om rootID är 0. (standard steam cloud i userdata)
+      return path.join(steamPath, "userdata", accountID, appID, "remote");
 
     case "1":
-      //om rootid är 1. (för vissa spel som inte använder steam cloud, utan istället sparar i själva spelmappen)
+      //om rootID är 1. (för vissa spel som inte använder steam cloud, utan istället sparar i själva spelmappen)
       return path.join(steamPath, "steamapps", "common");
     case "2":
-      //om rootid är 2. (för spel som sparar i dokument-mappen)
+      //om rootID är 2. (för spel som sparar i dokument-mappen)
       return path.join(userProfile, "Documents");
     case "3":
-      //om rootid är 3 (/Appdata/Local)
+      //om rootID är 3 (/Appdata/Local)
       return localAppData;
     case "4":
-      //om rootid är 4 (/Appdata/Roaming)
+      //om rootID är 4 (/Appdata/Roaming)
       return roamingAppData;
     case "9":
-      //om rootid är 9 (/Appdata/LocalLow)
+      //om rootID är 9 (/Appdata/LocalLow)
       return path.join(userProfile, "AppData", "LocalLow");
     case "12":
-      //om rootid är 12 (/Appdata/LocalLow)
+      //om rootID är 12 (/Appdata/LocalLow)
       return path.join(userProfile, "AppData", "LocalLow");
     default:
-      //Default fallback ifall rootId inte matchar någon av de kända. Vi loggar en varning och återgår till root 0.
-      console.warn(`Unknown root ID: ${rootId}. Defaulting to root 0.`);
-      return path.join(steamPath, "userdata", accountid, appid, "remote");
+      //Default fallback ifall rootID inte matchar någon av de kända. Vi loggar en varning och återgår till root 0.
+      console.warn(`Unknown root ID: ${rootID}. Defaulting to root 0.`);
+      return path.join(steamPath, "userdata", accountID, appID, "remote");
   }
 }
 
 export async function getGameSavePath(
-  user: steamuser,
+  user: steamUser,
   appID: string,
   steamPath: string,
-): Promise<Foundfile[]> {
+): Promise<foundFile[]> {
   const remotecachepath = path.join(
     steamPath,
     "userdata",
-    user.AccountID,
+    user.accountID,
     appID,
     "remotecache.vdf",
   );
@@ -309,16 +310,16 @@ export async function getGameSavePath(
 
     const rootIDRegex = /"([^"]+)"\s+\{[^}]*?"root"\s+"(\d+)"/gi;
 
-    const foundfiles: Foundfile[] = [];
+    const foundFiles: foundFile[] = [];
     let match;
     while ((match = rootIDRegex.exec(remotecachecontent))) {
       const relativepath = match[1];
-      const rootId = match[2];
+      const rootID = match[2];
 
       const basepath = getBasePathFromRoot(
-        rootId,
+        rootID,
         steamPath,
-        user.AccountID,
+        user.accountID,
         appID,
       );
       const fullpathraw = path.join(basepath, relativepath);
@@ -329,12 +330,12 @@ export async function getGameSavePath(
         const filesize = stats.size;
         const megabytes = (filesize / (1024 * 1024)).toFixed(3);
 
-        foundfiles.push({
+        foundFiles.push({
           filePath: fullpathnormalized,
-          filename: path.basename(relativepath),
-          filesize: megabytes.toString(),
+          fileName: path.basename(relativepath),
+          fileSize: megabytes.toString(),
           relativePath: relativepath,
-          rootID: rootId,
+          rootID: rootID,
         });
       } catch (error) {
         console.warn(
@@ -343,51 +344,51 @@ export async function getGameSavePath(
         );
       }
     }
-    return foundfiles;
+    return foundFiles;
   } catch (error) {
     console.error(
-      `Error accessing remotecache.vdf (cloudcache) for user ${user.AccountID} and app ${appID}. Maybe it was installed locally?`,
+      `Error accessing remotecache.vdf (cloudcache) for user ${user.accountID} and app ${appID}. Maybe it was installed locally?`,
       error,
     );
     return [];
   }
 }
 
-export async function getCompleteGameSaveData(): Promise<GameData[]> {
+export async function getCompleteGameSaveData(): Promise<gameData[]> {
   const steampath = await find_steampath();
   if (!steampath) {
     console.error("Steam path not found.");
     return [];
   }
-  const user = await getLatestActiveSteamUser(steampath);
+  const user = await getLatestActivesteamUser(steampath);
   if (!user) {
     console.error("No active user found.");
     return [];
   }
-  const librarypaths = await getLibraryVdfPaths(steampath);
-  if (!librarypaths) {
+  const libraryPaths = await getLibraryVdfPaths(steampath);
+  if (!libraryPaths) {
     console.error("No library paths found.");
     return [];
   }
-  const installedgames = await getInstalledSteamGames(librarypaths);
+  const installedgames = await getInstalledsteamGames(libraryPaths);
   if (installedgames.length === 0) {
     console.error("No installed games found.");
     return [];
   }
   const gamewithsaves = await Promise.all(
     installedgames.map(async (game) => {
-      const saves = await getGameSavePath(user, game.appid, steampath);
+      const saves = await getGameSavePath(user, game.appID, steampath);
       return {
-        Gamename: game.name,
-        SizeOnDisk: game.SizeOnDisk,
-        lastplayed: game.lastplayed,
+        gameName: game.gameName,
+        sizeOnDisk: game.sizeOnDisk,
+        lastPlayed: game.lastPlayed,
         versionID: game.versionID,
-        AppID: game.appid,
-        Saves: saves,
+        appID: game.appID,
+        saves: saves,
       };
     }),
   );
-  return gamewithsaves.filter((game) => game.Saves.length > 0);
+  return gamewithsaves.filter((game) => game.saves.length > 0);
 }
 
 export async function cloudMatcher(appID: string, rootID: string, relativePath: string): Promise<string> {
@@ -397,11 +398,11 @@ export async function cloudMatcher(appID: string, rootID: string, relativePath: 
     if (!steampath) {
       throw new Error("Steam path not found.");
     }
-    const user = await getLatestActiveSteamUser(steampath);
+    const user = await getLatestActivesteamUser(steampath);
     if (!user) {
       throw new Error("No active user found.");
     }
-    const filedir = getBasePathFromRoot(rootID, steampath, user.AccountID, appID);
+    const filedir = getBasePathFromRoot(rootID, steampath, user.accountID, appID);
     const fullpathnormalized = path.normalize(path.join(filedir, relativePath));
     console.log(`Attempting to match cloud save path: ${fullpathnormalized}`);
     

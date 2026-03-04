@@ -7,8 +7,8 @@ import { uploadGameSave_separate } from "./Main/save-handler-separate-files";
 contextBridge.exposeInMainWorld("electron", {
   selectFolder: () => ipcRenderer.invoke("dialog:openDirectory"),
   selectFile: () => ipcRenderer.invoke("dialog:openFile"),
-  uploadSave: (path: string, userId: string, gameId: string) =>
-    ipcRenderer.invoke("upload-save", path, userId, gameId),
+  uploadSave: (path: string, userID: string, gameID: string) =>
+    ipcRenderer.invoke("upload-save", path, userID, gameID),
   getMinecraftWorlds: () => ipcRenderer.invoke("get-minecraft-worlds"),
   find_steampath: () => ipcRenderer.invoke("find-steam-path"),
   getXboxGames: () => ipcRenderer.invoke("get-xbox-games"),

@@ -130,9 +130,9 @@ export async function fetchCloudSaves(userID: string) {
         gameName: object.game_name,
         appID: object.app_id,
         fileName: object.file_name,
-        last_updated: object.last_updated,
-        file_size: object.file_size_mb,
-        storage_path: object.storage_path,
+        lastUpdated: object.last_updated,
+        fileSize: object.file_size_mb,
+        storagePath: object.storage_path,
         relativePath: object.relative_path,
         rootID: object.root_id,
       }));
@@ -174,9 +174,9 @@ export async function downloadSave(signedUrl: string, targetFolder: string) {
   }
 }
 
-export async function checkIfFileExists(Localdirectory: string): Promise<boolean> {
+export async function checkIfFileExists(localDirectory: string): Promise<boolean> {
   try {
-    await fs.promises.access(Localdirectory);
+    await fs.promises.access(localDirectory);
     return true;
 } 
   catch (error)

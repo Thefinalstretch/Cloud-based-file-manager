@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { LiquidGlassFilters } from "@gracefullight/liquid-glass";
 import { useEffect, useState } from "react";
-import type { Cloudsave, GameData } from "src/types";
+import type { cloudSave, gameData } from "src/types";
 import HexGameCard from "./HexGameCard";
 import { supabase } from "./authflow/supabase-vite";
 import { useAuthContext } from "../hooks/useAuth";
@@ -14,7 +14,7 @@ export default function CloudFileList() {
   const back = useNavigate();
   const { user } = useAuthContext();
 
-  const [Saves, setSaves] = useState<Cloudsave[]>([]);
+  const [Saves, setSaves] = useState<cloudSave[]>([]);
   const [nr_saves, setNr_saves] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -48,7 +48,7 @@ export default function CloudFileList() {
   }
 
 
-  function RemoveDuplicated (array: Cloudsave[]): Cloudsave[] {
+  function RemoveDuplicated (array: cloudSave[]): cloudSave[] {
     const seenAppIDs = new Set<string>();
 
     return array.filter((game) => {
@@ -63,20 +63,20 @@ export default function CloudFileList() {
    
   }
   const SIMULATION_COUNT = 40; // Totalt antal spel att simulera (inklusive riktiga spel)
-  const simulatedGames: Cloudsave[] = [...Saves];
+  const simulatedGames: cloudSave[] = [...Saves];
 
   for (let i = Saves.length; i < SIMULATION_COUNT; i++) {
     simulatedGames.push({
       gameName: `sim-${i}`,
       appID: `Test Game ${i}`,
-      last_updated: "10 GB",
-      file_size: "2024-01-01",
-      storage_path: "1.0",
+      lastUpdated: "10 GB",
+      fileSize: "2024-01-01",
+      storagePath: "1.0",
       // Vi sätter INTE isDummy: true här, för vi vill att HexGameCard ska renderas
-    } as Cloudsave);
+    } as cloudSave);
   }
 
-  function createHoneycombRows(games: Cloudsave[]) {
+  function createHoneycombRows(games: cloudSave[]) {
     const rows = [];
     let currentIndex = 0;
     let isThreeRow = true;
@@ -88,9 +88,9 @@ export default function CloudFileList() {
         chunk.push({
           gameName: "empty",
           appID: `dummy-${currentIndex}-${chunk.length}`,
-          last_updated: "",
-          file_size: "",
-          storage_path: "",
+          lastUpdated: "",
+          fileSize: "",
+          storagePath: "",
           fileName:"",
           isDummy: true,
           rootID: "",
@@ -118,16 +118,16 @@ export default function CloudFileList() {
               <div
                 key={`row-${rowIndex}`}
                 className={`flex justify-center gap-4 ${rowIndex > 0 ? "-mt-[25px]" : ""}`}>
-                {row.map((game: Cloudsave) => {
+                {row.map((game: cloudSave) => {
 
                   return (<button 
                            key={game.appID}
-                           onClick={() => back("/CloudSave",
+                           onClick={() => back("/cloudSave",
                     { state: { selectedgame: game }, })} >
                     
                     <HexGameCard
                       key={game.fileName}
-                      gameId={game.appID}
+                      gameID={game.appID}
                       gameName={game.gameName}
                       gameSavesLength={nr_saves}
                     />

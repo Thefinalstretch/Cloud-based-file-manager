@@ -10,7 +10,6 @@ import {
   getCompleteGameSaveData,
 } from "./LocalDirectory_finder";
 import { find_xbox_games } from "./XBOXGameFinder";
-import { removeEnd } from "./LocalDirectory_finder";
 
 import DownloadSave from "src/components/DownloadGameSave";
 
@@ -96,11 +95,11 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.handle("upload-save", async (event, filePath, userId, gameId) => {
+ipcMain.handle("upload-save", async (event, filePath, userID, gameID) => {
   console.log("Main process recieved upload request for: ", filePath);
 
   //kallar på funktionen i save-handler.ts
-  return await uploadGameSave(filePath, userId, gameId);
+  return await uploadGameSave(filePath, userID, gameID);
 });
 
 ipcMain.handle("dialog:openDirectory", async () => {
@@ -159,7 +158,7 @@ ipcMain.handle("uploadsave-separate", async (event, filePath, userID, appID, gam
 ipcMain.handle("fetchCloudSaves", async (event, userID) => {
   return await fetchCloudSaves(userID)
 });
-ipcMain.handle("downloadSave", async (_event, signedUrl: string, targetFolder: string) => {
+ipcMain.handle("downloadSave", async (event, signedUrl: string, targetFolder: string) => {
   try {
     const result = await downloadSave(signedUrl, targetFolder);
     return result;

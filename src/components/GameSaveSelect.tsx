@@ -5,7 +5,7 @@ import { useAuthContext } from "../hooks/useAuth";
 import { Profile_icon } from "./Profile_icon";
 import { Extract_button } from "./authflow/file_management/buttons";
 import Gamefinder from "./Gamefinder";
-import { GameData, Foundfile } from "src/types";
+import { gameData, foundFile } from "src/types";
 import { useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import HexGameCard from "./HexGameCard";
@@ -15,14 +15,14 @@ export default function Selector() {
   const { user } = useAuthContext();
   const location = useLocation();
 
-  const game = location.state?.selectedgame as GameData;
-  const [availableSaves, setAvailableSaves] = useState<Foundfile[]>(game?.Saves || []);
-  const [selectedGame, setSelectedGame] = useState<Foundfile[]>([]);
-  const [headfolder, setHeadfolder] = useState<string>(game.Gamename);
+  const game = location.state?.selectedgame as gameData;
+  const [availableSaves, setAvailableSaves] = useState<foundFile[]>(game?.saves || []);
+  const [selectedGame, setSelectedGame] = useState<foundFile[]>([]);
+  const [headfolder, setHeadfolder] = useState<string>(game.gameName);
   
 
   const UploadSelected = async () => {
-  const headfolder = game.Gamename;
+  const headfolder = game.gameName;
     if (selectedGame.length === 0) {
       alert("Please select at least one save to upload.");
       return;
@@ -33,9 +33,9 @@ export default function Selector() {
       const path = save.filePath;
       await window.electron.uploadsave_separate(save.filePath, 
                                                 user?.id as string, 
-                                                game.AppID, 
-                                                game.Gamename.replace(/[^a-zA-Z0-9 ]/g, ""), 
-                                                save.filename,
+                                                game.appID, 
+                                                game.gameName.replace(/[^a-zA-Z0-9 ]/g, ""), 
+                                                save.fileName,
                                                 save.relativePath,
                                                 save.rootID);
       
@@ -48,16 +48,16 @@ export default function Selector() {
 
 
 
-  const SelectSave = (MoveToSelect: Foundfile) => {
+  const SelectSave = (MoveToSelect: foundFile) => {
     //Steg A: Ta bort från tillgängliga saves
     //"Behåll alla filer vars namn vi inte klickat på"
-    setAvailableSaves((prev) => prev.filter((save) => save.filename !== MoveToSelect.filename));
+    setAvailableSaves((prev) => prev.filter((save) => save.fileName !== MoveToSelect.fileName));
     setSelectedGame((prev) => [...prev, MoveToSelect])
   }
 
 
-  const DeselectSave = (MoveToAvailable: Foundfile) =>{
-    setSelectedGame((prev) => prev.filter((save) => save.filename !== MoveToAvailable.filename));
+  const DeselectSave = (MoveToAvailable: foundFile) =>{
+    setSelectedGame((prev) => prev.filter((save) => save.fileName !== MoveToAvailable.fileName));
     setAvailableSaves((prev) => [...prev, MoveToAvailable])
   }
 
@@ -69,16 +69,16 @@ export default function Selector() {
 
       <div className="bg-[#ffffff]/50 h-[651px] w-[643px] rounded-[20px] flex flex-col items-center pt-[40px]">
         <div className="w-[600px] h-[150px] bg-[#D9BBA1] rounded-[20px] flex">
-          <header>{game.Gamename}
+          <header>{game.gameName}
             <HexGameCard
-              key={game.AppID}
-              gameId={game.AppID}
-              gameName={game.Gamename}
-              gameSavesLength={game.Saves.length}
+              key={game.appID}
+              gameId={game.appID}
+              gameName={game.gameName}
+              gameSavesLength={game.saves.length}
             />
           </header>
-          <p>{game.SizeOnDisk} GB</p>
-          <p>{game.lastplayed}</p>
+          <p>{game.sizeOnDisk} GB</p>
+          <p>{game.lastPlayed}</p>
 
         </div>
 
@@ -89,11 +89,11 @@ export default function Selector() {
             <h1>Local Saves</h1>
             {availableSaves.map((save) => (
               <div onClick={() => SelectSave(save)}
-                   key={save.filename} 
+                   key={save.fileName} 
                    className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
-                <h3 className="text-md font-bold">{save.filename}</h3>
-                <p className="text-sm">{save.filesize} MB</p>
-                <p>{game.Gamename}</p>
+                <h3 className="text-md font-bold">{save.fileName}</h3>
+                <p className="text-sm">{save.fileSize} MB</p>
+                <p>{game.gameName}</p>
               </div>
 
             ))}
@@ -103,10 +103,10 @@ export default function Selector() {
             <h1 className="">To Be Uploaded</h1> 
             {selectedGame.map((save) => (
               <div onClick={() => DeselectSave(save)}
-                   key={save.filename} 
+                   key={save.fileName} 
                    className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
-                <h3 className="text-md font-bold">{save.filename}</h3>
-                <p className="text-sm">{save.filesize} MB</p>
+                <h3 className="text-md font-bold">{save.fileName}</h3>
+                <p className="text-sm">{save.fileSize} MB</p>
               </div>
 
             ))}

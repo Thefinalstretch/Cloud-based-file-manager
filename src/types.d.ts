@@ -3,8 +3,8 @@ export interface IElectronAPI {
   selectFile: () => Promise<string | null>;
   uploadSave: (
     filePath: string,
-    userId: string,
-    gameId: string,
+    userID: string,
+    gameID: string,
   ) => Promise<any>;
   getMinecraftWorlds: () => Promise<any>;
   onLog: (callback: (message: string) => void) => void;
@@ -13,9 +13,9 @@ export interface IElectronAPI {
   getallgames: () => Promise<GameData[]>;
   uploadsave_separate: (
     filePath: string,
-    userId: string,
-    gameId: string,
-    fileId: string,
+    userID: string,
+    gameID: string,
+    fileID: string,
     fileName: string,
     relativePath: string,
     rootID: string,
@@ -33,62 +33,62 @@ declare global {
   }
 }
 
-export interface SteamGame {
-  appid: string;
-  name: string;
+export interface steamGame {
+  appID: string;
+  gameName: string;
   installDir: string;
   libraryPath: string;
-  lastplayed: string;
-  SizeOnDisk: string;
+  lastPlayed: string;
+  sizeOnDisk: string;
   versionID: string;
 }
 
-export interface steamuser {
-  SteamID64: string;
-  AccountID: string;
-  AccountName: string;
-  PersonaName: string;
-  userpathdata: string;
+export interface steamUser {
+  steamID64: string;
+  accountID: string;
+  accountName: string;
+  personaName: string;
+  userPathData: string;
 }
 
-export interface Foundfile {
+export interface foundFile {
   filePath: string;
-  filename: string;
-  filesize?: string;
+  fileName: string;
+  fileSize?: string;
   relativePath: string;
   rootID: string;
 }
 
-export interface GameData {
-  Gamename: string;
-  SizeOnDisk: string;
-  lastplayed: string;
+export interface gameData {
+  gameName: string;
+  sizeOnDisk: string;
+  lastPlayed: string;
   versionID: string;
-  Saves: Foundfile[];
-  AppID: string;
+  saves: Foundfile[];
+  appID: string;
   isDummy?: boolean;
 }
 
-export interface HexGameCardProps {
-  gameId: string;
+export interface hexGameCardProps {
+  gameID: string;
   gameName: string;
   gameSavesLength: number;
   // onUpload: (id: string, name: string) => void;
 }
-export interface XboxGame {
-  Name: string;
-  PackageFamilyName: string;
-  InstallLocation: string;
+export interface xboxGame {
+  name: string;
+  packageFamilyName: string;
+  installLocation: string;
 }
 
-export interface Cloudsave {
+export interface cloudSave {
   gameName: string,
   appID: string,
   fileName: string,
   relativePath: string,
-  last_updated: string,
-  file_size: string,
-  storage_path: string,
+  lastUpdated: string,
+  fileSize: string,
+  storagePath: string,
   isDummy?: boolean,
   rootID: string,
 }
