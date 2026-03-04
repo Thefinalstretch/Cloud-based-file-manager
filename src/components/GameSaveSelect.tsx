@@ -17,111 +17,129 @@ export default function Selector() {
   const location = useLocation();
 
   const game = location.state?.selectedgame as gameData;
-  const [availableSaves, setAvailableSaves] = useState<foundFile[]>(game?.saves || []);
+  const [availableSaves, setAvailableSaves] = useState<foundFile[]>(
+    game?.saves || [],
+  );
   const [selectedGame, setSelectedGame] = useState<foundFile[]>([]);
   const [headfolder, setHeadfolder] = useState<string>(game.gameName);
-  
 
   const UploadSelected = async () => {
-  const headfolder = game.gameName;
+    const headfolder = game.gameName;
     if (selectedGame.length === 0) {
       alert("Please select at least one save to upload.");
       return;
     }
 
     try {
-    for (const save of selectedGame) {
-      const path = save.filePath;
-      //Logik för att titta om relative path finns i databasen
-      
-      await window.electron.uploadsave_separate(save.filePath, 
-                                                user?.id as string, 
-                                                game.appID, 
-                                                game.gameName, 
-                                                save.fileName,
-                                                save.relativePath,
-                                                save.rootID);
+      for (const save of selectedGame) {
+        
+        const path = save.filePath;
+        //Logik för att titta om relative path finns i databasen
+        const uploadConfirm = window.confirm(
+          `Are you sure you want to upload ${save.fileName}?`,
+        );
+        if (!uploadConfirm) {
+          continue;
+        }
+
+        await window.electron.uploadsave_separate(
+          save.filePath,
+          user?.id as string,
+          game.appID,
+          game.gameName,
+          save.fileName,
+          save.relativePath,
+          save.rootID,
+        );
+        alert(`Successfully uploaded ${save.fileName}`);
       }
-    }
-    catch (error) {
+     
+    } catch (error) {
       console.error("Error uploading saves: ", error);
     }
-    }
+
+  };
 
   const SelectSave = (MoveToSelect: foundFile) => {
     //Steg A: Ta bort från tillgängliga saves
     //"Behåll alla filer vars namn vi inte klickat på"
-    setAvailableSaves((prev) => prev.filter((save) => save.relativePath !== MoveToSelect.relativePath));
-    setSelectedGame((prev) => [...prev, MoveToSelect])
-  }
+    setAvailableSaves((prev) =>
+      prev.filter((save) => save.relativePath !== MoveToSelect.relativePath),
+    );
+    setSelectedGame((prev) => [...prev, MoveToSelect]);
+  };
 
-
-  const DeselectSave = (MoveToAvailable: foundFile) =>{
-    setSelectedGame((prev) => prev.filter((save) => save.relativePath !== MoveToAvailable.relativePath));
-    setAvailableSaves((prev) => [...prev, MoveToAvailable])
-  }
-
-
-
+  const DeselectSave = (MoveToAvailable: foundFile) => {
+    setSelectedGame((prev) =>
+      prev.filter((save) => save.relativePath !== MoveToAvailable.relativePath),
+    );
+    setAvailableSaves((prev) => [...prev, MoveToAvailable]);
+  };
 
   return (
     <div className="flex flex-col items-center pt-[40px]">
-
       <div className="bg-[#ffffff]/50 h-[651px] w-[643px] rounded-[20px] flex flex-col items-center pt-[40px]">
         <div className="w-[600px] h-[150px] bg-[#D9BBA1] rounded-[20px] flex">
-          <header>{game.gameName}
-            <HexGameCard
-              key={game.appID}
-              gameID={game.appID}
-              gameName={game.gameName}
-              gameSavesLength={game.saves.length}
+          <div className="justify-center items-center flex ml-5">
+            <img
+              className="rounded-[20px] w-[300px] h-auto"
+              src={`https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appID}/library_hero.jpg`}
             />
-          </header>
-          <p>{game.sizeOnDisk} GB</p>
-          <p>{game.lastPlayed}</p>
-
+          </div>
+          <div className="mt-7 ml-10 flex flex-col font-kodchasan">
+            <p className="text-2xl pb-2 ">{game.gameName}</p>
+            <p>Size: {game.sizeOnDisk} GB</p>
+            <p>Last Played: {game.lastPlayed}</p>
+          </div>
         </div>
 
-
         <div className="flex flex-row">
-
           <div className="mt-4 h-[335px] w-[250px] overflow-auto scrollbar-hide mr-5">
-            <h1>Local Saves</h1>
+            <h1 className="font-kodchasan">Local Saves</h1>
             {availableSaves.map((save) => (
-              <div onClick={() => SelectSave(save)}
-                   key={save.relativePath}
-                   className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
-                <h3 className="text-md font-bold">{save.fileName}</h3>
-                <p className="text-sm">{save.fileSize} MB</p>
-                <p>{game.gameName}</p>
+              <div
+                onClick={() => SelectSave(save)}
+                key={save.relativePath}
+                className="bg-[#D9BBA1]/60 p-1 rounded mb-4"
+              >
+                <h3 className="text-md font-bold font-kodchasan">
+                  Name: {save.fileName}
+                </h3>
+                <p className="text-sm font-kodchasan">
+                  Size: {save.fileSize} MB
+                </p>
               </div>
-
             ))}
           </div>
 
           <div className=" mt-4 h-[335px] w-[250px] overflow-auto scrollbar-hide">
-            <h1 className="">To Be Uploaded</h1> 
+            <h1 className="font-kodchasan">To Be Uploaded</h1>
             {selectedGame.map((save) => (
-              <div onClick={() => DeselectSave(save)}
-                   key={save.relativePath} 
-                   className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
-                <h3 className="text-md font-bold">{save.fileName}</h3>
-                <p className="text-sm">{save.fileSize} MB</p>
+              <div
+                onClick={() => DeselectSave(save)}
+                key={save.relativePath}
+                className="bg-[#D9BBA1]/60 p-1 rounded mb-4"
+              >
+                <h3 className="text-md font-bold font-kodchasan">
+                  Name: {save.fileName}
+                </h3>
+                <p className="text-sm font-kodchasan">
+                  Size: {save.fileSize} MB
+                </p>
               </div>
-
             ))}
           </div>
         </div>
         <div className="pt-3 ">
-          <GeneralisedbuttonSm buttonName="Upload" onClick={() => UploadSelected()}/>
+          <GeneralisedbuttonSm
+            buttonName="Upload"
+            onClick={() => UploadSelected()}
+          />
         </div>
-       
-        
       </div>
       <div className="position: fixed bottom-16 left-6">
-          <GeneralisedbuttonSm buttonName="Back" onClick={() => back(-1)}/>
-        </div>
-
+        <GeneralisedbuttonSm buttonName="Back" onClick={() => back(-1)} />
+      </div>
     </div>
   );
 }

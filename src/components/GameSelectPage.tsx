@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import type { gameData } from "src/types";
 import HexGameCard from "./HexGameCard";
 import { Generalisedbutton, GeneralisedbuttonSm } from "./authflow/buttons";
+import { uploadGameSave } from "src/Main/save-handler";
+import { useAuthContext } from "../hooks/useAuth";
 
 export default function GameList() {
   const back = useNavigate();
   const [games, setGames] = useState<gameData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const {user} = useAuthContext();
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -24,6 +27,23 @@ export default function GameList() {
 
     fetchGames();
   }, []);
+
+const handleAddFolder = async () => {
+    const path = await window.electron.selectFolder();
+
+    if (path) {
+      console.log("selected: ", path);
+
+      const uploadconfirm = window.confirm(`Are you sure you want to upload ${path}?`);
+      if (!uploadconfirm) {
+        return;
+      }
+
+      
+      await window.electron.uploadSave(path, user?.id as string, "");
+    }
+  }
+
 
   if (loading) {
     return <div>Loading games...</div>;

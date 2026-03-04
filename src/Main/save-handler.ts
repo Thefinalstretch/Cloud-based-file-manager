@@ -60,7 +60,7 @@ export async function uploadGameSave(
     //ladda upp steget
 
     console.log(gameId, userId);
-    const cloudPath = `${userId}/${gameId}/saveC.zip`;
+    const cloudPath = `${userId}/${gameId}.zip`;
     console.log(`laddar upp till  ${cloudPath}`);
 
     const { data, error } = await supabase.storage

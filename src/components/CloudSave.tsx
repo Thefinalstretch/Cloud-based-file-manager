@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import HexGameCard from "./HexGameCard";
 import { cloudSave } from "src/types";
-import { GeneralisedbuttonSm } from "./authflow/buttons";
+import { GeneralisedbuttonSm, SignOut } from "./authflow/buttons";
 
 
 export default function Selectors() {
@@ -129,7 +129,48 @@ export default function Selectors() {
     setAvailableSaves((prev) => [...prev, MoveToAvailable])
   }
 
+  const DeleteFromSupabase = async () => {
+    if (selectedGame.length === 0) {
+      alert("Please select at least one save to delete.");
+      return;
+    }
+    try {
+      for (const save of selectedGame) {
+        const deleteConfirm = await window.confirm(`Are you sure you want to delete ${save.fileName} This action cannot be undone.`);
+        if(!deleteConfirm) {
+          console.log(`Skipping deletion of ${save.fileName} as user chose not to delete.`);
+          continue;
+        }
+        try {
+        const cloudFilePath = `${user.id}/${game.gameName}/${save.fileName}`;
+        const { error: storageError } = await supabase
+          .storage
+          .from("Game-save")
+          .remove([cloudFilePath]);
 
+        if (storageError) throw storageError;
+
+        const { error: dbError } = await supabase
+          .from("game_saves")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("app_id", game.appID)
+          .eq("file_name", save.fileName);
+          
+        if (dbError) throw dbError;
+
+        console.log(`File ${save.fileName} deleted successfully from Supabase.`);
+
+
+        } catch (error) {
+          console.error(`Error deleting file ${save.fileName}: `, error);
+        }
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error deleting file: ", error);
+  }
+  }
 
 
   return (
@@ -137,17 +178,13 @@ export default function Selectors() {
 
       <div className="bg-[#ffffff]/50 h-[651px] w-[643px] rounded-[20px] flex flex-col items-center pt-[40px]">
         <div className="w-[600px] h-[150px] bg-[#D9BBA1] rounded-[20px] flex">
-          <header>
-            <img src={`https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appID}/library_hero.jpg`}/>{game.gameName}
-            {/* <HexGameCard
-              key={game.appID}
-              gameID={game.appID}
-              gameName={game.gameName}
-              gameSavesLength={0}
-            /> */}
-          </header>
-          {/* <p>{game.fileSize} GB</p> */}
-          {/* <p>{game.lastplayed}</p> */}
+          <div className="justify-center items-center flex ml-5">
+            <img className="rounded-[20px] w-[300px] h-auto" src={`https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appID}/library_hero.jpg`}/>
+          </div>
+            <div className="justify-center ml-10 flex flex-col font-kodchasan">
+              <p className="text-2xl pb-2">{game.gameName}</p>
+              
+            </div>
 
         </div>
 
@@ -155,35 +192,36 @@ export default function Selectors() {
         <div className="flex flex-row">
 
           <div className="mt-4 h-[335px] w-[250px] overflow-auto scrollbar-hide mr-5">
-            <h1>Cloud Database</h1>
+            <h1 className="font-kodchasan">Cloud Database</h1>
             {availableSaves.map((save) => (
               <div onClick={() => SelectSave(save)}
                 key={save.relativePath}
                 className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
-                <h3 className="text-md font-bold">{splitFileName(save.fileName)}</h3>
-                <p className="text-sm">{save.fileSize} MB</p>
-                <p>{game.gameName}</p>
+                <h3 className="text-md font-bold font-kodchasan">Name: {splitFileName(save.fileName)}</h3>
+                <p className="text-sm font-kodchasan">Size: {save.fileSize} MB</p>
+                
               </div>
 
             ))}
           </div>
 
           <div className=" mt-4 h-[335px] w-[250px] overflow-auto scrollbar-hide">
-            <h1 className="">To Be Downloaded</h1>
+            <h1 className="font-kodchasan">Selected File</h1>
             {selectedGame.map((save) => (
               <div onClick={() => DeselectSave(save)}
                 key={save.relativePath}
                 className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
-                <h3 className="text-md font-bold">{splitFileName(save.fileName)}</h3>
-                <p className="text-sm">{save.fileSize} MB</p>
+                <h3 className="text-md font-bold font-kodchasan">Name: {splitFileName(save.fileName)}</h3>
+                <p className="text-sm font-kodchasan">Size: {save.fileSize} MB</p>
               </div>
 
             ))}
           </div>
         </div>
 
-        <div className="pt-3 ">
-                  <GeneralisedbuttonSm buttonName="Upload" onClick={() => DownloadSelected()}/>
+        <div className="pt-3 flex flex-row gap-4">
+                  <GeneralisedbuttonSm buttonName="Download" onClick={() => DownloadSelected()}/>
+                  <GeneralisedbuttonSm buttonName="Delete" onClick={DeleteFromSupabase}/>
                 </div>
       </div>
       <div className="position: fixed bottom-16 left-6">
