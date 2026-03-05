@@ -70,7 +70,7 @@ export default function CloudFileList() {
 
   for (let i = Saves.length; i < SIMULATION_COUNT; i++) {
     simulatedGames.push({
-      gameName: `sim-${i}`,
+      gameName: `Empty Slot`,
       appID: `Test Game ${i}`,
       lastUpdated: "10 GB",
       fileSize: "2024-01-01",
@@ -98,6 +98,7 @@ export default function CloudFileList() {
           isDummy: true,
           rootID: "",
           relativePath: "",
+          index: 0,
         });
       }
       rows.push(chunk);
@@ -141,11 +142,8 @@ export default function CloudFileList() {
             ))}
           </div>
         </div>
-        <div className="position: fixed bottom-10 left-10">
+        <div className="position: fixed bottom-16 left-6">
           <GeneralisedbuttonSm buttonName="Back" onClick={() => back(-1)}/>
-        </div>
-        <div className="position: fixed bottom-10 right-10">
-          <GeneralisedbuttonSm buttonName="Manual Download" onClick={() => back(-1)}/>
         </div>
       </div>
     </div>

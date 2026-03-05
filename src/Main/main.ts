@@ -147,8 +147,8 @@ ipcMain.handle("get-complete-game-save-data", async () => {
   return await getCompleteGameSaveData();
 });
 
-ipcMain.handle("uploadsave-separate", async (event, filePath, userID, appID, gameName, fileName, relativePath, rootID) => {
-  return await uploadGameSave_separate(filePath, userID, appID, gameName, fileName, relativePath, rootID);
+ipcMain.handle("uploadsave-separate", async (event, filePath, userID, appID, gameName, fileName, relativePath, rootID, index) => {
+  return await uploadGameSave_separate(filePath, userID, appID, gameName, fileName, relativePath, rootID, index);
 });
 
 ipcMain.handle("fetchCloudSaves", async (event, userID) => {

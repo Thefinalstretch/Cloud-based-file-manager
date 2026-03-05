@@ -19,6 +19,7 @@ export interface IElectronAPI {
     fileName: string,
     relativePath: string,
     rootID: string,
+    index: number
   ) => Promise<any>;
   fetchCloudSaves: (
     userID: string,
@@ -91,4 +92,5 @@ export interface cloudSave {
   storagePath: string,
   isDummy?: boolean,
   rootID: string,
+  index: number
 }

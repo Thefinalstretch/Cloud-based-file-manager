@@ -74,7 +74,12 @@ export default function Selectors() {
     try {
       for (const save of selectedGame) {
         
-        const cloudFilePath = `${user.id}/${game.gameName}/${save.fileName}`;
+        let cloudFilePath = "";
+          if(save.appID === "1"){
+            cloudFilePath = `${user.id}/${game.gameName}/${save.fileName}.zip`;
+          } else {
+            cloudFilePath = `${user.id}/${game.gameName}/${game.index}/${save.fileName}`;
+          }
         console.log("Attempting to download file from path: ", cloudFilePath);
         const { data, error } = await supabase
           .storage
@@ -97,10 +102,14 @@ export default function Selectors() {
           else{
             await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath));
             console.log(`File ${save.fileName} downloaded and extracted successfully.`);
+            setSelectedGame((prev) => prev.filter((x) => x.relativePath !== save.relativePath));
+            setAvailableSaves((prev) => [...prev, save])
           } 
       } else {
            await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath));
            console.log(`File ${save.fileName} downloaded and extracted successfully.`);
+           setSelectedGame((prev) => prev.filter((x) => x.relativePath !== save.relativePath));
+           setAvailableSaves((prev) => [...prev, save])
         } 
 
 
@@ -136,13 +145,19 @@ export default function Selectors() {
     }
     try {
       for (const save of selectedGame) {
-        const deleteConfirm = await window.confirm(`Are you sure you want to delete ${save.fileName} This action cannot be undone.`);
+        const deleteConfirm = window.confirm(`Are you sure you want to delete ${save.fileName} This action cannot be undone.`);
         if(!deleteConfirm) {
           console.log(`Skipping deletion of ${save.fileName} as user chose not to delete.`);
           continue;
         }
         try {
-        const cloudFilePath = `${user.id}/${game.gameName}/${save.fileName}`;
+          let cloudFilePath = "";
+          if(save.appID === "1"){
+            cloudFilePath = `${user.id}/${game.gameName}/${save.fileName}.zip`;
+          } else {
+            cloudFilePath = `${user.id}/${game.gameName}/${game.index}/${save.fileName}`;
+          }
+        
         const { error: storageError } = await supabase
           .storage
           .from("Game-save")
@@ -155,7 +170,7 @@ export default function Selectors() {
           .delete()
           .eq("user_id", user.id)
           .eq("app_id", game.appID)
-          .eq("file_name", save.fileName);
+          .eq("relative_path", save.relativePath);
           
         if (dbError) throw dbError;
 
@@ -165,12 +180,19 @@ export default function Selectors() {
         } catch (error) {
           console.error(`Error deleting file ${save.fileName}: `, error);
         }
-        window.location.reload();
+        setSelectedGame((prev) => prev.filter((x) => x.relativePath !== save.relativePath));
       }
     } catch (error) {
       console.error("Error deleting file: ", error);
   }
   }
+
+  let imgSrc = ""
+  if (game.appID === "1"){
+    imgSrc = "/wideFolder2.jpg";
+  } else{
+    imgSrc = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appID}/library_hero.jpg`;
+  };
 
 
   return (
@@ -179,7 +201,7 @@ export default function Selectors() {
       <div className="bg-[#ffffff]/50 h-[651px] w-[643px] rounded-[20px] flex flex-col items-center pt-[40px]">
         <div className="w-[600px] h-[150px] bg-[#D9BBA1] rounded-[20px] flex">
           <div className="justify-center items-center flex ml-5">
-            <img className="rounded-[20px] w-[300px] h-auto" src={`https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appID}/library_hero.jpg`}/>
+            <img className="rounded-[20px] w-[300px] h-auto" src={imgSrc}/>
           </div>
             <div className="justify-center ml-10 flex flex-col font-kodchasan">
               <p className="text-2xl pb-2">{game.gameName}</p>
@@ -197,7 +219,7 @@ export default function Selectors() {
               <div onClick={() => SelectSave(save)}
                 key={save.relativePath}
                 className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
-                <h3 className="text-md font-bold font-kodchasan">Name: {splitFileName(save.fileName)}</h3>
+                <h3 className="text-md font-bold font-kodchasan">Name: {save.fileName}</h3>
                 <p className="text-sm font-kodchasan">Size: {save.fileSize} MB</p>
                 
               </div>
@@ -211,7 +233,7 @@ export default function Selectors() {
               <div onClick={() => DeselectSave(save)}
                 key={save.relativePath}
                 className="bg-[#D9BBA1]/60 p-1 rounded mb-4">
-                <h3 className="text-md font-bold font-kodchasan">Name: {splitFileName(save.fileName)}</h3>
+                <h3 className="text-md font-bold font-kodchasan">Name: {save.fileName}</h3>
                 <p className="text-sm font-kodchasan">Size: {save.fileSize} MB</p>
               </div>
 

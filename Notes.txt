@@ -1,0 +1,7 @@
+Good to note, our current database storage is made to be easily managable, but badly handles overlap occurences between save files.
+
+The system checks for overlap in the front end and then writes files with matching names to different indexes
+For most files this isn't a problem, same name = same file, but some files have the same name but different file folders in the game.
+This isn't a problem when uploading each file seperatly, but uploading them in a batch causes overlap as hour database updates simultanuesly.
+A quick but less managable fix would be to simply write the files to folders with their specific relative path, 
+this makes it so only files with the exact same path and name can overwrite each other. Looking back, we should have used this.

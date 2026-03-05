@@ -42,16 +42,12 @@ export default function Selector() {
           continue;
         }
 
-        await window.electron.uploadsave_separate(
-          save.filePath,
-          user?.id as string,
-          game.appID,
-          game.gameName,
-          save.fileName,
-          save.relativePath,
-          save.rootID,
-        );
-        alert(`Successfully uploaded ${save.fileName}`);
+        try{
+          await terminateDupesAndUpload(0, save);
+          alert(`Successfully uploaded: ${save.fileName}`);
+        } catch(error) {
+          alert(`Upload failed for: ${save.fileName} ${error}`);
+        }
       }
      
     } catch (error) {
@@ -59,6 +55,50 @@ export default function Selector() {
     }
 
   };
+
+  async function Upload(index : number, save: foundFile) {
+    setSelectedGame((prev) => prev.filter((x) => x.relativePath !== save.relativePath));
+    setAvailableSaves((prev) => [...prev, save])
+    return window.electron.uploadsave_separate(save.filePath,
+                                                user?.id as string,
+                                                game.appID,
+                                                game.gameName,
+                                                save.fileName,
+                                                save.relativePath,
+                                                save.rootID,
+                                                index);
+    
+  }
+
+  async function terminateDupesAndUpload(index: number, save: foundFile) {
+    let {data: dataExactFile, error: ErrorExactFile} = await supabase.from("game_saves").select("index").eq("relative_path", save.relativePath).eq("user_id", user?.id).eq("app_id", game.appID);
+    let {data: dataBaseFileName, error: ErrorFileName} = await supabase.from("game_saves").select("id").eq("file_name", save.fileName).eq("user_id", user?.id).eq("app_id", game.appID).eq("index", index);
+
+    if(ErrorExactFile){
+      throw ErrorExactFile
+    }
+
+    if(ErrorFileName){
+      throw ErrorFileName;
+    }
+
+    if (dataExactFile.length !== 0) {
+      console.log("There is an exact file with index: ", dataExactFile[0].index);
+      
+      console.log("Uploading file to index: ", dataExactFile[0].index);
+
+      return await Upload(dataExactFile[0].index, save);
+    } else if (dataBaseFileName.length === 0) {
+      console.log("AAAAAAHHHH", dataExactFile)
+      console.log("Index:", index)
+
+      return await Upload(index, save);
+    }
+    else {
+      console.log("Index", index, "Data", dataExactFile);
+      return await terminateDupesAndUpload(index + 1, save);
+    }
+  }
 
   const SelectSave = (MoveToSelect: foundFile) => {
     //Steg A: Ta bort från tillgängliga saves

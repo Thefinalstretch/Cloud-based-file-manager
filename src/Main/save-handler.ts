@@ -3,8 +3,8 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import archiver from "archiver";
-import { use } from "react";
-import extract from 'extract-zip';
+import { supabase } from "./save-handler-separate-files";
+import { SupabaseURL, SupabaseKey } from "../components/authflow/supabase-vite";
 
 // sätt in dessa i .env senare om det behövs
 
@@ -16,11 +16,12 @@ import extract from 'extract-zip';
 // );
 // const SUPABASE_URL = "https://gueunvtnebrpjgcpaixk.supabase.co";
 // const SUPABASE_KEY = "sb_publishable_7gVhaErk-SgFFaDwzDs5Pw_qO4PH6iM";
-const supabase = createClient(
+/* const supabase = createClient(
   process.env.VITE_SUPABASE_URL as string,
-  process.env.VITE_SUPABASE_SERVICE_ROLE_KEY as string,
-);
-//helper, denna funktion skapar en zipfil av vald mapp
+  process.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY as string,
+ ); **/
+
+
 
 function zipDirectory(sourceDir: string, outPath: string): Promise<void> {
   const archive = archiver("zip", { zlib: { level: 6 } });
@@ -60,7 +61,7 @@ export async function uploadGameSave(
     //ladda upp steget
 
     console.log(gameId, userId);
-    const cloudPath = `${userId}/${gameId}.zip`;
+    const cloudPath = `${userId}/Personal Files/${gameId}.zip`;
     console.log(`laddar upp till  ${cloudPath}`);
 
     const { data, error } = await supabase.storage
@@ -85,7 +86,9 @@ export async function uploadGameSave(
     const { error: dbError } = await supabase.from("game_saves").insert([
       {
         user_id: userId,
-        game_name: gameId,
+        game_name: "Personal Files",
+        app_id: "1",
+        file_name: gameId,
         storage_path: cloudPath,
         file_size_mb: Size_MB,
       },

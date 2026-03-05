@@ -7,7 +7,14 @@ export default function HexGameCard({
   gameSavesLength
   // onUpload,
 }: hexGameCardProps) {
-  const steamImageUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${gameID}/header.jpg`;
+  let steamImageUrl = "";
+  if (gameID === "1")
+  {
+    steamImageUrl = "/folder.jpg";
+  } else {
+    steamImageUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${gameID}/header.jpg`;
+  }
+  
 
   return (
     /* Hexagon containern */

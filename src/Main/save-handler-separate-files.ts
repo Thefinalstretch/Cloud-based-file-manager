@@ -6,6 +6,7 @@ import archiver from "archiver";
 import { use } from "react";
 import { cloudSave } from "../types";
 import extract from "extract-zip";
+import { SupabaseURL, SupabaseKey } from "../components/authflow/supabase-vite";
 import { error } from "console";
 
 // sätt in dessa i .env senare om det behövs
@@ -18,10 +19,10 @@ import { error } from "console";
 // );
 // const SUPABASE_URL = "https://gueunvtnebrpjgcpaixk.supabase.co";
 // const SUPABASE_KEY = "sb_publishable_7gVhaErk-SgFFaDwzDs5Pw_qO4PH6iM";
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL as string,
-  process.env.VITE_SUPABASE_SERVICE_ROLE_KEY as string,
-);
+export const supabase = createClient(
+  SupabaseURL,
+  SupabaseKey
+ );
 //helper, denna funktion skapar en zipfil av vald mapp
 
 function zipSource(sourceDir: string, outPath: string): Promise<void> {
@@ -54,6 +55,7 @@ export async function uploadGameSave_separate(
   fileName: string,
   relativePath: string,
   rootID: string,
+  index: number
 
 ) {
   console.log(`startar uppladdning för: '${filePath}`);
@@ -73,7 +75,7 @@ export async function uploadGameSave_separate(
     //ladda upp steget
 
     console.log(gameName, userID);
-    const cloudPath = `${userID}/${gameName}/${fileName}`;
+    const cloudPath = `${userID}/${gameName}/${index}/${fileName}`;
     console.log(`laddar upp till  ${cloudPath}`);
 
     const { data, error } = await supabase.storage
@@ -95,6 +97,7 @@ export async function uploadGameSave_separate(
 
     // om uppladdningen lyckades, kan vi spara metadata i databasen, t.ex. en referens till filen i storage och vilken användare det tillhör
     console.log("Updating database record");
+    console.log("Given index:", index)
     const { error: dbError } = await supabase.from("game_saves").upsert([
       {
         user_id: userID,
@@ -104,7 +107,8 @@ export async function uploadGameSave_separate(
         file_size_mb: Size_MB,
         app_id: appID,
         relative_path: relativePath,
-        root_id: rootID
+        root_id: rootID,
+        index: index
       },
     ], { onConflict: "user_id,app_id,relative_path" });
 
@@ -141,6 +145,7 @@ export async function fetchCloudSaves(userID: string) {
         storagePath: object.storage_path,
         relativePath: object.relative_path,
         rootID: object.root_id,
+        index: object.index
       }));
       return { success: true, saves: gameObjects };
     }

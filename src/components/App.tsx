@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { Homescreen } from "./Homescreen";
 import { uploadGameSave } from "src/Main/save-handler";
 
-import UploadSave from "./UploadGameSave";
+
 import { AuthContext } from "src/hooks/useAuth";
 import AuthProvider from "./authflow/authProvider";
 
@@ -31,7 +31,6 @@ export const App = () => {
             <Route path="/" element={<Login_screen />} />
             {/*Här ska man kanske sätta in någon form av guard???  */}
             <Route path="/home" element={<Homescreen />} />
-            <Route path="/UploadGameSave" element={<UploadSave />} />
             <Route path="/CloudSelectPage" element={<CloudFileList />} />
             <Route path="/CloudSave" element={<Selectors />} />
             <Route path="/GameSelectPage" element={<GameList />} />

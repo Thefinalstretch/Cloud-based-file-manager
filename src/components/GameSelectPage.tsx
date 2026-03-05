@@ -6,12 +6,14 @@ import HexGameCard from "./HexGameCard";
 import { Generalisedbutton, GeneralisedbuttonSm } from "./authflow/buttons";
 import { uploadGameSave } from "src/Main/save-handler";
 import { useAuthContext } from "../hooks/useAuth";
+import { supabase } from "./authflow/supabase-vite";
 
 export default function GameList() {
   const back = useNavigate();
   const [games, setGames] = useState<gameData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const {user} = useAuthContext();
+  const [selectedPath, setSelectedPath] = useState("");
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -28,21 +30,26 @@ export default function GameList() {
     fetchGames();
   }, []);
 
-const handleAddFolder = async () => {
+  const handleAddGame = async () => {
     const path = await window.electron.selectFolder();
 
-    if (path) {
-      console.log("selected: ", path);
+    if (!path) return;
 
-      const uploadconfirm = window.confirm(`Are you sure you want to upload ${path}?`);
-      if (!uploadconfirm) {
-        return;
-      }
+    console.log("selected:", path);
 
-      
-      await window.electron.uploadSave(path, user?.id as string, "");
-    }
-  }
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log(user);
+
+    setSelectedPath(path);
+
+    const ok = window.confirm(`Are you sure you want to upload ${path}?`);
+    if (!ok) return;
+
+    const splitPath = path.split("\\")
+    const folderName = splitPath[splitPath.length-1]
+
+    await window.electron.uploadSave(path, user?.id, folderName);
+  };
 
 
   if (loading) {
@@ -53,7 +60,7 @@ const handleAddFolder = async () => {
   for (let i = games.length; i < SIMULATION_COUNT; i++) {
     simulatedGames.push({
       appID: `sim-${i}`,
-      gameName: `Test Game ${i}`,
+      gameName: `Empty Slot`,
       sizeOnDisk: "10 GB",
       lastPlayed: "2024-01-01",
       versionID: "1.0",
@@ -124,12 +131,12 @@ const handleAddFolder = async () => {
             ))}
           </div>
         </div>
-        <div className="position: fixed bottom-10 left-10">
+        <div className="position: fixed bottom-16 left-6">
           <GeneralisedbuttonSm buttonName="Back" onClick={() => back(-1)}/>
         </div>
 
-        <div className="position: fixed bottom-10 right-10">
-          <GeneralisedbuttonSm buttonName="Manual Upload" onClick={() => back(-1)}/>
+        <div className="position: fixed bottom-16 right-6">
+          <GeneralisedbuttonSm buttonName="Manual Upload" onClick={handleAddGame}/>
         </div>
         
         

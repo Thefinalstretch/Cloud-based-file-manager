@@ -6,7 +6,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import UploadSave from "./UploadGameSave";
 import { SignOut, Signoutbutton } from "./authflow/buttons";
 import { useAuthContext } from "../hooks/useAuth";
 import { Profile_icon } from "./Profile_icon";
@@ -46,7 +45,12 @@ export const Homescreen = () => {
         <Generalisedbutton buttonName="Download Game-Save" onClick={() => router("/CloudSelectPage")}/>
       </div>
       <div className="pt-5">
-        <Generalisedbutton buttonName="Sign Out" onClick={SignOut}/>
+        <Generalisedbutton
+          buttonName="Sign Out"
+          onClick={async () => {
+          SignOut();
+          router("/");
+        }}/>
       </div>
     </div>
       <div className="position: fixed top-16 left-5 "> <Profile_icon/>
