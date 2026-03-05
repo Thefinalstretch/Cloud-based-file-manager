@@ -49,12 +49,11 @@ export const Homescreen = () => {
           buttonName="Sign Out"
           onClick={async () => {
           SignOut();
-          router("/");
         }}/>
       </div>
     </div>
       <div className="position: fixed top-16 left-5 "> <Profile_icon/>
-            <h1 className="position: fixed top-10 left-4 font-[Kodchasan-SemiBold] text-[#57463D] text-sm">Signed in as: {user.email}</h1>      
+            <h1 className="position: fixed top-10 left-4 font-[Kodchasan-SemiBold] text-[#57463D] text-sm">Signed in as: {user?.email}</h1>      
 
     </div>
   </div>
