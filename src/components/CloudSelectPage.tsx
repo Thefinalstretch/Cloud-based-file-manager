@@ -19,8 +19,6 @@ export default function CloudFileList() {
   const [nr_saves, setNr_saves] = useState<cloudSave[]>([]);
   const [loading, setLoading] = useState(true);
 
-  
-
 
 
   useEffect(() => {
@@ -49,7 +47,7 @@ export default function CloudFileList() {
   if (loading) {
     return <div>Loading games...</div>;
   }
-
+  
 
   function RemoveDuplicated (array: cloudSave[]): cloudSave[] {
     const seenAppIDs = new Set<string>();

@@ -1,4 +1,3 @@
-import React from "react";
 import type { hexGameCardProps } from "src/types";
 
 export default function HexGameCard({

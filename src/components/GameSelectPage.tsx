@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { gameData } from "src/types";
 import HexGameCard from "./HexGameCard";
 import { Generalisedbutton, GeneralisedbuttonSm } from "./authflow/buttons";
-import { uploadGameSave } from "src/Main/save-handler";
+import { uploadFolder } from "src/Main/save-handler";
 import { useAuthContext } from "../hooks/useAuth";
 import { supabase } from "./authflow/supabase-vite";
 
@@ -48,7 +48,7 @@ export default function GameList() {
     const splitPath = path.split("\\")
     const folderName = splitPath[splitPath.length-1]
 
-    await window.electron.uploadSave(path, user?.id, folderName);
+    await window.electron.uploadFolder(path, user?.id, folderName);
   };
 
 
@@ -144,25 +144,3 @@ export default function GameList() {
     </div>
   );
 }
-
-// export default function HoneycombGrid() {
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen p-10 bg-gray-950">
-
-//       {/* TOP ROW: 3 Hexagons */}
-//       <div className="flex gap-4">
-//         <LiquidHexagon label="STEAM" onClick={() => console.log("Steam clicked")} />
-//         <LiquidHexagon label="XBOX" onClick={() => console.log("Xbox clicked")} />
-//         <LiquidHexagon label="MINECRAFT" onClick={() => console.log("Minecraft clicked")} />
-//       </div>
-
-//       {/* BOTTOM ROW: 2 Hexagons */}
-//       {/* -mt-[60px] pulls this row up so it slots perfectly between the top hexagons */}
-//       <div className="flex gap-4 -mt-[60px]">
-//         <LiquidHexagon label="UPLOAD" onClick={() => console.log("Upload clicked")} />
-//         <LiquidHexagon label="DOWNLOAD" onClick={() => console.log("Download clicked")} />
-//       </div>
-
-//     </div>
-//   );
-// }

@@ -3,7 +3,7 @@ import { supabase } from "./authflow/supabase-vite";
 import { useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuth";
 import { Profile_icon } from "./Profile_icon";
-import { Extract_button } from "./authflow/file_management/buttons";
+
 
 import { gameData, foundFile } from "src/types";
 import { useLocation } from "react-router-dom";
@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import HexGameCard from "./HexGameCard";
 import { cloudSave } from "src/types";
 import { GeneralisedbuttonSm, SignOut } from "./authflow/buttons";
+import fs from "fs";
 
 
 export default function Selectors() {
@@ -91,7 +92,13 @@ export default function Selectors() {
           continue; // Skip this file and move to the next one
         }
         try {
-        const localfilePath = await window.electron.cloudMatcher(save.appID, save.rootID, save.relativePath);
+        let localfilePath = "";
+        if (save.appID === "1"){
+          localfilePath = save.relativePath;
+        } else {
+          localfilePath = await window.electron.cloudMatcher(save.appID, save.rootID, save.relativePath);
+        }
+
         console.log("Local file path determined: ", localfilePath);
         
         if(await window.electron.checkIfFileExists(localfilePath)) {
@@ -100,12 +107,21 @@ export default function Selectors() {
             console.log(`Skipping download of ${save.fileName} as it already exists and user chose not to overwrite.`);
           }
           else{
-            await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath));
+            if (save.appID === "1"){
+              console.log("1:", localfilePath)
+              console.log("2:", removeEnd(localfilePath))
+              console.log("Going to remove the folder first")
+              await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath), localfilePath);
+            } else {
+              console.log(save.appID)
+              await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath));
+            }
+            
             console.log(`File ${save.fileName} downloaded and extracted successfully.`);
             setSelectedGame((prev) => prev.filter((x) => x.relativePath !== save.relativePath));
             setAvailableSaves((prev) => [...prev, save])
           } 
-      } else {
+        } else {
            await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath));
            console.log(`File ${save.fileName} downloaded and extracted successfully.`);
            setSelectedGame((prev) => prev.filter((x) => x.relativePath !== save.relativePath));

@@ -3,7 +3,6 @@ import { supabase } from "./authflow/supabase-vite";
 import { useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuth";
 import { Profile_icon } from "./Profile_icon";
-import { Extract_button } from "./authflow/file_management/buttons";
 
 import { gameData, foundFile } from "src/types";
 import { useLocation } from "react-router-dom";

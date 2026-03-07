@@ -8,7 +8,6 @@ import {
 import Login_screen from "./authflow/login-screen";
 import React, { useState } from "react";
 import { Homescreen } from "./Homescreen";
-import { uploadGameSave } from "src/Main/save-handler";
 
 
 import { AuthContext } from "src/hooks/useAuth";
@@ -42,11 +41,3 @@ export const App = () => {
   );
 };
 
-{
-  /* <div className="min-h-screen text-white bg-center bg-no-repeat bg-cover bg-fixed">
-      <div
-        className="w-full h-8"
-        style={{ WebkitAppRegion: "drag" } as React.CSSProperties}>
-        Nomadsync
-      </div> */
-}

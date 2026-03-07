@@ -1,11 +1,9 @@
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
-import { uploadGameSave } from "./save-handler";
-import { uploadGameSave_separate, fetchCloudSaves, downloadSave, checkIfFileExists } from "./save-handler-separate-files";
+import { uploadGameSave_separate, fetchCloudSaves, downloadSave, checkIfFileExists , uploadFolder} from "./save-handler";
 import {
   cloudMatcher,
-  find_all_worlds,
   find_steampath,
   getCompleteGameSaveData,
 } from "./LocalDirectory_finder";
@@ -93,11 +91,11 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.handle("upload-save", async (event, filePath, userId, gameId) => {
+ipcMain.handle("uploadFolder", async (event, filePath, userId, gameId) => {
   console.log("Main process recieved upload request for: ", filePath);
 
   //kallar på funktionen i save-handler.ts
-  return await uploadGameSave(filePath, userId, gameId);
+  return await uploadFolder(filePath, userId, gameId);
 });
 
 ipcMain.handle("dialog:openDirectory", async () => {
@@ -122,22 +120,6 @@ ipcMain.handle("dialog:openFile", async () => {
   }
 });
 
-//Variant som väljer flera directories
-ipcMain.handle("dialog:multiDirectory", async () => {
-  const { canceled, filePaths } = await dialog.showOpenDialog({
-    properties: ["openDirectory", "multiSelections"],
-  }); //
-  if (canceled) {
-    return null;
-  } else {
-    return filePaths;
-  }
-});
-
-ipcMain.handle("get-minecraft-worlds", () => {
-  return find_all_worlds();
-});
-
 ipcMain.handle("find-steam-path", () => {
   return find_steampath();
 });
@@ -154,9 +136,9 @@ ipcMain.handle("uploadsave-separate", async (event, filePath, userID, appID, gam
 ipcMain.handle("fetchCloudSaves", async (event, userID) => {
   return await fetchCloudSaves(userID)
 });
-ipcMain.handle("downloadSave", async (_event, signedUrl: string, targetFolder: string) => {
+ipcMain.handle("downloadSave", async (_event, signedUrl: string, targetFolder: string, removeThisFolder?: string) => {
   try {
-    const result = await downloadSave(signedUrl, targetFolder);
+    const result = await downloadSave(signedUrl, targetFolder, removeThisFolder);
     return result;
   } catch (error) {
     console.error("something failed gangalang", error);

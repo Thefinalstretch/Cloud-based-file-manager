@@ -9,77 +9,13 @@ import { exec } from "child_process";
 import util from "util";
 import { error } from "console";
 import type { foundFile, gameData, steamGame, steamUser } from "src/types";
-import { checkIfFileExists } from "./save-handler-separate-files";
-
-export function find_all_worlds() {
-  function findMinecraftDirectory(): string | null {
-    // vi kan möjligtvis också använda den här funktionen i downloadfunktionen, genom att vi laddar ner sparfilen
-    // och sedan att appen läser localdirectory och unzippar filen i pathen.
-    const platform = os.platform();
-    const homeDirectory = os.homedir();
-
-    if (platform === "win32") {
-      const appData = process.env.APPDATA;
-
-      if (!appData) return null;
-
-      return path.join(appData, ".minecraft", "saves");
-    }
-    if (platform === "darwin") {
-      return path.join(
-        homeDirectory,
-        "Library",
-        "Application Support",
-        "minecraft",
-        "saves",
-      ); // C:\\Users\User\Library\Application Support\minecraft\saves (bara ett exempel)
-    }
-    if (platform === "linux") {
-      return path.join(homeDirectory, ".minecraft", "saves");
-    }
-
-    return null;
-  }
-  const minecraftDirectory = findMinecraftDirectory();
-
-  if (!minecraftDirectory || !fs.existsSync(minecraftDirectory)) {
-    return [];
-  }
-  try {
-    const items = fs.readdirSync(minecraftDirectory, { withFileTypes: true });
-
-    const worlds = items
-      .filter((item) => item.isDirectory())
-      .map((item) => ({
-        name: item.name,
-        path: path.join(minecraftDirectory, item.name),
-      }));
-
-    console.log(`found ${worlds.length} worlds!`);
-    worlds.forEach((element) => console.log(element.name));
-    return worlds;
-  } catch (err) {
-    console.error("Error reading worlds:", err);
-    return [];
-  }
-}
+import { checkIfFileExists } from "./save-handler";
 
 // const execPromise = util.promisify(exec);
 
 const listkey = promisify(regedit.list);
 //Genom att köra den genom promisify förvandlar vi den till en Promise. Det gör att vi kan skriva await, vilket gör koden mycket mer lättläst.
 //regedit.list: Detta är huvudfunktionen. Den tar en lista på mappar i registret och hämtar allt som finns i dem.
-
-//{
-//   "HKCU\\Software\\Valve\\Steam": {
-//     "exists": true,
-//     "keys": ["ActiveProcess", "Apps", "Users"],
-//     "values": {
-//       "SteamPath": { "value": "C:/Program Files (x86)/Steam", "type": "REG_SZ" },
-//       "Language": { "value": "swedish", "type": "REG_SZ" }
-//     }
-//   }
-// }
 
 const vbsdirectory = path.join(process.cwd(), "node_modules", "regedit", "vbs");
 //process.cwd(): Betyder "Current Working Directory" – alltså mappen där ditt projekt körs ifrån.

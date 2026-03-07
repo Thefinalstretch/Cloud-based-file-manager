@@ -1,7 +1,7 @@
 export interface IElectronAPI {
   selectFolder: () => Promise<string | null>;
   selectFile: () => Promise<string | null>;
-  uploadSave: (
+  uploadFolder: (
     filePath: string,
     userID: string,
     gameID: string,
@@ -24,7 +24,7 @@ export interface IElectronAPI {
   fetchCloudSaves: (
     userID: string,
   ) => Promise<{ success: boolean; saves: cloudSave[] }>;
-  downloadSave: (signedUrl: string, targetFolder: string) => Promise<{ success: boolean }>;
+  downloadSave: (signedUrl: string, targetFolder: string, removeThisFolder?: string) => Promise<{ success: boolean }>;
   cloudMatcher: (appID: string, rootID: string, relativePath: string) => Promise<string>;
   checkIfFileExists: (localDirectory: string) => Promise<boolean>;
 }
