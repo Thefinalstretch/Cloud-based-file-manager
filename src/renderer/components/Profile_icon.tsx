@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../auth/supabaseClient";
 
+/**
+ * A React component that renders a profile icon for the logged-in user.
+ * @returns A profile icon component using the user's google profile picture.
+ */
 export const Profile_icon = () => {
   const [avatar_icon_url, setAvatar_icon_url] = useState<string | null>(null);
 

@@ -3,6 +3,14 @@ import { cloudSave } from "src/shared/types";
 import { buildCloudFilePath } from "./cloudSave.service";
 import { removeEnd } from "../util/saveHelpers";
 
+/**
+ * Creates a signed URL for downloading a cloud save.
+ * @param userId The ID of the user whose save is to be downloaded.
+ * @param gameName The name of the game for which to download the save.
+ * @param saveIndex The index of the save within the database, used for constructing the file path.
+ * @param save The cloud save object for which to create a signed URL.
+ * @returns A promise resolving to the signed URL for the cloud save.
+ */
 export async function createCloudSaveSignedUrl(
   userId: string,
   gameName: string,
@@ -27,7 +35,18 @@ export async function createCloudSaveSignedUrl(
 
   return data.signedUrl;
 }
-
+/**
+ * Determines the local path for a cloud save.
+ * @example 
+ * //Results in "C:\Users\jonat\Programmering\code\homework8"
+ * LocalSavePath(
+ * gameName: Personal files,
+ * appID: 1,
+ * fileName: homework8.zip,
+ * relativePath: C:\Users\jonat\Programmering\code\homework8)
+ * @param save The cloud save object for which to determine the local path.
+ * @returns A promise string representing the local file path where the cloud save should be downloaded.
+ */
 export async function LocalSavePath(save: cloudSave): Promise<string> {
   if (save.appID === "1") {
     return save.relativePath;
@@ -39,7 +58,13 @@ export async function LocalSavePath(save: cloudSave): Promise<string> {
     save.relativePath,
   );
 }
-
+/**
+ * Downloads a cloud save from a signed URL.
+ * @param signedUrl The signed URL for the cloud save.
+ * @param save The cloud save object to download.
+ * @param localFilePath The local file path where the cloud save should be downloaded.
+ * @returns A promise resolving when the download is complete.
+ */
 export async function downloadCloudSave( 
   signedUrl: string,
   save: cloudSave,

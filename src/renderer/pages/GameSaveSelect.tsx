@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../auth/supabaseClient";
 import { useAuthContext } from "../auth/useAuth";
 import { useSelectableList } from "../util/hooks/useSelectableList";
 
@@ -62,7 +61,8 @@ export default function Selector() {
 
   return (
     <div className="flex flex-col items-center pt-[40px]">
-      <div className="bg-[#ffffff]/50 h-[651px] w-[643px] rounded-[20px] flex flex-col items-center pt-[40px]">
+      <div className="bg-[#ffffff]/50 h-[651px] w-[643px] 
+                      rounded-[20px] flex flex-col items-center pt-[40px]">
         <div className="w-[600px] h-[150px] bg-[#D9BBA1] rounded-[20px] flex">
           <div className="justify-center items-center flex ml-5">
             <img
@@ -78,7 +78,8 @@ export default function Selector() {
         </div>
 
         <div className="flex flex-row">
-          <div className="mt-4 h-[335px] w-[250px] overflow-auto scrollbar-hide mr-5">
+          <div className="mt-4 h-[335px] w-[250px] 
+                          overflow-auto scrollbar-hide mr-5">
             <h1 className="font-kodchasan">Local Saves</h1>
             {availableFiles.map((save) => (
               <div
@@ -96,8 +97,10 @@ export default function Selector() {
             ))}
           </div>
 
-          <div className=" mt-4 h-[335px] w-[250px] overflow-auto scrollbar-hide">
-            <h1 className="font-kodchasan">To Be Uploaded</h1>
+          <div className="mt-4 h-[335px] w-[250px] overflow-auto 
+                          scrollbar-hide">
+            <h1 className="font-kodchasan">
+                To Be Uploaded</h1>
             {selectedFiles.map((save) => (
               <div
                 onClick={() => deselectSave(save)}

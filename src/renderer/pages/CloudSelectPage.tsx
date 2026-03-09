@@ -18,6 +18,13 @@ export default function CloudFileList() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+  /**
+   * Fetches the game from the supabase database, then removes duplicated games, 
+   * leaving only one entry per game, while changing the state of saves and nr_saves, 
+   * the first is used for rendering, the second is used to count the number of saves per game.
+   * @returns {Promise<void>}
+   */
     const fetchGames_from_supabase = async () => {
       try {
         setLoading(true);
@@ -25,7 +32,8 @@ export default function CloudFileList() {
         const response = await window.electron.fetchCloudSaves(user?.id);
         
         if (response) {
-          setSaves(removeDuplicated(response.saves)); // Removes files from the same games, leaving a single file for each wich becomes the entry point.
+          // Removes files from the same games, leaving a single file for each wich becomes the entry point.
+          setSaves(removeDuplicated(response.saves));
           setNr_saves(response.saves);
         }
       }
@@ -38,7 +46,7 @@ export default function CloudFileList() {
 
     fetchGames_from_supabase();
   }, []);
-
+ // Simulates additional saves to fill the UI, to later be replaced with actual data from the database.
   const simulatedSaves = simulateItems(
     saves,
     40,
@@ -48,7 +56,7 @@ export default function CloudFileList() {
         appID: `Test Game ${i}`,
         lastUpdated: "10 GB",
         fileSize: "2024-01-01",
-        isDummy: false, // Changing this to true removes additional rendering, for program showcase, keep false.
+        isDummy: true, // Changing this to true removes additional rendering, for program showcase, keep false.
         storagePath: "1.0",
       } as cloudSave)
   );
@@ -62,10 +70,12 @@ export default function CloudFileList() {
   return (
     <div>
       <div className="justify-center items-center flex-col flex">
-        <h1 className="mb-10 text-5xl font-bold text-[#57463D] font-[Kodchasan-Semibold] pt-16">
+        <h1 className="mb-10 text-5xl font-bold text-[#57463D] 
+                       font-[Kodchasan-Semibold] pt-16">
           Select a Game to Download
         </h1>
-        <div className="h-[550px] w-full overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,blue_25%,blue_75%,transparent)]">
+        <div className="h-[550px] w-full overflow-y-auto scrollbar-hide 
+                       [mask-image:linear-gradient(to_bottom,transparent,blue_25%,blue_75%,transparent)]">
           <div className="flex flex-col items-center pt-20">
             {honeycombRows.map((row, rowIndex) => (
               <div
@@ -95,7 +105,8 @@ export default function CloudFileList() {
           </div>
         </div>
         <div className="fixed bottom-16 left-6">
-          <GeneralisedbuttonSm buttonName="navigate" onClick={() => navigate(-1)}/>
+          <GeneralisedbuttonSm buttonName="navigate" 
+              onClick={() => navigate(-1)}/>
         </div>
       </div>
     </div>

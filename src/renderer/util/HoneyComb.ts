@@ -8,7 +8,7 @@ export function simulateItems<T>(items: T[], count: number, createDummy: (index:
   return result;
 }
 
-
+// Generates rows of items for a honeycomb layout, alternating between rows of 3 and 2 items, and filling in dummy items as needed to maintain the structure.
 export function createHoneycombRows<T extends { appID: string; isDummy?: boolean }>(
   items: T[]
 ): T[][] {

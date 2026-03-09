@@ -1,10 +1,4 @@
-import {
-  HashRouter,
-  Navigate,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuthContext } from "../auth/useAuth";
 import { Profile_icon } from "../components/Profile_icon";
@@ -35,9 +29,11 @@ export const Homescreen = () => {
       <p className="font-kodchasan text-5xl text-[#57463D]">NomadSync</p>
 
       <div className="flex items-center justify-center pt-44 gap-5">
-        <Generalisedbutton buttonName="Upload Game-Save" onClick={() => router("/GameSelectPage")
+        <Generalisedbutton buttonName="Upload Game-Save" 
+            onClick={() => router("/GameSelectPage")
         }/>
-        <Generalisedbutton buttonName="Download Game-Save" onClick={() => router("/CloudSelectPage")}/>
+        <Generalisedbutton buttonName="Download Game-Save" 
+            onClick={() => router("/CloudSelectPage")}/>
       </div>
       <div className="pt-5">
         <Generalisedbutton
@@ -48,7 +44,9 @@ export const Homescreen = () => {
       </div>
     </div>
       <div className="position: fixed top-16 left-5 "> <Profile_icon/>
-            <h1 className="position: fixed top-10 left-4 font-[Kodchasan-SemiBold] text-[#57463D] text-sm">Signed in as: {user?.email}</h1>      
+            <h1 className="position: fixed top-10 left-4 
+                           font-[Kodchasan-SemiBold] text-[#57463D] text-sm">
+                            Signed in as: {user?.email}</h1>      
 
     </div>
   </div>

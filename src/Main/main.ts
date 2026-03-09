@@ -1,7 +1,8 @@
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
-import { uploadGameSave_separate, fetchCloudSaves, downloadSave, checkIfFileExists , uploadFolder} from "./services/save.service";
+import { uploadGameSave_separate, fetchCloudSaves, downloadSave, 
+  checkIfFileExists , uploadFolder} from "./services/save.service";
 import {
   cloudMatcher,
   findSteamPath,
@@ -129,19 +130,44 @@ ipcMain.handle("get-complete-game-save-data", async () => {
   return await getCompleteGameSaveData();
 });
 
-ipcMain.handle("uploadsave-separate", async (event, filePath, userID, appID, gameName, fileName, relativePath, rootID, index) => {
-  return await uploadGameSave_separate(filePath, userID, appID, gameName, fileName, relativePath, rootID, index);
+ipcMain.handle("uploadsave-separate", async (
+  event, 
+  filePath, 
+  userID, 
+  appID, 
+  gameName, 
+  fileName, 
+  relativePath, 
+  rootID, 
+  index
+) => {
+  return await uploadGameSave_separate(
+    filePath, 
+    userID, 
+    appID, 
+    gameName, 
+    fileName, 
+    relativePath, 
+    rootID, 
+    index
+  );
 });
 
 ipcMain.handle("fetchCloudSaves", async (event, userID) => {
   return await fetchCloudSaves(userID)
 });
-ipcMain.handle("downloadSave", async (_event, signedUrl: string, targetFolder: string, removeThisFolder?: string) => {
+ipcMain.handle("downloadSave", async (
+  _event, 
+  signedUrl: string, 
+  targetFolder: string, 
+  removeThisFolder?: string
+) => {
   try {
-    const result = await downloadSave(signedUrl, targetFolder, removeThisFolder);
+    const result = await downloadSave(signedUrl, 
+                                      targetFolder,  
+                                      removeThisFolder);
     return result;
   } catch (error) {
-    console.error("something failed gangalang", error);
     throw error;
   }
 });

@@ -1,6 +1,7 @@
 import { supabase } from "../auth/supabaseClient";
 import { cloudSave } from "src/shared/types";
 
+// Builds the file path for a cloud save based on the user ID, game name, save index, and save details.
 export function buildCloudFilePath(
   userId: string,
   gameName: string,
@@ -13,6 +14,7 @@ export function buildCloudFilePath(
   return `${userId}/${gameName}/${saveIndex}/${save.fileName}`;
 }
 
+// Deletes a cloud save by removing the file from storage and deleting the corresponding database entry.
 export async function deleteCloudSave(
   userId: string,
   gameName: string,

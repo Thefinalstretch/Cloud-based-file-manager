@@ -80,10 +80,13 @@ export default function GameList() {
   return (
     <div>
       <div className="justify-center items-center flex-col flex">
-        <h1 className="mb-10 text-5xl font-bold text-[#57463D] font-[Kodchasan-Semibold] pt-16">
+        <h1 className="mb-10 text-5xl font-bold text-[#57463D] 
+                       font-[Kodchasan-Semibold] pt-16">
           Select a Game to Upload
         </h1>
-        <div className="h-[550px] w-full overflow-y-auto scrollbar-hide [mask-image:linear-gradient(to_bottom,transparent,blue_25%,blue_75%,transparent)]">
+        <div className="h-[550px] w-full overflow-y-auto scrollbar-hide 
+        [mask-image:linear-gradient(to_bottom,transparent,blue_25%,blue_75%,transparent)]">
+
           <div className="flex flex-col items-center pt-20">
             {honeycombRows.map((row, rowIndex) => (
               <div
@@ -112,11 +115,13 @@ export default function GameList() {
           </div>
         </div>
         <div className="fixed bottom-16 left-6">
-          <GeneralisedbuttonSm buttonName="Back" onClick={() => navigate(-1)}/>
+          <GeneralisedbuttonSm buttonName="Back" 
+              onClick={() => navigate(-1)}/>
         </div>
 
         <div className="fixed bottom-16 right-6">
-          <GeneralisedbuttonSm buttonName="Manual Upload" onClick={handleManualUpload}/>
+          <GeneralisedbuttonSm buttonName="Manual Upload" 
+              onClick={handleManualUpload}/>
         </div>
         
         

@@ -1,11 +1,9 @@
-import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
 import path from "path";
 import os from "os";
 import archiver from "archiver";
 import { cloudSave } from "../../shared/types";
 import extract from "extract-zip";
-import { SupabaseURL, SupabaseKey } from "../../shared/supabase";
 import { supabase } from "./supabase.client";
 
 // sätt in dessa i .env senare om det behövs
@@ -209,7 +207,8 @@ export async function downloadSave(signedUrl: string,
   }
 }
 
-export async function checkIfFileExists(localDirectory: string): Promise<boolean> {
+export async function 
+    checkIfFileExists(localDirectory: string): Promise<boolean> {
   try {
     await fs.promises.access(localDirectory);
     return true;
