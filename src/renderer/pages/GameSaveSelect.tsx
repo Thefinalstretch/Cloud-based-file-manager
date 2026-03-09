@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../auth/supabaseClient";
-import { useEffect } from "react";
 import { useAuthContext } from "../auth/useAuth";
-import { Profile_icon } from "../components/Profile_icon";
+import { useSelectableList } from "../util/hooks/useSelectableList";
 
 import { gameData, foundFile } from "src/shared/types";
 import { useLocation } from "react-router-dom";
-import React, { useState } from "react";
-import HexGameCard from "../components/HexGameCard";
+import { getGameImageSrc } from "../util/graphicHelper";
+import { useState } from "react";
 import { Generalisedbutton, GeneralisedbuttonSm } from "../components/buttons";
 
 export default function Selector() {
@@ -15,22 +14,25 @@ export default function Selector() {
   const { user } = useAuthContext();
   const location = useLocation();
 
-  const game = location.state?.selectedgame as gameData;
-  const [availableSaves, setAvailableSaves] = useState<foundFile[]>(
-    game?.saves || [],
-  );
-  const [selectedGame, setSelectedGame] = useState<foundFile[]>([]);
-  const [headfolder, setHeadfolder] = useState<string>(game.gameName);
+  const game = location.state?.selectedFiles as gameData;
+  const {
+  availableItems: availableFiles,
+  selectedItems: selectedFiles,
+  setAvailableItems: setAvailableFiles,
+  setSelectedItems: setSelectedFiles,
+  selectItem: selectSave,
+  deselectItem: deselectSave,
+  } = useSelectableList<foundFile>(game?.saves || []);
 
   const UploadSelected = async () => {
     const headfolder = game.gameName;
-    if (selectedGame.length === 0) {
+    if (selectedFiles.length === 0) {
       alert("Please select at least one save to upload.");
       return;
     }
 
     try {
-      for (const save of selectedGame) {
+      for (const save of selectedFiles) {
         
         const path = save.filePath;
         //Logik för att titta om relative path finns i databasen
@@ -56,8 +58,8 @@ export default function Selector() {
   };
 
   async function Upload(index : number, save: foundFile) {
-    setSelectedGame((prev) => prev.filter((x) => x.relativePath !== save.relativePath));
-    setAvailableSaves((prev) => [...prev, save])
+    setSelectedFiles((prev) => prev.filter((x) => x.relativePath !== save.relativePath));
+    setAvailableFiles((prev) => [...prev, save])
     return window.electron.uploadsave_separate(save.filePath,
                                                 user?.id as string,
                                                 game.appID,
@@ -88,7 +90,7 @@ export default function Selector() {
 
       return await Upload(dataExactFile[0].index, save);
     } else if (dataBaseFileName.length === 0) {
-      console.log("AAAAAAHHHH", dataExactFile)
+
       console.log("Index:", index)
 
       return await Upload(index, save);
@@ -98,22 +100,7 @@ export default function Selector() {
       return await terminateDupesAndUpload(index + 1, save);
     }
   }
-
-  const SelectSave = (MoveToSelect: foundFile) => {
-    //Steg A: Ta bort från tillgängliga saves
-    //"Behåll alla filer vars namn vi inte klickat på"
-    setAvailableSaves((prev) =>
-      prev.filter((save) => save.relativePath !== MoveToSelect.relativePath),
-    );
-    setSelectedGame((prev) => [...prev, MoveToSelect]);
-  };
-
-  const DeselectSave = (MoveToAvailable: foundFile) => {
-    setSelectedGame((prev) =>
-      prev.filter((save) => save.relativePath !== MoveToAvailable.relativePath),
-    );
-    setAvailableSaves((prev) => [...prev, MoveToAvailable]);
-  };
+  const imgSrc = getGameImageSrc(game.appID);
 
   return (
     <div className="flex flex-col items-center pt-[40px]">
@@ -122,7 +109,7 @@ export default function Selector() {
           <div className="justify-center items-center flex ml-5">
             <img
               className="rounded-[20px] w-[300px] h-auto"
-              src={`https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.appID}/library_hero.jpg`}
+              src={imgSrc}
             />
           </div>
           <div className="mt-7 ml-10 flex flex-col font-kodchasan">
@@ -135,9 +122,9 @@ export default function Selector() {
         <div className="flex flex-row">
           <div className="mt-4 h-[335px] w-[250px] overflow-auto scrollbar-hide mr-5">
             <h1 className="font-kodchasan">Local Saves</h1>
-            {availableSaves.map((save) => (
+            {availableFiles.map((save) => (
               <div
-                onClick={() => SelectSave(save)}
+                onClick={() => selectSave(save)}
                 key={save.relativePath}
                 className="bg-[#D9BBA1]/60 p-1 rounded mb-4"
               >
@@ -153,9 +140,9 @@ export default function Selector() {
 
           <div className=" mt-4 h-[335px] w-[250px] overflow-auto scrollbar-hide">
             <h1 className="font-kodchasan">To Be Uploaded</h1>
-            {selectedGame.map((save) => (
+            {selectedFiles.map((save) => (
               <div
-                onClick={() => DeselectSave(save)}
+                onClick={() => deselectSave(save)}
                 key={save.relativePath}
                 className="bg-[#D9BBA1]/60 p-1 rounded mb-4"
               >
@@ -176,7 +163,7 @@ export default function Selector() {
           />
         </div>
       </div>
-      <div className="position: fixed bottom-16 left-6">
+      <div className="fixed bottom-16 left-6">
         <GeneralisedbuttonSm buttonName="Back" onClick={() => back(-1)} />
       </div>
     </div>

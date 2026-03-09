@@ -97,7 +97,7 @@ export default function GameList() {
                   return (<button 
                            key={game.appID}
                            onClick={() => navigate("/GameSaveSelect", 
-                    {state: { selectedgame: game },})} >
+                    {state: { selectedFiles: game },})} >
                       
                     <HexGameCard
                       gameID={game.appID}

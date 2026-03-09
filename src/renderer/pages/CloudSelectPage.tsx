@@ -1,12 +1,12 @@
 
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { cloudSave, gameData } from "src/shared/types";
+import type { cloudSave } from "src/shared/types";
 import HexGameCard from "../components/HexGameCard";
 import { useAuthContext } from "../auth/useAuth";
 import { GeneralisedbuttonSm } from "../components/buttons";
 import { simulateItems, createHoneycombRows } from "../util/HoneyComb";
-import { RemoveDuplicated } from "../util/ArrayHelpers";
+import { removeDuplicated } from "../util/saveHelpers";
 
 
 export default function CloudFileList() {
@@ -25,7 +25,7 @@ export default function CloudFileList() {
         const response = await window.electron.fetchCloudSaves(user?.id);
         
         if (response) {
-          setSaves(RemoveDuplicated(response.saves)); // Removes files from the same games, leaving a single file for each wich becomes the entry point.
+          setSaves(removeDuplicated(response.saves)); // Removes files from the same games, leaving a single file for each wich becomes the entry point.
           setNr_saves(response.saves);
         }
       }
@@ -79,7 +79,7 @@ export default function CloudFileList() {
                   return (<button 
                            key={game.appID}
                            onClick={() => back("/cloudSave",
-                    { state: { selectedgame: game }, })} >
+                    { state: { selectedFiles: game }, })} >
                     
                     <HexGameCard
                       key={game.fileName}
