@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import { supabase } from "./authflow/supabase-vite";
+import { supabase } from "../auth/supabaseClient";
 import { useEffect } from "react";
-import { useAuthContext } from "../hooks/useAuth";
-import { Profile_icon } from "./Profile_icon";
+import { useAuthContext } from "../auth/useAuth";
+import { Profile_icon } from "../components/Profile_icon";
 
-import { gameData, foundFile } from "src/types";
+import { gameData, foundFile } from "src/shared/types";
 import { useLocation } from "react-router-dom";
 import React, { useState } from "react";
-import HexGameCard from "./HexGameCard";
-import { Generalisedbutton, GeneralisedbuttonSm } from "./authflow/buttons";
+import HexGameCard from "../components/HexGameCard";
+import { Generalisedbutton, GeneralisedbuttonSm } from "../components/buttons";
 
 export default function Selector() {
   const back = useNavigate();

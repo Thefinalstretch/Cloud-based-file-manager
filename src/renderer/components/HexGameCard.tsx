@@ -1,4 +1,4 @@
-import type { hexGameCardProps } from "src/types";
+import type { hexGameCardProps } from "src/shared/types";
 
 export default function HexGameCard({
   gameID,

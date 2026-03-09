@@ -1,15 +1,10 @@
 //importera modul som identifierar operativsystemet
-import { dialog, BaseWindow } from "electron";
 import * as os from "os";
 import path from "path";
 import fs from "fs";
 import regedit from "regedit";
 import { promisify } from "util";
-import { exec } from "child_process";
-import util from "util";
-import { error } from "console";
-import type { foundFile, gameData, steamGame, steamUser } from "src/types";
-import { checkIfFileExists } from "./save-handler";
+import type { foundFile, gameData, steamGame, steamUser } from "src/shared/types";
 
 // const execPromise = util.promisify(exec);
 
@@ -23,7 +18,7 @@ const vbsdirectory = path.join(process.cwd(), "node_modules", "regedit", "vbs");
 regedit.setExternalVBSLocation(vbsdirectory);
 //setExternalVBSLocation: Som vi märkte tidigare letar regedit på fel ställe efter sina skript när man kör med Vite. Dennna rad tvingar den att titta i din node_modules-mapp istället. Det är "fixen" för ditt error.
 
-export async function find_steampath(): Promise<string | null> {
+export async function findSteamPath(): Promise<string | null> {
   try {
     const steamRegistryKey = "HKCU\\Software\\Valve\\Steam";
     const result = (await listkey([steamRegistryKey])) as any;
@@ -291,7 +286,7 @@ export async function getGameSavePath(
 }
 
 export async function getCompleteGameSaveData(): Promise<gameData[]> {
-  const steampath = await find_steampath();
+  const steampath = await findSteamPath();
   if (!steampath) {
     console.error("Steam path not found.");
     return [];
@@ -330,7 +325,7 @@ export async function getCompleteGameSaveData(): Promise<gameData[]> {
 export async function cloudMatcher(appID: string, rootID: string, relativePath: string): Promise<string> {
   console.log("We are using cloudmatcher!")
   try {
-    const steampath = await find_steampath();
+    const steampath = await findSteamPath();
     if (!steampath) {
       throw new Error("Steam path not found.");
     }

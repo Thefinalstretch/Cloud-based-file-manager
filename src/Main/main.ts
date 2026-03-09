@@ -1,12 +1,12 @@
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
-import { uploadGameSave_separate, fetchCloudSaves, downloadSave, checkIfFileExists , uploadFolder} from "./save-handler";
+import { uploadGameSave_separate, fetchCloudSaves, downloadSave, checkIfFileExists , uploadFolder} from "./services/save.service";
 import {
   cloudMatcher,
-  find_steampath,
+  findSteamPath,
   getCompleteGameSaveData,
-} from "./LocalDirectory_finder";
+} from "./services/steam.service";
 
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
@@ -121,7 +121,7 @@ ipcMain.handle("dialog:openFile", async () => {
 });
 
 ipcMain.handle("find-steam-path", () => {
-  return find_steampath();
+  return findSteamPath();
 });
 
 

@@ -1,4 +1,4 @@
-import { supabase } from "./supabase-vite";
+import { supabase } from "../auth/supabaseClient";
 
 
 

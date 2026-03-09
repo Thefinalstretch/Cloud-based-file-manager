@@ -94,3 +94,8 @@ export interface cloudSave {
   rootID: string,
   index: number
 }
+
+export interface HoneycombItem {
+  appID: string
+  isDummy?: boolean
+}

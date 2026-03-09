@@ -5,20 +5,20 @@ import {
   Routes,
   useNavigate,
 } from "react-router-dom";
-import Login_screen from "./authflow/login-screen";
+import Login_screen from "./pages/login-screen";
 import React, { useState } from "react";
-import { Homescreen } from "./Homescreen";
+import { Homescreen } from "./pages/Homescreen";
 
 
-import { AuthContext } from "src/hooks/useAuth";
-import AuthProvider from "./authflow/authProvider";
+import { AuthContext } from "src/renderer/auth/useAuth";
+import AuthProvider from "./auth/authProvider";
 
-import CloudFileList from "./CloudSelectPage";
-import GameList from "./GameSelectPage";
+import CloudFileList from "./pages/CloudSelectPage";
+import GameList from "./pages/GameSelectPage";
 import { LiquidGlassProvider } from "@gracefullight/liquid-glass";
-import TopBar from "./TopBar";
-import Selector from "./GameSaveSelect";
-import Selectors from "./CloudSave";
+import TopBar from "./components/TopBar";
+import Selector from "./pages/GameSaveSelect";
+import Selectors from "./pages/CloudSave";
 
 export const App = () => {
   return (

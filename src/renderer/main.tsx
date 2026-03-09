@@ -1,9 +1,9 @@
-import "./index.css";
+import "./styles/index.css";
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import AuthProvider from "./components/authflow/authProvider";
-import { App } from "./components/App";
+import AuthProvider from "./auth/authProvider";
+import { App } from "./App";
 
 const container = document.getElementById("root") as HTMLElement;
 const root = createRoot(container);

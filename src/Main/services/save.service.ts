@@ -1,13 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
-import path, { relative } from "path";
+import path from "path";
 import os from "os";
 import archiver from "archiver";
-import { use } from "react";
-import { cloudSave } from "../types";
+import { cloudSave } from "../../shared/types";
 import extract from "extract-zip";
-import { SupabaseURL, SupabaseKey } from "../components/authflow/supabase-vite";
-import { error } from "console";
+import { SupabaseURL, SupabaseKey } from "../../shared/supabase";
+import { supabase } from "./supabase.client";
 
 // sätt in dessa i .env senare om det behövs
 
@@ -19,10 +18,6 @@ import { error } from "console";
 // );
 // const SUPABASE_URL = "https://gueunvtnebrpjgcpaixk.supabase.co";
 // const SUPABASE_KEY = "sb_publishable_7gVhaErk-SgFFaDwzDs5Pw_qO4PH6iM";
-export const supabase = createClient(
-  SupabaseURL,
-  SupabaseKey
- );
 //helper, denna funktion skapar en zipfil av vald mapp
 
 function zipSource(sourceDir: string, outPath: string): Promise<void> {
@@ -205,7 +200,6 @@ export async function downloadSave(signedUrl: string,
 
     return { success: true };
   } catch (error) {
-    console.log("HEEEEEEELLLLOOOOO")
     if (fs.existsSync(TempZipPath2)) {
       fs.unlinkSync(TempZipPath2);
     }

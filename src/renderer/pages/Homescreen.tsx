@@ -5,11 +5,10 @@ import {
   Routes,
   useNavigate,
 } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import { SignOut, Signoutbutton } from "./authflow/buttons";
-import { useAuthContext } from "../hooks/useAuth";
-import { Profile_icon } from "./Profile_icon";
-import { Googlesigninbutton, Generalisedbutton } from "./authflow/buttons";
+import { useEffect } from "react";
+import { useAuthContext } from "../auth/useAuth";
+import { Profile_icon } from "../components/Profile_icon";
+import { Generalisedbutton, SignOut } from "../components/buttons";
 
 // kanske måste lägga till lite grejer innan return statementet
 export const Homescreen = () => {
@@ -31,11 +30,7 @@ export const Homescreen = () => {
   }, [isLoggedIn, isLoading]);
 
   return (
-    
-    
-    <div>
-      
-      
+    <div>  
       <div className="flex-1 flex flex-col items-center justify-center pt-[78px]">
       <p className="font-kodchasan text-5xl text-[#57463D]">NomadSync</p>
 

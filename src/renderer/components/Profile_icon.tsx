@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "./authflow/supabase-vite";
+import { supabase } from "../auth/supabaseClient";
 
 export const Profile_icon = () => {
   const [avatar_icon_url, setAvatar_icon_url] = useState<string | null>(null);
