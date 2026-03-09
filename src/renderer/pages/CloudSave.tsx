@@ -1,13 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { gameData, cloudSave } from "src/shared/types";
+import { useEffect } from "react";
+import { cloudSave } from "src/shared/types";
 import { GeneralisedbuttonSm} from "../components/buttons";
 import { useAuthContext } from "../auth/useAuth";
-import { supabase } from "../auth/supabaseClient";
-import { removeEnd } from "../util/saveHelpers";
-import { deleteCloudSave, buildCloudFilePath } from "../services/cloudSave.service";
+import { deleteCloudSave } from "../services/cloudSave.service";
 import { useSelectableList } from "../util/hooks/useSelectableList";
 import { getGameImageSrc } from "../util/graphicHelper";
+import { createCloudSaveSignedUrl, LocalSavePath, downloadCloudSave} from "../services/download.service";
 
 export default function Selectors() {
   const back = useNavigate();
@@ -44,70 +43,53 @@ export default function Selectors() {
 
   }, [])
 
-  const DownloadSelected = async () => {
-    if (selectedFiles.length === 0) {
-      alert("Please select at least one save to download.");
-      return;
-    }
+const handleDownloadSelected = async () => {
+  if (selectedFiles.length === 0) {
+    alert("Please select at least one save to download.");
+    return;
+  }
 
+  for (const save of selectedFiles) {
     try {
-      for (const save of selectedFiles) {
+      const signedUrl = await createCloudSaveSignedUrl(
+        user.id,
+        game.gameName,
+        save.index,
+        save,
+      );
 
-        const cloudFilePath = buildCloudFilePath(user.id, game.gameName, save.index, save)
+      const localFilePath = await LocalSavePath(save);
+      const alreadyExists = await window.electron.checkIfFileExists(localFilePath);
 
-        console.log("Attempting to download file from path: ", cloudFilePath);
-        const { data, error } = await supabase
-          .storage
-          .from("Game-save")
-          .createSignedUrl(cloudFilePath, 60);
+      if (alreadyExists) {
+        const shouldOverwrite = window.confirm(
+          `${save.fileName} already exists at ${localFilePath}. Do you want to overwrite it?`,
+        );
 
-        if (error || !data) {
-          console.error("Error downloading file: ", error);
-          continue; // Skip this file and move to the next one
+        if (!shouldOverwrite) {
+          console.log(`Skipping download of ${save.fileName}.`);
+          continue;
         }
-        try {
-        let localfilePath = "";
-        if (save.appID === "1"){
-          localfilePath = save.relativePath;
-        } else {
-          localfilePath = await window.electron.cloudMatcher(save.appID, save.rootID, save.relativePath);
-        }
+      }
 
-        console.log("Local file path determined: ", localfilePath);
-        
-        if(await window.electron.checkIfFileExists(localfilePath)) {
-          const overrideselect = window.confirm(`${save.fileName} already exists at ${localfilePath}. Do you want to overwrite it?`)
-          if(!overrideselect) { 
-            console.log(`Skipping download of ${save.fileName} as it already exists and user chose not to overwrite.`);
-          }
-          else{
-            if (save.appID === "1"){
-              await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath), localfilePath);
-            } else {
-              console.log(save.appID)
-              await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath));
-            }
-            
-            console.log(`File ${save.fileName} downloaded and extracted successfully.`);
-            setSelectedFiles((prev) => prev.filter((x) => x.relativePath !== save.relativePath));
-            setAvailableFiles((prev) => [...prev, save])
-          } 
-        } else {
-           await window.electron.downloadSave(data.signedUrl, removeEnd(localfilePath));
-           console.log(`File ${save.fileName} downloaded and extracted successfully.`);
-           setSelectedFiles((prev) => prev.filter((x) => x.relativePath !== save.relativePath));
-           setAvailableFiles((prev) => [...prev, save])
-        } 
+      await downloadCloudSave(
+        signedUrl,
+        save,
+        localFilePath
+      );
 
+      console.log(`File ${save.fileName} downloaded successfully.`);
 
-
-      } catch (error) {
-          console.error(`Error downloading or extracting file ${save.fileName}: `, error);
-        }}
+      setSelectedFiles((prev) =>
+        prev.filter((x) => x.relativePath !== save.relativePath),
+      );
+      setAvailableFiles((prev) => [...prev, save]);
     } catch (error) {
-      console.error("Error fetching saves: ", error);
+      console.error(`Error downloading ${save.fileName}:`, error);
+      alert(`Error downloading ${save.fileName}`);
     }
   }
+};
 
   const handleDeleteSelected = async () => {
   if (selectedFiles.length === 0) {
@@ -127,13 +109,13 @@ export default function Selectors() {
     }
 
     try {
-      await deleteCloudSave({
-        userId: user.id,
-        gameName: game.gameName,
-        gameAppId: game.appID,
-        gameIndex: save.index,
+      await deleteCloudSave(
+        user.id,
+        game.gameName,
+        game.appID,
+        save.index,
         save,
-      });
+      );
 
       alert(`File ${save.fileName} deleted successfully from Supabase.`);
       setSelectedFiles((prev) =>
@@ -194,7 +176,7 @@ export default function Selectors() {
         </div>
 
         <div className="pt-3 flex flex-row gap-4">
-                  <GeneralisedbuttonSm buttonName="Download" onClick={() => DownloadSelected()}/>
+                  <GeneralisedbuttonSm buttonName="Download" onClick={handleDownloadSelected}/>
                   <GeneralisedbuttonSm buttonName="Delete" onClick={handleDeleteSelected}/>
                 </div>
       </div>

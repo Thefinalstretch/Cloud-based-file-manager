@@ -4,25 +4,23 @@ import { cloudSave } from "src/shared/types";
 export function buildCloudFilePath(
   userId: string,
   gameName: string,
-  gameIndex: number,
+  saveIndex: number,
   save: cloudSave
 ): string {
   if (save.appID === "1") { // Personal Files case
     return `${userId}/${gameName}/${save.fileName}.zip`;
   }
-  return `${userId}/${gameName}/${gameIndex}/${save.fileName}`;
+  return `${userId}/${gameName}/${saveIndex}/${save.fileName}`;
 }
 
-export async function deleteCloudSave(params: {
-  userId: string;
-  gameName: string;
-  gameAppId: string;
-  gameIndex: number;
-  save: cloudSave;
-}) {
-  const { userId, gameName, gameAppId, gameIndex, save } = params;
+export async function deleteCloudSave(
+  userId: string,
+  gameName: string,
+  gameAppId: string,
+  saveIndex: number,
+  save: cloudSave) {
 
-  const cloudFilePath = buildCloudFilePath(userId, gameName, gameIndex, save);
+  const cloudFilePath = buildCloudFilePath(userId, gameName, saveIndex, save);
 
   const { error: storageError } = await supabase
     .storage

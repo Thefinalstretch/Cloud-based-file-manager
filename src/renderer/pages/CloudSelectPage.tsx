@@ -11,7 +11,7 @@ import { removeDuplicated } from "../util/saveHelpers";
 
 export default function CloudFileList() {
 
-  const back = useNavigate();
+  const navigate = useNavigate();
   const { user } = useAuthContext();
   const [saves, setSaves] = useState<cloudSave[]>([]);
   const [nr_saves, setNr_saves] = useState<cloudSave[]>([]);
@@ -78,7 +78,7 @@ export default function CloudFileList() {
                   const filesWithSameID = nr_saves.filter(x => x.appID === game.appID);
                   return (<button 
                            key={game.appID}
-                           onClick={() => back("/cloudSave",
+                           onClick={() => navigate("/cloudSave",
                     { state: { selectedFiles: game }, })} >
                     
                     <HexGameCard
@@ -95,7 +95,7 @@ export default function CloudFileList() {
           </div>
         </div>
         <div className="fixed bottom-16 left-6">
-          <GeneralisedbuttonSm buttonName="Back" onClick={() => back(-1)}/>
+          <GeneralisedbuttonSm buttonName="navigate" onClick={() => navigate(-1)}/>
         </div>
       </div>
     </div>

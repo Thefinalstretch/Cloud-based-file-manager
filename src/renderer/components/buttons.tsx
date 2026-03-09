@@ -1,7 +1,10 @@
 import { supabase } from "../auth/supabaseClient";
 
-
-
+/**
+ * @returns A button component for signing in with Google using Supabase authentication. 
+ * When clicked, it initiates the OAuth flow for Google sign-in. 
+ * Includes styling for a liquid glass effect and the Google logo.
+ */
 export const Googlesigninbutton = () => {
   const SignInwithGoogle = async (e: React.MouseEvent) => {
     e.preventDefault();

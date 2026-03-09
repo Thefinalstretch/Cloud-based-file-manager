@@ -6,8 +6,8 @@ import { useSelectableList } from "../util/hooks/useSelectableList";
 import { gameData, foundFile } from "src/shared/types";
 import { useLocation } from "react-router-dom";
 import { getGameImageSrc } from "../util/graphicHelper";
-import { useState } from "react";
-import { Generalisedbutton, GeneralisedbuttonSm } from "../components/buttons";
+import { GeneralisedbuttonSm } from "../components/buttons";
+import { uploadSaveWithDuplicateHandling } from "../services/upload.service";
 
 export default function Selector() {
   const back = useNavigate();
@@ -24,82 +24,40 @@ export default function Selector() {
   deselectItem: deselectSave,
   } = useSelectableList<foundFile>(game?.saves || []);
 
-  const UploadSelected = async () => {
-    const headfolder = game.gameName;
-    if (selectedFiles.length === 0) {
-      alert("Please select at least one save to upload.");
-      return;
+  const handleUploadSelected = async () => {
+  if (selectedFiles.length === 0) {
+    alert("Please select at least one save to upload.");
+    return;
+  }
+
+  for (const save of selectedFiles) {
+    const uploadConfirm = window.confirm(
+      `Are you sure you want to upload ${save.fileName}?`,
+    );
+
+    if (!uploadConfirm) {
+      continue;
     }
 
     try {
-      for (const save of selectedFiles) {
-        
-        const path = save.filePath;
-        //Logik för att titta om relative path finns i databasen
-        const uploadConfirm = window.confirm(
-          `Are you sure you want to upload ${save.fileName}?`,
-        );
-        if (!uploadConfirm) {
-          continue;
-        }
+      await uploadSaveWithDuplicateHandling(
+        save,
+        user.id,
+        game.appID,
+        game.gameName,
+      );
 
-        try{
-          await terminateDupesAndUpload(0, save);
-          alert(`Successfully uploaded: ${save.fileName}`);
-        } catch(error) {
-          alert(`Upload failed for: ${save.fileName} ${error}`);
-        }
-      }
-     
+      setSelectedFiles((prev) =>
+        prev.filter((x) => x.relativePath !== save.relativePath),
+      );
+      setAvailableFiles((prev) => [...prev, save]);
+
+      alert(`Successfully uploaded: ${save.fileName}`);
     } catch (error) {
-      console.error("Error uploading saves: ", error);
-    }
-
-  };
-
-  async function Upload(index : number, save: foundFile) {
-    setSelectedFiles((prev) => prev.filter((x) => x.relativePath !== save.relativePath));
-    setAvailableFiles((prev) => [...prev, save])
-    return window.electron.uploadsave_separate(save.filePath,
-                                                user?.id as string,
-                                                game.appID,
-                                                game.gameName,
-                                                save.fileName,
-                                                save.relativePath,
-                                                save.rootID,
-                                                index);
-    
-  }
-
-  async function terminateDupesAndUpload(index: number, save: foundFile) {
-    let {data: dataExactFile, error: ErrorExactFile} = await supabase.from("game_saves").select("index").eq("relative_path", save.relativePath).eq("user_id", user?.id).eq("app_id", game.appID);
-    let {data: dataBaseFileName, error: ErrorFileName} = await supabase.from("game_saves").select("id").eq("file_name", save.fileName).eq("user_id", user?.id).eq("app_id", game.appID).eq("index", index);
-
-    if(ErrorExactFile){
-      throw ErrorExactFile
-    }
-
-    if(ErrorFileName){
-      throw ErrorFileName;
-    }
-
-    if (dataExactFile.length !== 0) {
-      console.log("There is an exact file with index: ", dataExactFile[0].index);
-      
-      console.log("Uploading file to index: ", dataExactFile[0].index);
-
-      return await Upload(dataExactFile[0].index, save);
-    } else if (dataBaseFileName.length === 0) {
-
-      console.log("Index:", index)
-
-      return await Upload(index, save);
-    }
-    else {
-      console.log("Index", index, "Data", dataExactFile);
-      return await terminateDupesAndUpload(index + 1, save);
+      alert(`Upload failed for: ${save.fileName} ${error}`);
     }
   }
+};
   const imgSrc = getGameImageSrc(game.appID);
 
   return (
@@ -159,7 +117,7 @@ export default function Selector() {
         <div className="pt-3 ">
           <GeneralisedbuttonSm
             buttonName="Upload"
-            onClick={() => UploadSelected()}
+            onClick={handleUploadSelected}
           />
         </div>
       </div>
