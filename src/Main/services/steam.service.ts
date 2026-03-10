@@ -71,7 +71,7 @@ export async function getLibraryVdfPaths(
     uniquelibraryPaths.forEach((Path) => {
       console.log(Path);
     });
-
+    console.log("HERE IT IS:",uniquelibraryPaths)
     return uniquelibraryPaths;
   } catch (error) {
     console.error("Error accessing libraryfolders.vdf:", error);

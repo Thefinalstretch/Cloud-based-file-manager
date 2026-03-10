@@ -111,7 +111,7 @@ export default function CloudFileList() {
           </div>
         </div>
         <div className="fixed bottom-16 left-6">
-          <GeneralisedbuttonSm buttonName="navigate" 
+          <GeneralisedbuttonSm buttonName="back" 
               onClick={() => navigate(-1)}/>
         </div>
       </div>

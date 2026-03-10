@@ -60,6 +60,8 @@ const handleDownloadSelected = async () => {
 
   for (const save of selectedFiles) {
     try {
+      console.log(game.gameName)
+      console.log(save)
       const signedUrl = await createCloudSaveSignedUrl(
         user.id,
         game.gameName,

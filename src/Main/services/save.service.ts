@@ -142,6 +142,7 @@ export async function uploadFolder(
 
 /**
  * Uploads a single game save file to the cloud storage.
+ * Could have been better to just use foundFile and gameData
  * @param filePath The path to the file to upload.
  * @param userID ID string for the user
  * @param appID ID string for the application

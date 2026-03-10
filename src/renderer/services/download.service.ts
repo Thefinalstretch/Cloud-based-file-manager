@@ -37,6 +37,7 @@ export async function createCloudSaveSignedUrl(
 }
 /**
  * Determines the local path for a cloud save.
+ * Handles the two cases between if the path is a game save or a "personal file" save.
  * @example 
  * //Results in "C:\Users\jonat\Programmering\code\homework8"
  * LocalSavePath(
@@ -45,7 +46,7 @@ export async function createCloudSaveSignedUrl(
  * fileName: homework8.zip,
  * relativePath: C:\Users\jonat\Programmering\code\homework8)
  * @param save The cloud save object for which to determine the local path.
- * @returns A promise string representing the local file path where the cloud save should be downloaded.
+ * @returns {promise<string>} a promise string with the local path for the cloud save.
  */
 export async function LocalSavePath(save: cloudSave): Promise<string> {
   if (save.appID === "1") {
@@ -63,13 +64,13 @@ export async function LocalSavePath(save: cloudSave): Promise<string> {
  * @param signedUrl The signed URL for the cloud save.
  * @param save The cloud save object to download.
  * @param localFilePath The local file path where the cloud save should be downloaded.
- * @returns A promise resolving when the download is complete.
+ * @returns {promise<void>} A promise that resolves when the download is complete.
  */
 export async function downloadCloudSave( 
   signedUrl: string,
   save: cloudSave,
   localFilePath: string
-) {
+): Promise<void> {
 
   const targetFolder = removeEnd(localFilePath);
 

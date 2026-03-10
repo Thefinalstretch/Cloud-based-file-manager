@@ -126,7 +126,10 @@ export default function Selector() {
         <div className="pt-3 ">
           <GeneralisedbuttonSm
             buttonName="Upload"
-            onClick={handleUploadSelected}
+            onClick={() => {
+          console.log(selectedFiles);
+          handleUploadSelected();
+          }}
           />
         </div>
       </div>

@@ -1,0 +1,95 @@
+"AppState"
+{
+	"appid"		"313690"
+	"universe"		"1"
+	"LauncherPath"		"C:\\Program Files (x86)\\Steam\\steam.exe"
+	"name"		"LEGO® Batman™ 3: Beyond Gotham"
+	"StateFlags"		"4"
+	"installdir"		"LEGO Batman 3 Beyond Gotham"
+	"LastUpdated"		"1771425094"
+	"LastPlayed"		"1772631922"
+	"SizeOnDisk"		"8660541270"
+	"StagingSize"		"0"
+	"buildid"		"18924960"
+	"LastOwner"		"76561198019852321"
+	"DownloadType"		"1"
+	"UpdateResult"		"0"
+	"BytesToDownload"		"0"
+	"BytesDownloaded"		"0"
+	"BytesToStage"		"0"
+	"BytesStaged"		"0"
+	"TargetBuildID"		"18924960"
+	"AutoUpdateBehavior"		"0"
+	"AllowOtherDownloadsWhileRunning"		"0"
+	"ScheduledAutoUpdate"		"0"
+	"FullValidateAfterNextUpdate"		"1"
+	"InstalledDepots"
+	{
+		"313691"
+		{
+			"manifest"		"4443902272311026638"
+			"size"		"7736705811"
+		}
+		"327174"
+		{
+			"manifest"		"964649925611933701"
+			"size"		"3519007"
+			"dlcappid"		"327174"
+		}
+		"327170"
+		{
+			"manifest"		"2020646298349048643"
+			"size"		"146704741"
+			"dlcappid"		"327170"
+		}
+		"327171"
+		{
+			"manifest"		"4238496217585822049"
+			"size"		"127009679"
+			"dlcappid"		"327171"
+		}
+		"327177"
+		{
+			"manifest"		"4325475610853729515"
+			"size"		"133008367"
+			"dlcappid"		"327177"
+		}
+		"327175"
+		{
+			"manifest"		"7803373803440355626"
+			"size"		"107227661"
+			"dlcappid"		"327175"
+		}
+		"327176"
+		{
+			"manifest"		"5382487805151043846"
+			"size"		"217511221"
+			"dlcappid"		"327176"
+		}
+		"327172"
+		{
+			"manifest"		"6398719775382247543"
+			"size"		"163367379"
+			"dlcappid"		"327172"
+		}
+		"335800"
+		{
+			"manifest"		"317296534116282674"
+			"size"		"25487404"
+			"dlcappid"		"335800"
+		}
+	}
+	"SharedDepots"
+	{
+		"228983"		"228980"
+		"228990"		"228980"
+	}
+	"UserConfig"
+	{
+		"language"		"english"
+	}
+	"MountedConfig"
+	{
+		"language"		"english"
+	}
+}

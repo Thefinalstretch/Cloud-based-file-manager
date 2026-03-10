@@ -13,10 +13,10 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "jsx": "react-jsx",
-    "types": ["vite/client"],
+    "types": ["vite/client", "jest"],
     "paths": {
       "src/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/vite-env.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/vite-env.d.ts", "tests/cloudManager.test.ts"]
 }

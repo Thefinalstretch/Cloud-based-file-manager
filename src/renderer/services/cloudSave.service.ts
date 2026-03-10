@@ -3,26 +3,26 @@ import { cloudSave } from "src/shared/types";
 
 // Builds the file path for a cloud save based on the user ID, game name, save index, and save details.
 export function buildCloudFilePath(
-  userId: string,
+  userID: string,
   gameName: string,
-  saveIndex: number,
+  index: number,
   save: cloudSave
 ): string {
   if (save.appID === "1") { // Personal Files case
-    return `${userId}/${gameName}/${save.fileName}.zip`;
+    return `${userID}/${gameName}/${save.fileName}.zip`;
   }
-  return `${userId}/${gameName}/${saveIndex}/${save.fileName}`;
+  return `${userID}/${gameName}/${index}/${save.fileName}`;
 }
 
 // Deletes a cloud save by removing the file from storage and deleting the corresponding database entry.
 export async function deleteCloudSave(
-  userId: string,
+  userID: string,
   gameName: string,
-  gameAppId: string,
-  saveIndex: number,
+  appID: string,
+  index: number,
   save: cloudSave) {
 
-  const cloudFilePath = buildCloudFilePath(userId, gameName, saveIndex, save);
+  const cloudFilePath = buildCloudFilePath(userID, gameName, index, save);
 
   const { error: storageError } = await supabase
     .storage
@@ -34,8 +34,8 @@ export async function deleteCloudSave(
   const { error: dbError } = await supabase
     .from("game_saves")
     .delete()
-    .eq("user_id", userId)
-    .eq("app_id", gameAppId)
+    .eq("user_id", userID)
+    .eq("app_id", appID)
     .eq("relative_path", save.relativePath);
 
   if (dbError) throw dbError;

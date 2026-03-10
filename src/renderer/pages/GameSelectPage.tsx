@@ -33,32 +33,33 @@ export default function GameList() {
   }, []);
 
   const handleManualUpload = async () => {
-    try{
+    try {
       const path = await window.electron.selectFolder();
-
       if (!path) return;
 
       console.log("selected:", path);
 
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data, error } = await supabase.auth.getUser();
+
+      if (error) throw error;
+
+      const user = data.user;
       console.log(user);
 
       const ok = window.confirm(`Are you sure you want to upload ${path}?`);
       if (!ok) return;
 
-      const splitPath = path.split("\\")
-      const folderName = splitPath[splitPath.length-1]
+      const splitPath = path.split("\\");
+      const folderName = splitPath[splitPath.length - 1];
 
       await window.electron.uploadFolder(path, user?.id, folderName);
 
       alert(`Successfully uploaded: ${folderName}`);
-      
-    } catch (error) {
 
-      alert(`Failed to upload folder`);
-      console.log(error);
+    } catch (error) {
+    alert("Failed to upload folder");
+    console.error(error);
     }
-    
   };
 
   const simulatedGames = simulateItems(

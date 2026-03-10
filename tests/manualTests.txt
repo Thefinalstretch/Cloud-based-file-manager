@@ -1,0 +1,42 @@
+Test case 1: "No internet connection"
+Open the program.
+Go to Upload Game-Save.
+While in the game selection page disconnect your internet.
+Press the manual upload button.
+Click and upload a folder of your choice in the dialog box.
+
+Expected result: 
+The program will show the alert "Failed to upload folder."
+No folder will have been uploaded to the database. 
+Otherwise would have been under "Personal Files"
+
+
+Test case 2: "Duplicate upload"
+----------
+precondition: 
+The tester has to have a local application of Steam downloaded.
+In their steam files under "Chosen Disk":\Program Files (x86)\Steam,
+add the content of the Steam folder from the repo tests folder.
+The content should go into their respective places.
+The find logic is predetirmined so any change would break the program
+----------
+This then creates mock save files for the game Lego Batman 3 Beyond Gotham
+
+Testing:
+Open the program.
+Select Upload Game-Save.
+Choose Lego Batman 3 between the found games.
+Select the two available files.
+Press Upload.
+Then go back to home screen.
+Go into Download Game-Save.
+Choose Lego Batman 3 between the found games.
+
+Expected Result:
+Only one file has been uploaded. Meaning our duplicate handling has failed,
+one file has overwritten the other.
+
+This is because a bug in our asynchronous function that makes it so
+if two files are uploaded in a batch, results in one overwritten the other.
+Uploading the two files seperately works, making one file go to index 0 and the other to index 1.
+
