@@ -7,7 +7,7 @@ import { foundFile } from "src/shared/types";
  * results in a call to window.electron.uploadsave_separate
  * await uploadSave(currentFile, "user123", "app456", "Skyrim", 0);
  * @param save - The object containing the file's path, name, and relative path metadata
- * @param userId - The unique identifier of the authenticated user
+ * @param userID - The unique identifier of the authenticated user
  * @param appID - The unique identifier for the specific game
  * @param gameName - The title of the game
  * @param index - The conflict resolution index for the file
@@ -17,14 +17,14 @@ import { foundFile } from "src/shared/types";
  */
 export async function uploadSave(
   save: foundFile,
-  userId: string,
+  userID: string,
   appID: string,
   gameName: string,
   index: number,
 ) {
   return await window.electron.uploadsave_separate(
     save.filePath,
-    userId,
+    userID,
     appID,
     gameName,
     save.fileName,
@@ -40,17 +40,17 @@ export async function uploadSave(
  * @example 
  * returns 0 if no files conflict, or a higher integer like 1 or 2 if conflicts exists
  * @param save - The file object being checked against the database 
- * @param userId - The unique identifier of the authenticated user
+ * @param userID - The unique identifier of the authenticated user
  * @param appID - The unique identifier for the specific game
  * @param index - The current index being tested for conflicts (defaults to 0)
- * @precondition index is not negative.
+ * @precondition All indexes in the database are non-negative numbers.
  * @complexity Theta(N), where N is the number of conflicting files in the database with the exact same file name.
  * @returns {Promise<number>} Returns the first available non-conflicting integer index.
  */
 
 export async function findUploadIndex(
   save: foundFile,
-  userId: string,
+  userID: string,
   appID: string,
   index: number = 0,
 ): Promise<number> {
@@ -58,7 +58,7 @@ export async function findUploadIndex(
     .from("game_saves")
     .select("index")
     .eq("relative_path", save.relativePath)
-    .eq("user_id", userId)
+    .eq("user_id", userID)
     .eq("app_id", appID);
 
   if (errorExactFile) {
@@ -73,7 +73,7 @@ export async function findUploadIndex(
     .from("game_saves")
     .select("id")
     .eq("file_name", save.fileName)
-    .eq("user_id", userId)
+    .eq("user_id", userID)
     .eq("app_id", appID)
     .eq("index", index);
 
@@ -86,15 +86,15 @@ export async function findUploadIndex(
   }
   // variant: N - index
   // Where N is the number of conflicting files.
-  return await findUploadIndex(save, userId, appID, index + 1);
+  return await findUploadIndex(save, userID, appID, index + 1);
 }
 
 export async function uploadSaveWithDuplicateHandling(
   save: foundFile,
-  userId: string,
+  userID: string,
   appID: string,
   gameName: string,
 ) {
-  const index = await findUploadIndex(save, userId, appID, 0);
-  return await uploadSave(save, userId, appID, gameName, index);
+  const index = await findUploadIndex(save, userID, appID, 0);
+  return await uploadSave(save, userID, appID, gameName, index);
 }

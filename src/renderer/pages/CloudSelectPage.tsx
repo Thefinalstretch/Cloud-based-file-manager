@@ -8,7 +8,13 @@ import { GeneralisedbuttonSm } from "../components/buttons";
 import { simulateItems, createHoneycombRows } from "../util/HoneyComb";
 import { removeDuplicated } from "../util/saveHelpers";
 
-
+/**
+ * The game list page component, responsible for displaying the list of games with saves available for download.
+ * Fetches cloud saves and then renders a honeycomb style layout of game cards buttons.
+ * To be precise, the available saves are fetched, but only one save per game is rendered so only one entry per game is shown.
+ * The available saves are passed on to the next page.
+ * @returns {JSX.Element} The game cloud data selection interface.
+ */
 export default function CloudFileList() {
 
   const navigate = useNavigate();
@@ -56,7 +62,7 @@ export default function CloudFileList() {
         appID: `Test Game ${i}`,
         lastUpdated: "10 GB",
         fileSize: "2024-01-01",
-        isDummy: true, // Changing this to true removes additional rendering, for program showcase, keep false.
+        isDummy: false, // Changing this to true removes additional rendering, for program showcase, keep false.
         storagePath: "1.0",
       } as cloudSave)
   );

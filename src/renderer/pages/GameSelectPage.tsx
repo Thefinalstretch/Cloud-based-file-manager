@@ -7,6 +7,11 @@ import { GeneralisedbuttonSm } from "../components/buttons";
 import { supabase } from "../auth/supabaseClient";
 import { simulateItems, createHoneycombRows } from "../util/HoneyComb";
 
+/**
+ * The game list page component, responsible for displaying the list of games with saves available for upload.
+ * Fetches games data and then renders a honeycomb style layout of game cards buttons.
+ * @returns {JSX.Element} The game selection interface.
+ */
 export default function GameList() {
   const navigate = useNavigate();
   const [games, setGames] = useState<gameData[]>([]);

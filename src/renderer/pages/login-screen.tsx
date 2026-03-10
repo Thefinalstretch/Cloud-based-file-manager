@@ -3,7 +3,7 @@ import { useAuthContext } from "../auth/useAuth";
 import { Googlesigninbutton } from "../components/buttons";
 import { useEffect } from "react";
 
-
+// Login screen component.
 export default function Login_screen() {
   const { isLoggedIn, session } = useAuthContext();
   const router = useNavigate();

@@ -9,7 +9,6 @@ export interface IElectronAPI {
   getMinecraftWorlds: () => Promise<any>;
   onLog: (callback: (message: string) => void) => void;
   find_steampath: () => Promise<any>;
-  getXboxGames: () => Promise<any[]>;
   getallgames: () => Promise<gameData[]>;
   uploadsave_separate: (
     filePath: string,
@@ -24,8 +23,10 @@ export interface IElectronAPI {
   fetchCloudSaves: (
     userID: string,
   ) => Promise<{ success: boolean; saves: cloudSave[] }>;
-  downloadSave: (signedUrl: string, targetFolder: string, removeThisFolder?: string) => Promise<{ success: boolean }>;
-  cloudMatcher: (appID: string, rootID: string, relativePath: string) => Promise<string>;
+  downloadSave: (signedUrl: string, targetFolder: string, 
+    removeThisFolder?: string) => Promise<{ success: boolean }>;
+  cloudMatcher: (appID: string, rootID: string, relativePath: string) => 
+    Promise<string>;
   checkIfFileExists: (localDirectory: string) => Promise<boolean>;
 }
 declare global {

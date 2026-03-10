@@ -8,6 +8,11 @@ import { getGameImageSrc } from "../util/graphicHelper";
 import { GeneralisedbuttonSm } from "../components/buttons";
 import { uploadSaveWithDuplicateHandling } from "../services/upload.service";
 
+/**
+ * Component for selecting game saves to upload.
+ * Displays html and logic to select between available saves and those selected for upload.
+ * @returns {JSX.Element} The save selection interface.
+ */
 export default function Selector() {
   const back = useNavigate();
   const { user } = useAuthContext();
@@ -23,6 +28,7 @@ export default function Selector() {
   deselectItem: deselectSave,
   } = useSelectableList<foundFile>(game?.saves || []);
 
+  // Calls upon the upload workflow, also houses the confirmation logic.
   const handleUploadSelected = async () => {
   if (selectedFiles.length === 0) {
     alert("Please select at least one save to upload.");

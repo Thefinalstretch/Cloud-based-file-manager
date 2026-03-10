@@ -4,20 +4,17 @@ import { useAuthContext } from "../auth/useAuth";
 import { Profile_icon } from "../components/Profile_icon";
 import { Generalisedbutton, SignOut } from "../components/buttons";
 
-// kanske måste lägga till lite grejer innan return statementet
+/**
+ * The home screen page component.
+ * Renderes the two choices of game handling and also log out.
+ * @returns {JSX.Element} The home screen interface.
+ */
 export const Homescreen = () => {
   const { isLoggedIn, isLoading } = useAuthContext();
   const router = useNavigate();
   const {user} = useAuthContext();
 
   useEffect(() => {
-    // vi har även en isLoading state i authContext som vi kan använda för att undvika att redirecta innan
-    // vi vet om användaren är inloggad eller inte. Exempelvis tar det en stund för supabase att verifiera sessionen när appen startar,
-    // och under den tiden vill vi inte redirecta användaren till login-skärmen.
-    // Detta skulle kunna hända när man refreshar sidan, då appen startar om och authContext måste verifiera sessionen igen.
-    // Utan isLoading skulle användaren då snabbt flasha in på login-skärmen innan de redirectas tillbaka till homescreen när sessionen verifierats.
-    // Med isLoading kan vi undvika den flashen och bara redirecta till login-skärmen om vi vet att användaren inte
-    // är inloggad efter att sessionen verifierats.
     if (!isLoggedIn && !isLoading) {
       router("/");
     }

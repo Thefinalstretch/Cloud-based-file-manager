@@ -18,6 +18,12 @@ const vbsdirectory = path.join(process.cwd(), "node_modules", "regedit", "vbs");
 regedit.setExternalVBSLocation(vbsdirectory);
 //setExternalVBSLocation: Som vi märkte tidigare letar regedit på fel ställe efter sina skript när man kör med Vite. Dennna rad tvingar den att titta i din node_modules-mapp istället. Det är "fixen" för ditt error.
 
+/**
+ * Uses registry keys to find the installation path of Steam, regardless of where it is installed on the user's system.
+ * @precondition The user must have Steam installed on their system, and the registry keys must be intact and accessible.
+ * @complexity Theta(1) in the average case, as it involves a constant number of registry lookups, but can degrade to Theta(N) in the worst case if there are issues with the registry or if multiple lookups are needed due to errors.
+ * @returns {Promise<string | null>} The normalized path to the Steam installation directory, or null if it cannot be found.
+ */
 export async function findSteamPath(): Promise<string | null> {
   try {
     const steamRegistryKey = "HKCU\\Software\\Valve\\Steam";
@@ -32,6 +38,13 @@ export async function findSteamPath(): Promise<string | null> {
   return null;
 }
 
+/**
+ * Retrieves the paths of all Steam library folders.
+ * @param steampath The path to the Steam installation directory.
+ * @precondition steampath must be a valid path to the Steam installation directory, and the user must have permission to access the libraryfolders.vdf file.
+ * @complexity Theta(N) where N is the size of the libraryfolders.vdf file, due to the need to read and parse the entire file to extract library paths.
+ * @returns {Promise<string[] | null>} An array of unique library paths or null if an error occurs.
+ */
 export async function getLibraryVdfPaths(
   steampath: string,
 ): Promise<string[] | null> {
@@ -66,6 +79,14 @@ export async function getLibraryVdfPaths(
   }
 }
 
+/**
+ * Converts the library paths array from getLibraryVdfPaths into an array of steamGame objects, 
+ * by reading the appmanifest files in each library path.
+ * @param libraryPaths An array of paths to Steam library folders.
+ * @precondition libraryPaths must be an array of valid paths to Steam library folders, and the user must have permission to access the appmanifest files within those folders.
+ * @complexity Theta(M) where M is the total number of appmanifest files across all provided library paths, due to the need to read and parse each file to extract game information.
+ * @returns {Promise<steamGame[]>} An array of steamGame objects representing the installed games.
+ */
 export async function getInstalledsteamGames(
   libraryPaths: string[],
 ): Promise<steamGame[]> {
@@ -131,6 +152,13 @@ export async function getInstalledsteamGames(
   return installedgames;
 }
 
+/**
+ * Retrieves the latest active Steam user.
+ * @param steamPath The path to the Steam installation directory.
+ * @precondition steamPath must be a valid path to the Steam installation directory, and the user must have permission to access the loginusers.vdf file.
+ * @complexity Theta(N) where N is the size of the loginusers.vdf file, due to parsing.
+ * @returns {Promise<steamUser | null>} The latest active Steam user or null if an error occurs.
+ */
 export async function getLatestActivesteamUser(
   steamPath: string,
 ): Promise<steamUser | null> {
@@ -177,7 +205,23 @@ export async function getLatestActivesteamUser(
   }
   return null;
 }
-
+/**
+ * Takes the rootID and returns a path of the save file that is relative 
+ * to that specific rootID case.
+ * Used to handle the different save file structures that games use.
+ * @example For rootID === "0",
+ *          getBasePathFromRoot returns something like "C:\Program Files (x86)\Steam\userdata\123456789\123456\remote",
+ * @param rootID A string derived from games remotecache.vdf that indicates which save file structure the game uses.
+ * @param steamPath The path to the Steam installation directory.
+ * @param accountID The Steam account ID of the user.
+ * @param appID The app ID of the game.
+ * @precondition rootID must be a valid root ID as defined in the Steam documentation, 
+ *               steamPath must be a valid path to the Steam installation directory, 
+ *               accountID must be a valid Steam account ID, 
+ *               appID must be a valid Steam app ID.
+ * @returns {string} The full base path to the save file corresponding to the provided rootID. 
+ *                   Afterward additional paths are added to find the specific file
+ */
 function getBasePathFromRoot(
   rootID: string,
   steamPath: string,
@@ -220,6 +264,14 @@ function getBasePathFromRoot(
   }
 }
 
+/**
+ * Retrieves the paths of all save files for a specific game.
+ * Uses the rootID to get base path and then adds the relative path to find the specific save file.
+ * @param user The Steam user for whom to retrieve save paths.
+ * @param appID The app ID of the game for which to retrieve save paths.
+ * @param steamPath The path to the Steam installation directory.
+ * @returns {Promise<foundFile[]>} An array of foundFile objects representing the save files.
+ */
 export async function getGameSavePath(
   user: steamUser,
   appID: string,
@@ -284,7 +336,11 @@ export async function getGameSavePath(
     return [];
   }
 }
-
+/**
+ * Uses the getGameSavePath function to effectively convert all the found files
+ * into gameData types. Converting into gameData helps manage the games and upload them later.
+ * @returns {Promise<gameData[]>} An array of gameData objects representing the installed games save files.
+ */
 export async function getCompleteGameSaveData(): Promise<gameData[]> {
   const steampath = await findSteamPath();
   if (!steampath) {
@@ -322,6 +378,19 @@ export async function getCompleteGameSaveData(): Promise<gameData[]> {
   return gamewithsaves.filter((game) => game.saves.length > 0);
 }
 
+/**
+ * Takes the rootID and relative path of a file and sticks them together giving you a full path to the file.
+ * While not necessarily needed, this intends to be used with cloudSaves, 
+ * deriving the rootID and relative path from the database and using it to get
+ * the file path target.
+ * @param appID The app ID of the game.
+ * @param rootID The root ID of the save file.
+ * @param relativePath The relative path of the save file. Found in the database.
+ * @precondition appID must be a valid Steam app ID, 
+ *               rootID must be a valid root ID as defined in the Steam documentation, 
+ *               relativePath must be a valid relative path as defined in the Steam remotecache.vdf.
+ * @returns {Promise<string>} The full path to the file corresponding to the provided rootID and relative path.
+ */
 export async function cloudMatcher(appID: string, rootID: string, relativePath: string): Promise<string> {
   console.log("We are using cloudmatcher!")
   try {
