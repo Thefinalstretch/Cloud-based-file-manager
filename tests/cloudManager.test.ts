@@ -6,7 +6,12 @@ import { cloudSave } from "src/shared/types";
 import { deleteCloudSave } from "../src/renderer/services/cloudSave.service";
 import { findSteamPath } from "../src/main/services/steam.service";
 
-  const user = homedir();
+// OM DU RUNNAR npm test. KOM IHÅG ATT VÅRA TESTS LADDAR NER EN FIL PÅ DIN DATOR.
+// 
+
+
+
+ const user = homedir();
 
  const testCloudSave: cloudSave = {
   appID: "550010",
@@ -27,6 +32,8 @@ test("A file shouldn't exist", async () => {
   expect(fileExists).toBe(false);
 });
 
+// This test assumes the user has a Downloads folder
+
 test("A valid file path argument", async () => {
   
   const fileExists = await checkIfFileExists(`${user}\\Downloads`);
@@ -43,6 +50,8 @@ test("Get Jonatans games", async () => {
   expect(saveNames).toEqual(expectedCloudSaveNames);
 });
 
+// This test assumes the user has a Downloads folder
+
 test("Download a txt file from our data base", async () => {
   const URL = await createCloudSaveSignedUrl(
                    "596f1040-6f5d-456e-bfd9-3a66da53ec66",
@@ -51,8 +60,8 @@ test("Download a txt file from our data base", async () => {
                    testCloudSave
   );
 
-  await downloadSave(URL, `${user}\\Documents`)
-  const fileExists = await checkIfFileExists(`${user}\\Documents\\output_log.txt`);
+  await downloadSave(URL, `${user}\\Downloads`)
+  const fileExists = await checkIfFileExists(`${user}\\Downloads\\output_log.txt`);
   expect(fileExists).toBe(true);
 });
 
