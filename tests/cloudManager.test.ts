@@ -29,7 +29,7 @@ test("A file shouldn't exist", async () => {
 
 test("A valid file path argument", async () => {
   
-  const fileExists = await checkIfFileExists(`${user}\\pictures`);
+  const fileExists = await checkIfFileExists(`${user}\\Downloads`);
   expect(fileExists).toBe(true);
 });
 
