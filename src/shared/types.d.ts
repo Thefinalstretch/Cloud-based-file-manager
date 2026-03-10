@@ -52,7 +52,8 @@ export interface steamUser {
   personaName: string;
   userPathData: string;
 }
-
+// Represents the files found through our steam searching workflow.
+// These then represent each and all files found, before we add the needed information to be handled.
 export interface foundFile {
   filePath: string;
   fileName: string;
@@ -60,7 +61,8 @@ export interface foundFile {
   relativePath: string;
   rootID: string;
 }
-
+// Represents the files saved on the users pc. When fetching, writes information to this object format.
+// Uploading mostly takes information from this object.
 export interface gameData {
   gameName: string;
   sizeOnDisk: string;
@@ -77,12 +79,8 @@ export interface hexGameCardProps {
   gameSavesLength: number;
   // onUpload: (id: string, name: string) => void;
 }
-export interface xboxGame {
-  name: string;
-  packageFamilyName: string;
-  installLocation: string;
-}
 
+// Represents the files saved in the cloud. When fetching, writes in this format object.
 export interface cloudSave {
   gameName: string,
   appID: string,
