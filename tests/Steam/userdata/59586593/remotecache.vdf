@@ -2,6 +2,78 @@
 {
 	"ChangeNumber"		"0"
 	"OSType"		"0"
+	"savedgames/slot1/dlc1.savegamedata"
+	{
+		"root"		"0"
+		"size"		"29453"
+		"localtime"		"1479843549"
+		"time"		"1479843510"
+		"remotetime"		"1479843510"
+		"sha"		"4f709b0c5ec719aac5300354a27d6f7595e508f2"
+		"syncstate"		"1"
+		"persiststate"		"0"
+		"platformstosync2"		"-1"
+	}
+	"savedgames/slot1/dlc2.savegamedata"
+	{
+		"root"		"0"
+		"size"		"29453"
+		"localtime"		"1772723775"
+		"time"		"1498926327"
+		"remotetime"		"1498926327"
+		"sha"		"9bda4976d4108d2184550c489e9c77c99e9099b3"
+		"syncstate"		"1"
+		"persiststate"		"0"
+		"platformstosync2"		"-1"
+	}
+	"savedgames/slot1/dlc3.savegamedata"
+	{
+		"root"		"0"
+		"size"		"29453"
+		"localtime"		"1772723773"
+		"time"		"1498920979"
+		"remotetime"		"1498920979"
+		"sha"		"36757c084360a9ff4875d6c13ab45e4f86b025ac"
+		"syncstate"		"1"
+		"persiststate"		"0"
+		"platformstosync2"		"-1"
+	}
+	"savedgames/slot1/dlc6.savegamedata"
+	{
+		"root"		"0"
+		"size"		"29453"
+		"localtime"		"1423066132"
+		"time"		"1423066093"
+		"remotetime"		"1423066093"
+		"sha"		"e9120241f210b3f9cb625af27b762d508be96fb3"
+		"syncstate"		"1"
+		"persiststate"		"0"
+		"platformstosync2"		"-1"
+	}
+	"savedgames/slot1/dlc7.savegamedata"
+	{
+		"root"		"0"
+		"size"		"29453"
+		"localtime"		"1511101390"
+		"time"		"1511101351"
+		"remotetime"		"1511101351"
+		"sha"		"083ee92631cbcde47441639d3cf7630df07cea59"
+		"syncstate"		"1"
+		"persiststate"		"0"
+		"platformstosync2"		"-1"
+	}
+	"savedgames/slot1/dlc8.savegamedata"
+	{
+		"root"		"0"
+		"size"		"29453"
+		"localtime"		"1498925253"
+		"time"		"1498925214"
+		"remotetime"		"1498925214"
+		"sha"		"e29c5a81892b1172ff3ab0632f116e54ee2c6134"
+		"syncstate"		"1"
+		"persiststate"		"0"
+		"platformstosync2"		"-1"
+	}
 	"savedgames/slot1/game1.savegamedata"
 	{
 		"root"		"0"
